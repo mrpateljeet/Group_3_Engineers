@@ -1,0 +1,57 @@
+/* src/components/LoginForm.css */
+.form-container {
+    padding: 40px;
+    margin: 20px auto;
+    max-width: 400px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+  }
+  
+  .form-container h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .form-container label {
+    display: block;
+    text-align: left;
+    margin: 10px 0 5px;
+    color: #333;
+  }
+  
+  .form-container input {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .form-container button {
+    padding: 10px 20px;
+    border: none;
+    background-color: #007BFF;
+    color: #fff;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .form-container button:hover {
+    background-color: #0056b3;
+  }
+  
+  .form-container a {
+    display: block;
+    margin-top: 20px;
+    color: #007BFF;
+    text-decoration: none;
+    transition: color 0.3s ease;
+  }
+  
+  .form-container a:hover {
+    color: #0056b3;
+  }
+  

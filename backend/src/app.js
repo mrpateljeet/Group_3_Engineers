@@ -1,15 +1,26 @@
-// backend/src/app.js
-
 const express = require('express');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+const userRoutes = require('./routes/userRoutes');
+const sequelize = require('./config/database');
+
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
-app.use(express.json());
+// Middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use('/users', userRoutes);
 
-app.get('/', (req, res) => {
-  res.send('Hello, Budget Minder!');
-});
+// Routes
+app.use('/api', userRoutes);
 
-app.listen(port, () => {
-  console.log(`Server running on port ${port}`);
+// Test database connection
+sequelize.authenticate().then(() => {
+    console.log('Database connected...');
+    app.listen(port, () => {
+        console.log(`Server running on port ${port}`);
+    });
+}).catch(err => {
+    console.error('Unable to connect to the database:', err);
 });

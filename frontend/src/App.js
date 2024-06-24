@@ -1,12 +1,27 @@
-// frontend/src/App.js
-
 import React from 'react';
+import { Routes, Route, Link } from 'react-router-dom';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+
+function Home() {
+  return (
+    <div className="container">
+      <h1>Budget Minder</h1>
+      <div className="links">
+        <Link to="/login">Login</Link>
+        <Link to="/register">Register</Link>
+      </div>
+    </div>
+  );
+}
 
 function App() {
   return (
-    <div className="App">
-      <h1>Welcome to Budget Minder</h1>
-    </div>
+    <Routes>
+      <Route path="/" element={<Home />} />
+      <Route path="/login" element={<LoginForm />} />
+      <Route path="/register" element={<RegisterForm />} />
+    </Routes>
   );
 }
 
