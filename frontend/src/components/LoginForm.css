@@ -1,57 +1,91 @@
-/* src/components/LoginForm.css */
+/* LoginForm.css */
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
+}
+
 .form-container {
-    padding: 40px;
-    margin: 20px auto;
-    max-width: 400px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    text-align: center;
-  }
-  
-  .form-container h2 {
-    margin-bottom: 20px;
-    color: #333;
-  }
-  
-  .form-container label {
-    display: block;
-    text-align: left;
-    margin: 10px 0 5px;
-    color: #333;
-  }
-  
-  .form-container input {
-    width: calc(100% - 22px);
-    padding: 10px;
-    margin-bottom: 20px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-  }
-  
-  .form-container button {
-    padding: 10px 20px;
-    border: none;
-    background-color: #007BFF;
-    color: #fff;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-  }
-  
-  .form-container button:hover {
-    background-color: #0056b3;
-  }
-  
-  .form-container a {
-    display: block;
-    margin-top: 20px;
-    color: #007BFF;
-    text-decoration: none;
-    transition: color 0.3s ease;
-  }
-  
-  .form-container a:hover {
-    color: #0056b3;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f8f9fa;
+}
+
+.form-content {
+  background: #fff;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  width: 300px;
+}
+
+.form-content h2 {
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.form-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 5px;
+  color: #333;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 8px;
+  box-sizing: border-box;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.login-button {
+  width: 100%;
+  padding: 10px;
+  background-color: #ffc107;  /* Yellow color */
+  border: none;
+  border-radius: 4px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.login-button:hover {
+  background-color: #e0a800;  /* Darker yellow on hover */
+}
+
+.message {
+  margin-top: 15px;
+  color: red;
+}
+
+.header, .footer {
+  width: 100%;
+  padding: 10px 0;
+  background-color: #343a40;  /* Dark grey color */
+  color: white;
+  text-align: center;
+}
+
+.header h1, .footer p {
+  margin: 0;
+}
+
+.header a, .footer a {
+  color: white;
+  text-decoration: none;
+  margin: 0 15px;
+}
+
+.header a:hover, .footer a:hover {
+  text-decoration: underline;
+}

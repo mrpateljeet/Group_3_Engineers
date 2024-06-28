@@ -28,30 +28,46 @@ const LoginForm = () => {
   };
 
   return (
-    <div className="form-container">
-      <h2>Login</h2>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
+    <>
+      <header className="header">
+        <h1>CulturalCui</h1>
+        <nav>
+          <Link to="/">Home</Link>
+          <Link to="/signup">Sign Up</Link>
+        </nav>
+      </header>
+      <div className="form-container">
+        <div className="form-content">
+          <h2>Login</h2>
+          <form onSubmit={handleSubmit}>
+            <div className="form-group">
+              <label>Email:</label>
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <div className="form-group">
+              <label>Password:</label>
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="login-button">Login</button>
+          </form>
+          {message && <p className="message">{message}</p>}
         </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-        <button type="submit">Login</button>
-      </form>
-      {message && <p>{message}</p>}
-      <Link to="/">Home</Link>
-    </div>
+      </div>
+      <footer className="footer">
+        <p>CulturalCuisine</p>
+        <p>Your gateway to global flavors since 1997</p>
+      </footer>
+    </>
   );
 };
 
