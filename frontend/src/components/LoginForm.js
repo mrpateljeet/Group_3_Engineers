@@ -1,14 +1,25 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './LoginForm.css';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const navigate = useNavigate();
+
+  const validatePassword = (password) => {
+    const pattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return pattern.test(password);
+  };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+
+    // if (!validatePassword(password)) {
+    //   setMessage('Password must contain at least 8 characters, including uppercase, lowercase, number, and special character.');
+    //   return;
+    // }
 
     const response = await fetch('http://localhost:3000/api/login', {
       method: 'POST',
@@ -22,6 +33,10 @@ const LoginForm = () => {
 
     if (response.ok) {
       setMessage(data.message);
+      localStorage.setItem('token', data.token); // Store the token in local storage
+      setTimeout(() => {
+        navigate('/dashboard');
+      }, 3000);
     } else {
       setMessage(data.error);
     }
