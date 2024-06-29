@@ -1,7 +1,7 @@
 import React from 'react';
 import './HomePage.css';
 import logo from '../images/budget_background.png';
-import backgroundVideo from '../images/gif_background.mp4'; // Ensure this video is in the src/images directory
+import backgroundVideo from '../images/gif_background.mp4'; 
 
 const Homepage = () => {
   return (
