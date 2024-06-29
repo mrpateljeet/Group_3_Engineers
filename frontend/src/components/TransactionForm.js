@@ -34,7 +34,7 @@ const TransactionForm = ({ onSubmit, initialData = {}, categories }) => {
             </div>
             <div>
                 <label>Category:</label>
-                <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} >
+                <select value={categoryId} onChange={(e) => setCategoryId(e.target.value)} required>
                     <option value="">Select Category</option>
                     {categories.map((category) => (
                         <option key={category.id} value={category.id}>

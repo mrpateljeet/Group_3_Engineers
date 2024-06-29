@@ -22,7 +22,8 @@ router.post('/register', async (req, res) => {
 
         // Insert user into database
         const user = await User.create({ username, email, password: hashedPassword });
-        res.status(201).json({ message: 'User registered successfully.', user });
+        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+        res.status(201).json({ message: 'User registered successfully.', token });
     } catch (err) {
         console.error('Error registering user:', err);
         res.status(500).json({ error: 'Internal server error.' });
@@ -53,7 +54,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Fetch user details
+// Fetch user profile
 router.get('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -64,17 +65,50 @@ router.get('/user', async (req, res) => {
     try {
         const decoded = jwt.verify(token, secretKey);
         const user = await User.findByPk(decoded.id, {
-            attributes: ['id', 'username', 'email']
+            attributes: ['id', 'username', 'email', 'name', 'job', 'bio', 'age', 'salary']
         });
 
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
         }
 
+        console.log('Fetched User:', user);  // Log the user data
         res.status(200).json(user);
     } catch (err) {
-        console.error('Error fetching user details:', err);
+        console.error('Error fetching user profile:', err);
         res.status(500).json({ error: 'Failed to authenticate token.' });
+    }
+});
+
+// Update user profile
+router.put('/user', async (req, res) => {
+    const token = req.headers['authorization']?.split(' ')[1];
+    const { name, job, bio, age, salary } = req.body;
+
+    if (!token) {
+        return res.status(401).json({ error: 'No token provided.' });
+    }
+
+    try {
+        const decoded = jwt.verify(token, secretKey);
+        const user = await User.findByPk(decoded.id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        user.name = name || user.name;
+        user.job = job || user.job;
+        user.bio = bio || user.bio;
+        user.age = age || user.age;
+        user.salary = salary || user.salary;
+
+        await user.save();
+
+        res.status(200).json({ message: 'Profile updated successfully.', user });
+    } catch (err) {
+        console.error('Error updating user profile:', err);
+        res.status(500).json({ error: 'Failed to update user profile.' });
     }
 });
 
