@@ -30,10 +30,10 @@ const LoginForm = () => {
   return (
     <>
       <header className="header">
-        <h1>CulturalCui</h1>
+        <h1>Budget Minder</h1>
         <nav>
           <Link to="/">Home</Link>
-          <Link to="/signup">Sign Up</Link>
+          <Link to="/register">Sign Up</Link>
         </nav>
       </header>
       <div className="form-container">
@@ -64,8 +64,8 @@ const LoginForm = () => {
         </div>
       </div>
       <footer className="footer">
-        <p>CulturalCuisine</p>
-        <p>Your gateway to global flavors since 1997</p>
+        <p>Budget Minder</p>
+        <p>Managing your finances with ease</p>
       </footer>
     </>
   );
