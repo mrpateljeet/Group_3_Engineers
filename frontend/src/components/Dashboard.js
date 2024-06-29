@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import TransactionForm from './TransactionForm';
 import TransactionList from './TransactionList';
 
@@ -7,6 +8,7 @@ const Dashboard = () => {
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [categories, setCategories] = useState([]);
     const [showForm, setShowForm] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchTransactions();
@@ -103,10 +105,15 @@ const Dashboard = () => {
         setShowForm(true);
     };
 
+    const handleProfile = () => {
+        navigate('/profile');
+    };
+
     return (
         <div>
             <h1>Dashboard</h1>
             <button onClick={handleAdd}>Add Transaction</button>
+            <button onClick={handleProfile}>Profile</button>
             {showForm && (
                 <TransactionForm
                     onSubmit={editingTransaction ? editTransaction : addTransaction}

@@ -24,7 +24,7 @@ const Homepage = () => {
             <li><a href="#savings">Savings</a></li>
           </ul>
         </nav>
-        <a href="/register" className="get-started">Get Started</a>
+        <a href="/login" className="get-started">Get Started</a>
       </header>
       <main>
         <section className="hero">
