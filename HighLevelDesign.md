@@ -1,7 +1,7 @@
 # High-Level Design Document
 
 ## Overview
-Budget Minder is a web-based application designed to help users manage and forecast their monthly budgets. The application allows users to set savings goals, forecast the time required to achieve these goals, and ensures robust data security. The project consists of a React frontend and a Node.js/Express backend, with SQLite and Sequelize for database management.
+Budget Minder is a web-based application designed to help users manage and forecast their monthly budgets. The application allows users to set savings goals, forecast the time required to achieve these goals, and ensures robust data security. The project consists of a React frontend and a Node.js/Express backend, with MYSQL and Sequelize for database management.
 
 ## Table of Contents
 1. [Introduction](#introduction)
