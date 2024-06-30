@@ -17,7 +17,7 @@ Budget Minder is designed to provide users with tools to track their income, exp
 - **Operating System**: Windows, macOS, Linux
 - **Node.js**: >= 14.x
 - **npm**: >= 6.x
-- **Database**: SQLite (using Sequelize ORM)
+- **Database**: MYSQL (using Sequelize ORM)
 - **Browser**: Latest versions of Chrome, Firefox, Safari, or Edge
 
 ## Architecture
@@ -36,7 +36,7 @@ The architecture of Budget Minder follows a typical Model-View-Controller (MVC) 
    - Middleware for authentication and authorization.
    - Controllers for managing business logic.
    
-3. **Database (SQLite with Sequelize)**:
+3. **Database (MYSQL with Sequelize)**:
    - Stores user data, transactions, and categories.
    - Ensures data integrity and security.
 
