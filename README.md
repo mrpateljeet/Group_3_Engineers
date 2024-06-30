@@ -83,7 +83,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 1. Open your browser and navigate to `http://localhost:3000` to access the application.
 2. Register a new user account.
 3. Log in with your credentials.
-4. Add, edit, delete, and view transactions.
+4. The application allows users to add, edit, delete, and view transactions.
 5. Manage categories and track your budget.
 
 ## API Endpoints
