@@ -106,6 +106,34 @@ Budget Minder is a web-based application designed to help users manage and forec
 
 - **GET /api/categories**: Get all categories.
 
+## System Requirements
+
+- **Node.js**: v14.x or higher
+- **npm**: v6.x or higher
+- **MySQL**: Ensure MySQL server is installed and running
+- **Operating System**: Compatible with Windows, macOS, and Linux
+
+## Compatible OSes
+
+- Windows 10 or higher
+- macOS 10.15 Catalina or higher
+- Ubuntu 18.04 or higher
+
+## Library Requirements
+
+- **Backend**:
+  - `express`
+  - `sequelize`
+  - `mysql2`
+  - `bcrypt`
+  - `jsonwebtoken`
+  - `cors`
+  - `body-parser`
+  
+- **Frontend**:
+  - `react`
+  - `axios`
+
 ## Team
 
 - **Jeet R Patel** (Scrum Master)
