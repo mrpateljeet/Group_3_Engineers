@@ -9,6 +9,9 @@ Budget Minder is a web-based application designed to help users manage and forec
 3. [Architecture](#architecture)
 4. [Components](#components)
 5. [Detailed Component Descriptions](#detailed-component-descriptions)
+6. [Architecture Diagram](#detailed-architecture-flow)
+7. [Activity Diagram](#detailed-activity-diagram)
+8. [Sequence Diagram](#detailed-sequence-flow)
 
 ## Introduction
 Budget Minder is designed to provide users with tools to track their income, expenses, and savings goals. The system offers functionalities such as user registration, login, transaction management, and budget forecasting. The project leverages various open-source libraries and frameworks to deliver a seamless and secure user experience.
@@ -87,3 +90,86 @@ The architecture of Budget Minder follows a typical Model-View-Controller (MVC) 
   - **Transaction belongs to User**: Each transaction is linked to a specific user.
   - **Category has many Transactions**: Each category can have multiple transactions.
   - **Transaction belongs to Category**: Each transaction is linked to a specific category.
+
+## Architecture Diagram
+```mermaid
+graph TD;
+    subgraph Frontend
+        A[User Interface]
+        A --> B[React Components]
+        B --> C[API Calls]
+    end
+
+    subgraph Backend
+        D[API Gateway]
+        D --> E[Authentication Service]
+        D --> F[User Service]
+        D --> G[Transaction Service]
+        D --> H[Category Service]
+        D --> I[Forecasting Service]
+    end
+
+    subgraph Database
+        J[SQLite Database]
+        J --> F
+        J --> G
+        J --> H
+    end
+
+   
+
+    A --> C
+    C --> D
+    C --> J
+```
+## Activity Diagram
+
+```mermaid
+graph TD
+    A[Home Page] --> B(Get Started)
+    B --> C(Login)
+    B --> D(Register)
+    D --> E(Profile Building)
+    E --> C(Login)
+    D --> A(Home)
+    C --> F(Transaction Page)
+    C --> A(Home)
+    F --> G{Manage Transactions}
+    G --> H(Add Transaction)
+    G --> I(Edit Transaction)
+    G --> J(Delete Transaction)
+    G --> K(View Transactions)
+    G --> L(Set Savings Goals)
+    G --> M(Forecast Budget)
+    G --> N(Set Frequency)
+```
+
+## Sequence Diagram
+```mermaid
+sequenceDiagram
+    actor User
+    User ->> Home: Open Home Page
+    Get_Started ->> Login: Login
+    Home ->> Get_Started: Click Get Started
+    Get_Started ->> Register:  Register
+    Register ->> Profile_Building: Complete Registration and Profile Building
+    Profile_Building ->> Login: Redirect to Login
+    Register ->> Home: Going back to home page
+    Login ->> Transaction_Page: Redirect to Transaction Page
+    Login ->> Home: Going back to home page
+    
+
+    User ->> Transaction_Page: Open Transaction Page
+    Transaction_Page ->> Add_Transaction: Add Transaction
+    Transaction_Page ->> Edit_Transaction: Edit Transaction
+    Transaction_Page ->> Delete_Transaction: Delete Transaction
+    Transaction_Page ->> View_Transactions: View Transactions
+    Transaction_Page ->> Set_Savings_Goals: Set Savings Goals
+    Transaction_Page ->> Forecast_Budget: Forecast Budget
+    Transaction_Page ->> Set_Frequency: Set Frequency
+    
+
+
+
+
+ 
