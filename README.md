@@ -10,6 +10,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 - [Usage](#usage)
 - [API Endpoints](#api-endpoints)
 - [Team](#team)
+- [Architecture Diagram](#architecture-diagram)
 
 ## Features
 
@@ -134,10 +135,20 @@ Budget Minder is a web-based application designed to help users manage and forec
   - `react`
   - `axios`
 
-## Team
+
+- ## Team
 
 - **Jeet R Patel** (Scrum Master)
 - **Pranitha Bollepalli**
 - **Nikhith Beta**
 - **Chanakya Dandamudi**
 - **Vineeth Ketham**
+
+
+##  Architecture Diagram
+```mermaid
+graph TD;
+    A[User] -->|HTTP Requests| B[React.js Frontend]
+    B -->|API Calls| C[Express.js Backend]
+    C -->|CRUD Operations| D[MySQL Database]
+    C -->|Authentication| E[JWT & bcrypt]
