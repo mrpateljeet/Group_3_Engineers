@@ -110,7 +110,7 @@ graph TD;
     end
 
     subgraph Database
-        J[SQLite Database]
+        J[ Database]
         J --> F
         J --> G
         J --> H
