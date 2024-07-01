@@ -16,8 +16,13 @@ const Dashboard = () => {
     }, []);
 
     const fetchTransactions = async () => {
+        const token = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:3000/api/transactions?userId=1'); // Adjust userId as necessary
+            const response = await fetch('http://localhost:3000/api/transactions?userId=1', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            }); // Adjust userId as necessary
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -30,8 +35,13 @@ const Dashboard = () => {
     };
 
     const fetchCategories = async () => {
+        const token = localStorage.getItem('token');
         try {
-            const response = await fetch('http://localhost:3000/api/categories');
+            const response = await fetch('http://localhost:3000/api/categories', {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
@@ -45,10 +55,14 @@ const Dashboard = () => {
     };
 
     const addTransaction = async (transaction) => {
+        const token = localStorage.getItem('token');
         try {
             const response = await fetch('http://localhost:3000/api/transactions', {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify({ ...transaction, userId: 1 }), // Adjust userId as necessary
             });
             if (!response.ok) {
@@ -63,10 +77,14 @@ const Dashboard = () => {
     };
 
     const editTransaction = async (transaction) => {
+        const token = localStorage.getItem('token');
         try {
             const response = await fetch(`http://localhost:3000/api/transactions/${transaction.id}`, {
                 method: 'PUT',
-                headers: { 'Content-Type': 'application/json' },
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
                 body: JSON.stringify(transaction),
             });
             if (!response.ok) {
@@ -82,9 +100,13 @@ const Dashboard = () => {
     };
 
     const deleteTransaction = async (id) => {
+        const token = localStorage.getItem('token');
         try {
             const response = await fetch(`http://localhost:3000/api/transactions/${id}`, {
                 method: 'DELETE',
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
