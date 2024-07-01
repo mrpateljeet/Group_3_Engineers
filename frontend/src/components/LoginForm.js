@@ -2,6 +2,18 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginForm.css';
 
+// Utility functions for validation and sanitization
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const sanitizeInput = (input) => {
+    const element = document.createElement('div');
+    element.innerText = input;
+    return element.innerHTML;
+};
+
 const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -11,12 +23,26 @@ const LoginForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // Validate email
+        if (!validateEmail(email)) {
+            setMessage('Invalid email format.');
+            return;
+        }
+
+        // Sanitize inputs
+        const sanitizedEmail = sanitizeInput(email);
+        const sanitizedPassword = sanitizeInput(password);
+
+        // Send sanitized and validated data to backend
         const response = await fetch('http://localhost:3000/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ email, password }),
+            body: JSON.stringify({ 
+                email: sanitizedEmail, 
+                password: sanitizedPassword 
+            }),
         });
 
         const data = await response.json();
@@ -75,4 +101,3 @@ const LoginForm = () => {
 };
 
 export default LoginForm;
-
