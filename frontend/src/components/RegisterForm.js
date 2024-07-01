@@ -2,6 +2,17 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
+// Utility functions for validation and sanitization
+const validateEmail = (email) => {
+    const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return re.test(String(email).toLowerCase());
+};
+
+const sanitizeInput = (input) => {
+    const element = document.createElement('div');
+    element.innerText = input;
+    return element.innerHTML;
+};
 
 const RegisterForm = () => {
     const [username, setUsername] = useState('');
@@ -13,18 +24,34 @@ const RegisterForm = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
+        // Validate email
+        if (!validateEmail(email)) {
+            setMessage('Invalid email format.');
+            return;
+        }
+
+        // Sanitize inputs
+        const sanitizedUsername = sanitizeInput(username);
+        const sanitizedEmail = sanitizeInput(email);
+        const sanitizedPassword = sanitizeInput(password);
+
+        // Send sanitized and validated data to backend
         const response = await fetch('http://localhost:3000/api/register', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ username, email, password }),
+            body: JSON.stringify({ 
+                username: sanitizedUsername, 
+                email: sanitizedEmail, 
+                password: sanitizedPassword 
+            }),
         });
 
         const data = await response.json();
 
         if (response.ok) {
-            localStorage.setItem('token', data.token);
+            localStorage.setItem('token', data.token); // Save the token for session management
             setMessage(data.message);
             setTimeout(() => navigate('/complete-profile'), 3000);
         } else {
@@ -86,4 +113,3 @@ const RegisterForm = () => {
 };
 
 export default RegisterForm;
-
