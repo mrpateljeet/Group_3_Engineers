@@ -9,9 +9,9 @@ Budget Minder is a web-based application designed to help users manage and forec
 3. [Architecture](#architecture)
 4. [Components](#components)
 5. [Detailed Component Descriptions](#detailed-component-descriptions)
-6. [Architecture Diagram](#detailed-architecture-flow)
-7. [Activity Diagram](#detailed-activity-diagram)
-8. [Sequence Diagram](#detailed-sequence-flow)
+6. [Architecture Diagram](#architecture-diagram)
+7. [Activity Diagram](#activity-diagram)
+8. [Sequence Diagram](#sequence-diagram)
 
 ## Introduction
 Budget Minder is designed to provide users with tools to track their income, expenses, and savings goals. The system offers functionalities such as user registration, login, transaction management, and budget forecasting. The project leverages various open-source libraries and frameworks to deliver a seamless and secure user experience.
@@ -126,47 +126,90 @@ graph TD;
 
 ```mermaid
 graph TD
-    A[Home Page] --> B(Get Started)
-    B --> C(Login)
-    B --> D(Register)
-    D --> E(Profile Building)
-    E --> C(Login)
-    D --> A(Home)
-    C --> F(Transaction Page)
-    C --> A(Home)
+    A[Home Page] --> B[Get Started]
+    B --> C[Login]
+    B --> D[Register]
+    D --> E[Profile Building]
+    E --> C
+    D --> A
+    C --> F[Transaction Page]
+    C --> A
     F --> G{Manage Transactions}
-    G --> H(Add Transaction)
-    G --> I(Edit Transaction)
-    G --> J(Delete Transaction)
-    G --> K(View Transactions)
-    G --> L(Set Savings Goals)
-    G --> M(Forecast Budget)
-    G --> N(Set Frequency)
+    G --> H[Transaction details]
+    G --> I[Set savings goals]
+    G --> J[Forecast Budget]
+    G --> K[Set Frequency]
 ```
 
 ## Sequence Diagram
+### Sequence Diagram for Login
 ```mermaid
 sequenceDiagram
     actor User
-    User ->> Home: Open Home Page
-    Get_Started ->> Login: Login
-    Home ->> Get_Started: Click Get Started
-    Get_Started ->> Register:  Register
-    Register ->> Profile_Building: Complete Registration and Profile Building
-    Profile_Building ->> Login: Redirect to Login
-    Register ->> Home: Going back to home page
-    Login ->> Transaction_Page: Redirect to Transaction Page
-    Login ->> Home: Going back to home page
-    
+    User ->> Login: Open Login Page
+    Login ->> Server: Send Login Credentials
+    Server ->> Database: Verify Credentials
+    Database ->> Server: Send Verification Result
+    Server ->> Login: Send Authentication Token
+    Login ->> User: Redirect to Transaction Page
+```
+### Sequence Diagram for Registration
+```mermaid
 
+sequenceDiagram
+    actor User
+    User ->> Register: Open Registration Page
+    Register ->> Server: Send Registration Details
+    Server ->> Database: Store User Details
+    Database ->> Server: Confirmation
+    Server ->> Register: Registration Successful
+    Register ->> User: Redirect to Profile Building
+    User ->> Profile_Building: Complete Profile
+    Profile_Building ->> Server: Send Profile Details
+    Server ->> Database: Store Profile Details
+    Database ->> Server: Confirmation
+    Server ->> Profile_Building: Profile Building Successful
+    Profile_Building ->> User: Redirect to Login
+```
+### Sequence Diagram for Transaction Management
+```mermaid
+sequenceDiagram
+    actor User
     User ->> Transaction_Page: Open Transaction Page
-    Transaction_Page ->> Add_Transaction: Add Transaction
-    Transaction_Page ->> Edit_Transaction: Edit Transaction
-    Transaction_Page ->> Delete_Transaction: Delete Transaction
-    Transaction_Page ->> View_Transactions: View Transactions
-    Transaction_Page ->> Set_Savings_Goals: Set Savings Goals
-    Transaction_Page ->> Forecast_Budget: Forecast Budget
-    Transaction_Page ->> Set_Frequency: Set Frequency
+    Transaction_Page ->> UI: Enter Transaction Details
+    UI ->> Transaction_Page: Submit Transaction
+    Transaction_Page ->> Server: Send Transaction Data
+    Server ->> Database: Store Transaction Data
+    Database ->> Server: Confirmation
+    Server ->> Transaction_Page: Transaction Successful
+    Transaction_Page ->> UI: Set Frequency
+    
+    UI ->> Transaction_Page: Submit Frequency
+    Transaction_Page ->> Server: Send Frequency Data
+    Server ->> Database: Store Frequency Data
+    Database ->> Server: Confirmation
+    Server ->> Transaction_Page: Frequency Set Successful
+```
+### Sequence Diagram for Forecasting Flow with Savings Goals 
+```mermaid
+sequenceDiagram
+    actor User
+    User ->> UI: Set Savings Goal
+    UI ->> Server: Send Savings Goal Data
+    Server ->> Database: Insert Savings Goal Data
+    Database -->> Server: Confirm Insertion
+    Server -->> UI: Confirm Savings Goal Set
+    UI -->> User: Display Confirmation
+
+    User ->> UI: Request Forecast Data
+    UI ->> Server: Send Forecast Request
+    Server ->> Database: Retrieve Transaction and Frequency Data
+    Database -->> Server: Return Data
+    Server ->> External_Forecasting_API: Request Forecast Calculation
+    External_Forecasting_API -->> Server: Return Forecast Data
+    Server -->> UI: Return Forecast Data
+    UI -->> User: Display Forecast Result
+```
     
 
 
