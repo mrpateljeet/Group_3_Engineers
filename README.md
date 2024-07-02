@@ -11,6 +11,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 - [API Endpoints](#api-endpoints)
 - [Team](#team)
 - [Architecture Diagram](#architecture-diagram)
+- [Design Document](#design-document)
 
 ## Features
 
@@ -152,3 +153,7 @@ graph TD;
     B -->|API Calls| C[Express.js Backend]
     C -->|CRUD Operations| D[MySQL Database]
     C -->|Authentication| E[JWT & bcrypt]
+```
+
+## Design Document
+https://github.com/mrpateljeet/Group_3_Engineers/blob/main/HighLevelDesign.md
