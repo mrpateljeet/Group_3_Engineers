@@ -15,7 +15,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 
 ## Features
 
-- User authentication (registration and login)
+- User authentication  (registration and login)
 - Secure password storage using bcrypt
 - JWT-based authentication
 - CRUD operations for transactions (income and expenses)
