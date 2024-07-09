@@ -1,4 +1,4 @@
-  name: CI/CD Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
@@ -10,7 +10,7 @@ on:
 
 jobs:
   lint:
-    name: Lint
+    name: Lint and Test
     runs-on: ubuntu-latest
 
     steps:
@@ -32,12 +32,58 @@ jobs:
           cd backend
           npm install
 
-      - name: Run App (Frontend)
+      - name: Run Lint (Frontend)
         run: |
           cd frontend
-          npm start
+          npm run lint
 
-      - name: Run App (Backend)
+      - name: Run Lint (Backend)
         run: |
           cd backend
-          npm run dev
+          npm run lint
+
+      - name: Run Tests (Frontend)
+        run: |
+          cd frontend
+          npm test
+
+      - name: Run Tests (Backend)
+        run: |
+          cd backend
+          npm test
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 14
+
+      - name: Install dependencies (Frontend)
+        run: |
+          cd frontend
+          npm install
+
+      - name: Install dependencies (Backend)
+        run: |
+          cd backend
+          npm install
+
+      - name: Deploy Frontend
+        run: |
+          cd frontend
+          npm run build
+          # Add your deployment commands here
+
+      - name: Deploy Backend
+        run: |
+          cd backend
+          npm run build
+          # Add your deployment commands here
