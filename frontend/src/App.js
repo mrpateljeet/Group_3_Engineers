@@ -6,6 +6,7 @@ import Homepage from './components/HomePage';
 import Dashboard from './components/Dashboard';
 import CompleteProfile from './components/CompleteProfile';
 import ProfilePage from './components/ProfilePage';
+import AddTransaction from './components/AddTransaction';
 
 
 
@@ -18,6 +19,8 @@ function App() {
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/complete-profile" element={<CompleteProfile />} />
       <Route path="/profile" element={<ProfilePage />} />
+      <Route path="/add-transaction" element={<AddTransaction />} />
+
       
     </Routes>
   );
