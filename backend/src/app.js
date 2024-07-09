@@ -21,6 +21,7 @@ app.use('/api', authRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', categoryRoutes);
 
+
 // Define relationships if necessary
 User.hasMany(Transaction, { foreignKey: 'userId' });
 Transaction.belongsTo(User, { foreignKey: 'userId' });
@@ -28,9 +29,23 @@ Transaction.belongsTo(User, { foreignKey: 'userId' });
 Category.hasMany(Transaction, { foreignKey: 'categoryId' });
 Transaction.belongsTo(Category, { foreignKey: 'categoryId' });
 
-// Sync models with database
-sequelize.sync({ alter: true }).then(() => {
+// Sync models with database and insert categories if they don't exist
+sequelize.sync({ alter: true }).then(async () => {
     console.log('Database synchronized...');
+
+    // Insert categories if they don't exist
+    const categories = [
+        { name: 'income', type: 'income' },
+        { name: 'expense', type: 'expense' }
+    ];
+
+    for (const category of categories) {
+        await Category.findOrCreate({
+            where: { name: category.name },
+            defaults: category
+        });
+    }
+
     app.listen(port, () => {
         console.log(`Server running on port ${port}`);
     });
