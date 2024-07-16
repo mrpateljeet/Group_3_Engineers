@@ -1,35 +1,41 @@
 import React from 'react';
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const TransactionList = ({ transactions, onEdit, onDelete }) => {
     return (
-        <div>
-            <h2>All Expenses</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>Amount</th>
-                        <th>Date</th>
-                        <th>Description</th>
-                        <th>Category</th>
-                        <th>Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
+        <TableContainer component={Paper} className="transaction-table-container">
+            <Table>
+                <TableHead>
+                    <TableRow>
+                        <TableCell className="table-header">Amount</TableCell>
+                        <TableCell className="table-header">Date</TableCell>
+                        <TableCell className="table-header">Description</TableCell>
+                        <TableCell className="table-header">Category</TableCell>
+                        <TableCell className="table-header">Actions</TableCell>
+                    </TableRow>
+                </TableHead>
+                <TableBody>
                     {transactions.map((transaction) => (
-                        <tr key={transaction._id}>
-                            <td>{transaction.amount}</td>
-                            <td>{new Date(transaction.date).toLocaleDateString()}</td>
-                            <td>{transaction.description}</td>
-                            <td>{transaction.categoryId.name}</td>
-                            <td>
-                                <button onClick={() => onEdit(transaction)}>Edit</button>
-                                <button onClick={() => onDelete(transaction._id)}>Delete</button>
-                            </td>
-                        </tr>
+                        <TableRow key={transaction._id} className="table-row">
+                            <TableCell className="table-cell">{transaction.amount}</TableCell>
+                            <TableCell className="table-cell">{new Date(transaction.date).toLocaleDateString()}</TableCell>
+                            <TableCell className="table-cell">{transaction.description}</TableCell>
+                            <TableCell className="table-cell">{transaction.categoryId.name}</TableCell>
+                            <TableCell className="table-cell">
+                                <IconButton color="primary" onClick={() => onEdit(transaction)}>
+                                    <EditIcon />
+                                </IconButton>
+                                <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
+                                    <DeleteIcon />
+                                </IconButton>
+                            </TableCell>
+                        </TableRow>
                     ))}
-                </tbody>
-            </table>
-        </div>
+                </TableBody>
+            </Table>
+        </TableContainer>
     );
 };
 

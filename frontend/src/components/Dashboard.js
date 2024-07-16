@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useAuth from '../components/useAuth';
 import TransactionList from './TransactionList';
 import './Dashboard.css';
 import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton } from '@mui/material';
@@ -14,7 +13,6 @@ import backgroundVideo from '../images/gif_background.mp4';
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const navigate = useNavigate();
-    useAuth();
 
     useEffect(() => {
         fetchTransactions();

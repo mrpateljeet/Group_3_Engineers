@@ -9,9 +9,12 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: 100vh; /* Full height of the viewport */
-    overflow: auto; /* Allow scrolling */
-    width: 1200px;
+    height: 100vh;
+    overflow: auto;
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    box-sizing: border-box;
 }
 
 /* Hide scrollbars for Webkit browsers (Chrome, Safari) */
@@ -27,20 +30,38 @@ body {
 }
 
 .goal-header {
-    background-color: #fff;
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     padding: 20px;
+    width: 100%;
+    background-color: #f1f1f1;
+    position: relative;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    position: fixed;
-    top: 0;
     z-index: 1000;
+}
+
+.back-button {
+    background-color: #FF0000;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 16px;
+    transition: background-color 0.3s;
+    position: absolute;
+    left: 20px;
+}
+
+.back-button:hover {
+    background-color: #CC0000;
 }
 
 .goal-header h1 {
     margin: 0;
     font-size: 24px;
     color: #333;
-    text-align: center;
 }
 
 .goal-form {
@@ -48,9 +69,10 @@ body {
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    margin-top: 80px; /* Ensure there's enough space below the fixed header */
-    width: 90%;
+    margin-top: 100px;
+    width: 100%;
     max-width: 500px;
+    box-sizing: border-box;
 }
 
 .form-group2 {
@@ -65,10 +87,11 @@ body {
 }
 
 .form-group2 input {
-    width: 97%;
+    width: 100%;
     padding: 10px;
     border-radius: 4px;
     border: 1px solid #ddd;
+    box-sizing: border-box;
 }
 
 .add-goal-button {
@@ -80,6 +103,7 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
+    box-sizing: border-box;
 }
 
 .add-goal-button:hover {
@@ -89,8 +113,8 @@ body {
 .goal-list-container {
     margin-top: 20px;
     padding: 20px;
-    width: 90%;
-    max-width: 1200px;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .goal-list {
@@ -98,6 +122,7 @@ body {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
 }
 
 .goal-list::-webkit-scrollbar {
@@ -111,38 +136,124 @@ body {
     scrollbar-width: none;  /* Firefox */
 }
 
-.goal-item {
-    border-bottom: 1px solid #ddd;
-    padding: 10px 0;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
+.goal-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    font-size: 18px;
+    text-align: left;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    box-sizing: border-box;
 }
 
-.goal-item h3 {
+.goal-table thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.goal-table th,
+.goal-table td {
+    padding: 12px 15px;
+}
+
+.goal-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.goal-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.goal-table tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.goal-table tbody tr:hover {
+    background-color: #f1f1f1;
+}
+
+.goal-table tbody tr td {
+    color: #333;
+    font-weight: normal;
+}
+
+.forecast-list-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.forecast-item {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    margin-bottom: 20px;
+    color: #333;
+}
+
+.forecast-details {
+    flex: 1;
+    min-width: 250px;
+    margin-right: 20px;
+    color: #333;
+}
+
+.forecast-item h3 {
     margin: 0 0 10px 0;
     color: #333;
 }
 
-.goal-item p {
+.forecast-item p {
     margin: 5px 0;
     color: #666;
 }
 
-.goal-item p strong {
+.forecast-item p strong {
     color: #333;
 }
 
-.goal-item button {
-    background-color: #f44336;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    padding: 5px 10px;
-    margin-top: 10px;
-    cursor: pointer;
+.forecast-chart {
+    flex: 2;
+    min-width: 300px;
 }
 
-.goal-item button:hover {
-    background-color: #d32f2f;
+.forecast-chart .chart-title {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.months-to-achieve-container {
+    margin-top: 20px;
+    padding: 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.months-to-achieve-list {
+    padding: 10px;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    box-sizing: border-box;
+}
+
+.months-to-achieve-list h3 {
+    margin: 0 0 10px 0;
+    color: #333;
+    text-align: center;
+}
+
+.months-to-achieve-list .chart-title {
+    text-align: center;
+    margin-bottom: 10px;
 }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './GoalForm.css';
+import { VictoryChart, VictoryLine, VictoryAxis } from 'victory';
 
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [name, setName] = useState('');
@@ -29,9 +30,85 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         getGoalsAndForecasts();
     }, [fetchGoals, fetchForecasts]);
 
+    const renderForecastChart = (forecast) => {
+        const data = [
+            { x: 'Target Amount', y: parseFloat(forecast.targetAmount) || 0 },
+            { x: 'Current Amount', y: parseFloat(forecast.currentAmount) || 0 },
+            { x: 'Monthly Income', y: parseFloat(forecast.monthlyIncome) || 0 },
+        ];
+
+        return (
+            <div>
+                {/* <h3 className="chart-title">Forecast Chart</h3> */}
+                <VictoryChart
+                    domainPadding={{ x: 50, y: 30 }}
+                    padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
+                    width={600}
+                    height={300}
+                >
+                    <VictoryLine
+                        data={data}
+                        x="x"
+                        y="y"
+                        style={{
+                            data: { stroke: "#2196F3" },
+                            labels: { fontSize: 12, fontWeight: 'bold' }
+                        }}
+                    />
+                    <VictoryAxis
+                        style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
+                    />
+                    
+                </VictoryChart>
+            </div>
+        );
+    };
+
+    const renderMonthsToAchieveChart = () => {
+        const data = forecasts.map(forecast => ({
+            x: forecast.name,
+            y: parseFloat(forecast.months) || 0
+        }));
+    
+        return (
+            <div>
+                <VictoryChart
+                    domainPadding={{ x: 50, y: 30 }}
+                    padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
+                    width={600}
+                    height={300}
+                >
+                    <VictoryAxis
+                        style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
+                    />
+                    <VictoryAxis
+                        dependentAxis
+                        style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
+                    />
+                    <VictoryLine
+                        data={data}
+                        x="x"
+                        y="y"
+                        style={{
+                            data: { stroke: "#FF5722" },
+                            labels: { fontSize: 12, fontWeight: 'bold' }
+                        }}
+                    />
+                </VictoryChart>
+            </div>
+        );
+    };
+    
     return (
         <div className="goal-container">
             <header className="goal-header">
+                <button className="back-button" onClick={() => window.location.href = '/dashboard'}>
+                    &larr;
+                </button>
                 <h1>Goal Management</h1>
             </header>
             <form onSubmit={handleSubmit} className="goal-form">
@@ -68,13 +145,24 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             <div className="goal-list-container">
                 <h2 style={{ color: '#fff', textAlign: 'center', marginBottom: '20px' }}>Your Goals</h2>
                 <div className="goal-list">
-                    {goals.map(goal => (
-                        <div key={goal._id} className="goal-item">
-                            <h3>{goal.name}</h3>
-                            <p><strong>Target Amount:</strong> ${goal.targetAmount}</p>
-                            <p><strong>Target Date:</strong> {new Date(goal.targetDate).toLocaleDateString()}</p>
-                        </div>
-                    ))}
+                    <table className="goal-table">
+                        <thead>
+                            <tr>
+                                <th>Goal Name</th>
+                                <th>Target Amount</th>
+                                <th>Target Date</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {goals.map(goal => (
+                                <tr key={goal._id}>
+                                    <td>{goal.name}</td>
+                                    <td>${goal.targetAmount}</td>
+                                    <td>{new Date(goal.targetDate).toLocaleDateString()}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -83,14 +171,26 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                 <div className="forecast-list">
                     {forecasts.map(forecast => (
                         <div key={forecast._id} className="forecast-item">
-                            <h3>{forecast.name}</h3>
-                            <p><strong>Target Amount:</strong> ${forecast.targetAmount}</p>
-                            <p><strong>Current Amount:</strong> ${forecast.currentAmount}</p>
-                            <p><strong>Monthly Income:</strong> ${forecast.monthlyIncome}</p>
-                            <p><strong>Allocation Percentage:</strong> {forecast.allocationPercentage}%</p>
-                            <p><strong>Months to Achieve Goal:</strong> {forecast.months}</p>
+                            <div className="forecast-details">
+                                <h3>{forecast.name}</h3>
+                                <p><strong>Target Amount:</strong> ${forecast.targetAmount}</p>
+                                <p><strong>Current Amount:</strong> ${forecast.currentAmount}</p>
+                                <p><strong>Monthly Income:</strong> ${forecast.monthlyIncome}</p>
+                                <p><strong>Allocation Percentage:</strong> {forecast.allocationPercentage}%</p>
+                                <p><strong>Months to Achieve Goal:</strong> {forecast.months}</p>
+                            </div>
+                            <div className="forecast-chart">
+                                {renderForecastChart(forecast)}
+                            </div>
                         </div>
                     ))}
+                </div>
+            </div>
+
+            <div className="months-to-achieve-container">
+                <h2 style={{ color: '#fff', textAlign: 'center', marginBottom: '20px' }}>Months to Achieve Goal</h2>
+                <div className="months-to-achieve-list">
+                    {renderMonthsToAchieveChart()}
                 </div>
             </div>
         </div>
