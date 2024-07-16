@@ -7,6 +7,7 @@ const CompleteProfile = () => {
     const [bio, setBio] = useState('');
     const [age, setAge] = useState('');
     const [salary, setSalary] = useState('');
+    const [accountBalance, setAccountBalance] = useState(''); // Added state for account balance
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
 
@@ -26,7 +27,7 @@ const CompleteProfile = () => {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${token}`
             },
-            body: JSON.stringify({ name, job, bio, age, salary }),
+            body: JSON.stringify({ name, job, bio, age, salary, accountBalance }), // Included account balance
         });
 
         const data = await response.json();
@@ -89,6 +90,15 @@ const CompleteProfile = () => {
                                 type="number"
                                 value={salary}
                                 onChange={(e) => setSalary(e.target.value)}
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Account Balance:</label>
+                            <input
+                                type="number"
+                                value={accountBalance}
+                                onChange={(e) => setAccountBalance(e.target.value)}
+                                required
                             />
                         </div>
                         <button type="submit" className="complete-profile-button">Complete Profile</button>

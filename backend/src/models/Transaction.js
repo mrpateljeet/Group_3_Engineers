@@ -1,29 +1,30 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/database');
+const mongoose = require('mongoose');
 
-const Transaction = sequelize.define('Transaction', {
+const transactionSchema = new mongoose.Schema({
     userId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
     },
     categoryId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true,
     },
     amount: {
-        type: DataTypes.DECIMAL(10, 2),
-        allowNull: false,
+        type: Number,
+        required: true,
     },
     date: {
-        type: DataTypes.DATE,
-        allowNull: false,
+        type: Date,
+        required: true,
     },
     description: {
-        type: DataTypes.STRING,
-        allowNull: true,
+        type: String,
+        required: true,
     },
 }, {
     timestamps: true,
 });
 
-module.exports = Transaction;
+module.exports = mongoose.model('Transaction', transactionSchema);

@@ -10,7 +10,8 @@ const registerUser = async (req, res) => {
 
     try {
         const hashedPassword = await bcrypt.hash(password, 10);
-        const user = await User.create({ username, email, password: hashedPassword });
+        const user = new User({ username, email, password: hashedPassword });
+        await user.save();
         res.status(201).json({ message: 'User registered successfully', user });
     } catch (error) {
         console.error(error);
@@ -23,7 +24,7 @@ const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
@@ -33,7 +34,7 @@ const loginUser = async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password' });
         }
 
-        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
 
         res.status(200).json({ message: 'User logged in successfully', token, name: user.username });
     } catch (error) {
@@ -52,13 +53,13 @@ const getUserDetails = async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, secretKey);
-        const user = await User.findByPk(decoded.id);
+        const user = await User.findById(decoded.id);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
 
-        res.status(200).json({ id: user.id, name: user.username, email: user.email });
+        res.status(200).json({ id: user._id, name: user.username, email: user.email });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Failed to authenticate token' });

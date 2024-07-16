@@ -3,16 +3,32 @@ import React from 'react';
 const TransactionList = ({ transactions, onEdit, onDelete }) => {
     return (
         <div>
-            <h2>Transaction List</h2>
-            <ul>
-                {transactions.map((transaction) => (
-                    <li key={transaction.id}>
-                        {transaction.amount} - {transaction.date} - {transaction.description} - {transaction.categoryId}
-                        <button onClick={() => onEdit(transaction)}>Edit</button>
-                        <button onClick={() => onDelete(transaction.id)}>Delete</button>
-                    </li>
-                ))}
-            </ul>
+            <h2>All Expenses</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Amount</th>
+                        <th>Date</th>
+                        <th>Description</th>
+                        <th>Category</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {transactions.map((transaction) => (
+                        <tr key={transaction._id}>
+                            <td>{transaction.amount}</td>
+                            <td>{new Date(transaction.date).toLocaleDateString()}</td>
+                            <td>{transaction.description}</td>
+                            <td>{transaction.categoryId.name}</td>
+                            <td>
+                                <button onClick={() => onEdit(transaction)}>Edit</button>
+                                <button onClick={() => onDelete(transaction._id)}>Delete</button>
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
         </div>
     );
 };

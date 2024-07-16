@@ -50,6 +50,7 @@ const Profile = () => {
                     <p>Bio: {user.bio}</p>
                     <p>Age: {user.age}</p>
                     <p>Salary: {user.salary}</p>
+                    <p>Account Balance: {user.accountBalance}</p>
                     <Link to="/dashboard">Back to Dashboard</Link>
                 </>
             )}

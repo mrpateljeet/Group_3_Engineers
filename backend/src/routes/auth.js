@@ -3,27 +3,33 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-
-const secretKey = 'Marvel##'; // Replace with your secret key
+const secretKey = 'Marvel##';
 
 // Register a new user
 router.post('/register', async (req, res) => {
-    const { username, email, password } = req.body;
+    const { username, email, password, accountBalance } = req.body;
 
     try {
-        // Check if user already exists
-        const existingUser = await User.findOne({ where: { email } });
+        const existingUser = await User.findOne({ email });
         if (existingUser) {
             return res.status(400).json({ error: 'User already exists with that email.' });
         }
 
-        // Hash the password
         const hashedPassword = await bcrypt.hash(password, 10);
 
-        // Insert user into database
-        const user = await User.create({ username, email, password: hashedPassword });
-        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
-        res.status(201).json({ message: 'User registered successfully.', token });
+        const user = new User({
+            username,
+            email,
+            password: hashedPassword,
+            accountBalance: accountBalance || 0.0
+        });
+
+        await user.save();
+
+        res.status(201).json({
+            message: 'User registered successfully.',
+            token: jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' })
+        });
     } catch (err) {
         console.error('Error registering user:', err);
         res.status(500).json({ error: 'Internal server error.' });
@@ -35,7 +41,7 @@ router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
     try {
-        const user = await User.findOne({ where: { email } });
+        const user = await User.findOne({ email });
         if (!user) {
             return res.status(401).json({ error: 'Invalid email or password.' });
         }
@@ -45,16 +51,20 @@ router.post('/login', async (req, res) => {
             return res.status(401).json({ error: 'Invalid email or password.' });
         }
 
-        const token = jwt.sign({ id: user.id }, secretKey, { expiresIn: '1h' });
+        const token = jwt.sign({ id: user._id }, secretKey, { expiresIn: '1h' });
 
-        res.status(200).json({ message: 'User logged in successfully', token, name: user.username });
+        res.status(200).json({
+            message: 'User logged in successfully',
+            token,
+            name: user.username,
+            accountBalance: user.accountBalance
+        });
     } catch (err) {
         console.error('Error logging in user:', err);
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
 
-// Fetch user profile
 router.get('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -64,15 +74,12 @@ router.get('/user', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, secretKey);
-        const user = await User.findByPk(decoded.id, {
-            attributes: ['id', 'username', 'email', 'name', 'job', 'bio', 'age', 'salary']
-        });
+        const user = await User.findById(decoded.id, 'id username email name job bio age salary accountBalance');
 
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
         }
 
-        console.log('Fetched User:', user);  // Log the user data
         res.status(200).json(user);
     } catch (err) {
         console.error('Error fetching user profile:', err);
@@ -80,10 +87,9 @@ router.get('/user', async (req, res) => {
     }
 });
 
-// Update user profile
 router.put('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
-    const { name, job, bio, age, salary } = req.body;
+    const { name, job, bio, age, salary, accountBalance } = req.body;
 
     if (!token) {
         return res.status(401).json({ error: 'No token provided.' });
@@ -91,7 +97,7 @@ router.put('/user', async (req, res) => {
 
     try {
         const decoded = jwt.verify(token, secretKey);
-        const user = await User.findByPk(decoded.id);
+        const user = await User.findById(decoded.id);
 
         if (!user) {
             return res.status(404).json({ error: 'User not found.' });
@@ -102,10 +108,11 @@ router.put('/user', async (req, res) => {
         user.bio = bio || user.bio;
         user.age = age || user.age;
         user.salary = salary || user.salary;
+        user.accountBalance = accountBalance || user.accountBalance;
 
         await user.save();
 
-        res.status(200).json({ message: 'Profile updated successfully.', user });
+        res.status(200).json(user);
     } catch (err) {
         console.error('Error updating user profile:', err);
         res.status(500).json({ error: 'Failed to update user profile.' });

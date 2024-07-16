@@ -1,16 +1,19 @@
+// app.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
+const connectDB = require('./config/database');
 const authRoutes = require('./routes/auth');
 const transactionRoutes = require('./routes/transactionRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
-const sequelize = require('./config/database');
-const User = require('./models/User');
-const Transaction = require('./models/Transaction');
-const Category = require('./models/Category');
+const goalRoutes = require('./routes/goalRoutes');
+const forecastRoutes = require('./routes/forecastRoutes');
 
 const app = express();
 const port = 3000;
+
+// Connect to MongoDB
+connectDB();
 
 // Middleware
 app.use(cors());
@@ -20,35 +23,9 @@ app.use(bodyParser.json());
 app.use('/api', authRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', categoryRoutes);
+app.use('/api', goalRoutes);
+app.use('/api', forecastRoutes);
 
-
-// Define relationships if necessary
-User.hasMany(Transaction, { foreignKey: 'userId' });
-Transaction.belongsTo(User, { foreignKey: 'userId' });
-
-Category.hasMany(Transaction, { foreignKey: 'categoryId' });
-Transaction.belongsTo(Category, { foreignKey: 'categoryId' });
-
-// Sync models with database and insert categories if they don't exist
-sequelize.sync({ alter: true }).then(async () => {
-    console.log('Database synchronized...');
-
-    // Insert categories if they don't exist
-    const categories = [
-        { name: 'income', type: 'income' },
-        { name: 'expense', type: 'expense' }
-    ];
-
-    for (const category of categories) {
-        await Category.findOrCreate({
-            where: { name: category.name },
-            defaults: category
-        });
-    }
-
-    app.listen(port, () => {
-        console.log(`Server running on port ${port}`);
-    });
-}).catch(err => {
-    console.error('Unable to synchronize the database:', err);
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
