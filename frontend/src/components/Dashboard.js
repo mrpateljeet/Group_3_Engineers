@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import useAuth from '../components/useAuth';
 import TransactionList from './TransactionList';
 import './Dashboard.css';
 import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton } from '@mui/material';
@@ -7,11 +8,13 @@ import AddIcon from '@mui/icons-material/Add';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ForecastIcon from '@mui/icons-material/WbSunny';
 import GoalIcon from '@mui/icons-material/EmojiEvents';
-import backgroundVideo from '../images/gif_background.mp4'; // Ensure the video file is in the correct path
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import backgroundVideo from '../images/gif_background.mp4';
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const navigate = useNavigate();
+    useAuth();
 
     useEffect(() => {
         fetchTransactions();
@@ -19,7 +22,7 @@ const Dashboard = () => {
 
     const fetchTransactions = async () => {
         const token = localStorage.getItem('token');
-        const userId = '60d0fe4f5311236168a109ca'; // Ensure this user ID is correct and exists in the database
+        const userId = localStorage.getItem('userId');
         try {
             const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`, {
                 headers: {
@@ -77,6 +80,12 @@ const Dashboard = () => {
         navigate('/add-goal');
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/login', { replace: true });
+    };
+
     return (
         <div className="dashboard-container">
             <video autoPlay loop muted className="background-video">
@@ -91,6 +100,9 @@ const Dashboard = () => {
                         </Typography>
                         <IconButton color="inherit" onClick={handleProfile}>
                             <AccountCircle />
+                        </IconButton>
+                        <IconButton color="inherit" onClick={handleLogout}>
+                            <ExitToAppIcon />
                         </IconButton>
                     </Toolbar>
                 </AppBar>
@@ -118,7 +130,7 @@ const Dashboard = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Card className="dashboard-card">
                             <CardContent>
-                                <Typography variant="h5">Add Goal</Typography>
+                                <Typography variant="h5">Savings Goal</Typography>
                                 <Button variant="contained" color="primary" startIcon={<GoalIcon />} onClick={handleAddGoal}>
                                     Add Goal
                                 </Button>
@@ -128,7 +140,7 @@ const Dashboard = () => {
                     <Grid item xs={12} sm={6} md={3}>
                         <Card className="dashboard-card">
                             <CardContent>
-                                <Typography variant="h5">Forecast</Typography>
+                                <Typography variant="h5">Budget Forecast</Typography>
                                 <Button variant="contained" color="primary" startIcon={<ForecastIcon />} onClick={handleForecast}>
                                     Forecast
                                 </Button>

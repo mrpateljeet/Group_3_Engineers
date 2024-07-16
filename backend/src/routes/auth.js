@@ -36,7 +36,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login user
+/// Login user
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -56,6 +56,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({
             message: 'User logged in successfully',
             token,
+            userId: user._id, // Include userId in the response
             name: user.username,
             accountBalance: user.accountBalance
         });
@@ -64,6 +65,7 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Internal server error.' });
     }
 });
+
 
 router.get('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];

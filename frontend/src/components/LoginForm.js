@@ -49,6 +49,7 @@ const LoginForm = () => {
 
         if (response.ok) {
             localStorage.setItem('token', data.token);
+            localStorage.setItem('userId', data.userId); // Store userId in localStorage
             setMessage(data.message);
             setTimeout(() => navigate('/dashboard'), 3000);
         } else {

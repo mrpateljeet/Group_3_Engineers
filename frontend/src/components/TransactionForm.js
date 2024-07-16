@@ -51,23 +51,31 @@ const TransactionForm = () => {
             date,
             description,
             categoryId: category,
-            userId: '60d0fe4f5311236168a109ca', // Ensure this user ID is valid
         };
+
+        const userId = localStorage.getItem('userId'); // Assuming the user ID is stored in localStorage
+        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+
+        if (!userId) {
+            setError('User ID not found. Please log in.');
+            return;
+        }
 
         const url = transaction
             ? `http://localhost:3000/api/transactions/${transaction._id}`
             : 'http://localhost:3000/api/transactions';
         const method = transaction ? 'PUT' : 'POST';
 
-        console.log('Submitting transaction:', transactionData); // Log the transaction data
+        console.log('Submitting transaction:', { ...transactionData, userId }); // Log the transaction data
 
         try {
             const response = await fetch(url, {
                 method,
                 headers: {
                     'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify(transactionData),
+                body: JSON.stringify({ ...transactionData, userId }),
             });
 
             if (!response.ok) {
