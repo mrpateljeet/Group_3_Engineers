@@ -27,7 +27,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 
 - **Frontend**: React
 - **Backend**: Node.js, Express.js
-- **Database**: MySQL (using Sequelize ORM)
+- **Database**: MongoDB 
 - **Authentication**: JWT (JSON Web Tokens)
 - **Others**: bcrypt for password hashing, cors for Cross-Origin Resource Sharing, body-parser for parsing incoming request bodies
 
@@ -125,8 +125,6 @@ Budget Minder is a web-based application designed to help users manage and forec
 
 - **Backend**:
   - `express`
-  - `sequelize`
-  - `mysql2`
   - `bcrypt`
   - `jsonwebtoken`
   - `cors`
@@ -151,7 +149,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 graph TD;
     A[User] -->|HTTP Requests| B[React.js Frontend]
     B -->|API Calls| C[Express.js Backend]
-    C -->|CRUD Operations| D[MySQL Database]
+    C -->|CRUD Operations| D[MongoDB]
     C -->|Authentication| E[JWT & bcrypt]
 ```
 

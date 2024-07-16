@@ -146,7 +146,13 @@ const Dashboard = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={12}>
-                        <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={deleteTransaction} />
+                        {transactions.length > 0 ? (
+                            <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={deleteTransaction} />
+                        ) : (
+                            <Typography variant="h6" align="center" style={{ color: 'white' }}>
+                                No transactions found.
+                            </Typography>
+                        )}
                     </Grid>
                 </Grid>
             </div>
