@@ -5,6 +5,8 @@ const Profile = () => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editMode, setEditMode] = useState(false);
+    const [formData, setFormData] = useState({});
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -19,8 +21,8 @@ const Profile = () => {
                     throw new Error('Failed to fetch user profile');
                 }
                 const data = await response.json();
-                console.log('Fetched User Data:', data);  // Log the fetched data
                 setUser(data);
+                setFormData(data); // Initialize form data with user data
                 setLoading(false);
             } catch (error) {
                 setError(error.message);
@@ -30,6 +32,37 @@ const Profile = () => {
 
         fetchUserProfile();
     }, []);
+
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value,
+        });
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+        const token = localStorage.getItem('token');
+        try {
+            const response = await fetch('http://localhost:3000/api/user', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update user profile');
+            }
+            const updatedData = await response.json();
+            setUser(updatedData);
+            setEditMode(false);
+        } catch (error) {
+            setError(error.message);
+        }
+    };
 
     if (loading) {
         return <p>Loading...</p>;
@@ -43,16 +76,87 @@ const Profile = () => {
         <div>
             <h1>Profile</h1>
             {user && (
-                <>
-                    <p>Name: {user.name}</p>
-                    <p>Email: {user.email}</p>
-                    <p>Job: {user.job}</p>
-                    <p>Bio: {user.bio}</p>
-                    <p>Age: {user.age}</p>
-                    <p>Salary: {user.salary}</p>
-                    <p>Account Balance: {user.accountBalance}</p>
-                    <Link to="/dashboard">Back to Dashboard</Link>
-                </>
+                editMode ? (
+                    <form onSubmit={handleSubmit}>
+                        <div>
+                            <label>Name:</label>
+                            <input
+                                type="text"
+                                name="name"
+                                value={formData.name}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Email:</label>
+                            <input
+                                type="email"
+                                name="email"
+                                value={formData.email}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Job:</label>
+                            <input
+                                type="text"
+                                name="job"
+                                value={formData.job}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Bio:</label>
+                            <input
+                                type="text"
+                                name="bio"
+                                value={formData.bio}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Age:</label>
+                            <input
+                                type="number"
+                                name="age"
+                                value={formData.age}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Salary:</label>
+                            <input
+                                type="number"
+                                name="salary"
+                                value={formData.salary}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <div>
+                            <label>Account Balance:</label>
+                            <input
+                                type="number"
+                                name="accountBalance"
+                                value={formData.accountBalance}
+                                onChange={handleInputChange}
+                            />
+                        </div>
+                        <button type="submit">Save</button>
+                        <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
+                    </form>
+                ) : (
+                    <>
+                        <p>Name: {user.name}</p>
+                        <p>Email: {user.email}</p>
+                        <p>Job: {user.job}</p>
+                        <p>Bio: {user.bio}</p>
+                        <p>Age: {user.age}</p>
+                        <p>Salary: {user.salary}</p>
+                        <p>Account Balance: {user.accountBalance}</p>
+                        <button onClick={() => setEditMode(true)}>Edit</button>
+                        <Link to="/dashboard">Back to Dashboard</Link>
+                    </>
+                )
             )}
         </div>
     );
