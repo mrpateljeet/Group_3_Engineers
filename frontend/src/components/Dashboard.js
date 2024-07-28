@@ -8,6 +8,9 @@ import AccountCircle from '@mui/icons-material/AccountCircle';
 import ForecastIcon from '@mui/icons-material/WbSunny';
 import GoalIcon from '@mui/icons-material/EmojiEvents';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import BalanceIcon from '@mui/icons-material/AccountBalance';
+import ExpenseIcon from '@mui/icons-material/ArrowDownward';
+import ProfitIcon from '@mui/icons-material/ArrowUpward';
 import backgroundVideo from '../images/gif_background.mp4';
 
 const Dashboard = () => {
@@ -133,32 +136,43 @@ const Dashboard = () => {
                 <source src={backgroundVideo} type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
+            <AppBar position="static" color="primary" className="app-bar">
+                <Toolbar>
+                    <Typography variant="h6" className="title">
+                        Dashboard
+                    </Typography>
+                    <IconButton color="inherit" onClick={handleProfile}>
+                        <AccountCircle />
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleLogout}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <div className="dashboard-content">
-                <AppBar position="static" color="primary">
-                    <Toolbar>
-                        <Typography variant="h6" style={{ flexGrow: 1 }}>
-                            Dashboard
+                <div className="balance-card">
+                    <div className="balance-item current-balance">
+                        <Typography variant="h6">Current Balance</Typography>
+                        <Typography variant="h5" className="balance-amount">
+                            <BalanceIcon /> <span>${balance.toFixed(2)}</span>
                         </Typography>
-                        <IconButton color="inherit" onClick={handleProfile}>
-                            <AccountCircle />
-                        </IconButton>
-                        <IconButton color="inherit" onClick={handleLogout}>
-                            <ExitToAppIcon />
-                        </IconButton>
-                    </Toolbar>
-                </AppBar>
-                <Grid container spacing={3} style={{ padding: 20 }}>
-                    <Grid item xs={12}>
-                        <Card className="dashboard-card">
-                            <CardContent>
-                                <Typography variant="h5">Current Balance: ${balance.toFixed(2)}</Typography>
-                                <Typography variant="h6">Total Expense: ${totalExpense.toFixed(2)}</Typography>
-                                <Typography variant="h6">Total Profit: ${totalProfit.toFixed(2)}</Typography>
-                            </CardContent>
-                        </Card>
-                    </Grid>
+                    </div>
+                    <div className="balance-item expense">
+                        <Typography variant="h6">Total Expense</Typography>
+                        <Typography variant="h5" className="balance-amount">
+                            <ExpenseIcon /> <span>${totalExpense.toFixed(2)}</span>
+                        </Typography>
+                    </div>
+                    <div className="balance-item profit">
+                        <Typography variant="h6">Total Profit</Typography>
+                        <Typography variant="h5" className="balance-amount">
+                            <ProfitIcon /> <span>${totalProfit.toFixed(2)}</span>
+                        </Typography>
+                    </div>
+                </div>
+                <Grid container spacing={3} className="dashboard-cards">
                     <Grid item xs={12} sm={6} md={3}>
-                        <Card className="dashboard-card">
+                        <Card className="dashboard-card action-card">
                             <CardContent>
                                 <Typography variant="h5">Add Expense</Typography>
                                 <Button variant="contained" color="primary" startIcon={<AddIcon />} onClick={handleAdd}>
@@ -168,7 +182,7 @@ const Dashboard = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <Card className="dashboard-card">
+                        <Card className="dashboard-card action-card">
                             <CardContent>
                                 <Typography variant="h5">Profile</Typography>
                                 <Button variant="contained" color="primary" startIcon={<AccountCircle />} onClick={handleProfile}>
@@ -178,7 +192,7 @@ const Dashboard = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <Card className="dashboard-card">
+                        <Card className="dashboard-card action-card">
                             <CardContent>
                                 <Typography variant="h5">Savings Goal</Typography>
                                 <Button variant="contained" color="primary" startIcon={<GoalIcon />} onClick={handleAddGoal}>
@@ -188,7 +202,7 @@ const Dashboard = () => {
                         </Card>
                     </Grid>
                     <Grid item xs={12} sm={6} md={3}>
-                        <Card className="dashboard-card">
+                        <Card className="dashboard-card action-card">
                             <CardContent>
                                 <Typography variant="h5">Budget Forecast</Typography>
                                 <Button variant="contained" color="primary" startIcon={<ForecastIcon />} onClick={handleForecast}>
@@ -201,7 +215,7 @@ const Dashboard = () => {
                         {transactions.length > 0 ? (
                             <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={deleteTransaction} />
                         ) : (
-                            <Typography variant="h6" align="center" style={{ color: 'white' }}>
+                            <Typography variant="h6" align="center" className="no-transactions">
                                 No transactions found.
                             </Typography>
                         )}

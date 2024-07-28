@@ -1,41 +1,85 @@
 import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, IconButton } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Profit icon
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'; // Expense icon
+import DateRangeIcon from '@mui/icons-material/DateRange';
+import DescriptionIcon from '@mui/icons-material/Description';
+import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
+import './TransactionList.css';
+
+const groupTransactionsByMonth = (transactions) => {
+    return transactions.reduce((groups, transaction) => {
+        const date = new Date(transaction.date);
+        const monthYear = `${date.toLocaleString('default', { month: 'long' })} ${date.getFullYear()}`;
+        if (!groups[monthYear]) {
+            groups[monthYear] = [];
+        }
+        groups[monthYear].push(transaction);
+        return groups;
+    }, {});
+};
 
 const TransactionList = ({ transactions, onEdit, onDelete }) => {
+    const groupedTransactions = groupTransactionsByMonth(transactions);
+
     return (
-        <TableContainer component={Paper} className="transaction-table-container">
-            <Table>
-                <TableHead>
-                    <TableRow>
-                        <TableCell className="table-header">Amount</TableCell>
-                        <TableCell className="table-header">Date</TableCell>
-                        <TableCell className="table-header">Description</TableCell>
-                        <TableCell className="table-header">Category</TableCell>
-                        <TableCell className="table-header">Actions</TableCell>
-                    </TableRow>
-                </TableHead>
-                <TableBody>
-                    {transactions.map((transaction) => (
-                        <TableRow key={transaction._id} className="table-row">
-                            <TableCell className="table-cell">{transaction.amount}</TableCell>
-                            <TableCell className="table-cell">{new Date(transaction.date).toLocaleDateString()}</TableCell>
-                            <TableCell className="table-cell">{transaction.description}</TableCell>
-                            <TableCell className="table-cell">{transaction.categoryId.name}</TableCell>
-                            <TableCell className="table-cell">
-                                <IconButton color="primary" onClick={() => onEdit(transaction)}>
-                                    <EditIcon />
-                                </IconButton>
-                                <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
-                                    <DeleteIcon />
-                                </IconButton>
-                            </TableCell>
-                        </TableRow>
-                    ))}
-                </TableBody>
-            </Table>
-        </TableContainer>
+        <div className="transaction-list-container">
+            {Object.keys(groupedTransactions).map((monthYear) => (
+                <div key={monthYear} className="transaction-group">
+                    <Typography variant="h6" className="transaction-group-header">
+                        {monthYear}
+                    </Typography>
+                    <div className="transaction-group-content">
+                        {groupedTransactions[monthYear].map((transaction) => (
+                            <Card key={transaction._id} className="transaction-list-item">
+                                <CardContent>
+                                    <Grid container spacing={2}>
+                                        <Grid item xs={12} sm={6} md={3}>
+                                            <Typography className="transaction-amount">
+                                                <AttachMoneyIcon className="transaction-icon" />
+                                                ${transaction.amount}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6} md={3}>
+                                            <Typography className="transaction-date">
+                                                <DateRangeIcon className="transaction-icon" />
+                                                {new Date(transaction.date).toLocaleDateString()}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6} md={3}>
+                                            <Typography className="transaction-description">
+                                                <DescriptionIcon className="transaction-icon" />
+                                                {transaction.description}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6} md={2}>
+                                            <Typography className={`transaction-category ${transaction.categoryId.name.toLowerCase()}`}>
+                                                {transaction.categoryId.name === 'Income' ? (
+                                                    <ArrowUpwardIcon className="transaction-icon" />
+                                                ) : (
+                                                    <ArrowDownwardIcon className="transaction-icon" />
+                                                )}
+                                                {transaction.categoryId.name}
+                                            </Typography>
+                                        </Grid>
+                                        <Grid item xs={12} sm={6} md={1} className="transaction-actions">
+                                            <IconButton color="primary" onClick={() => onEdit(transaction)}>
+                                                <EditIcon />
+                                            </IconButton>
+                                            <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
+                                                <DeleteIcon />
+                                            </IconButton>
+                                        </Grid>
+                                    </Grid>
+                                </CardContent>
+                            </Card>
+                        ))}
+                    </div>
+                </div>
+            ))}
+        </div>
     );
 };
 

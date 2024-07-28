@@ -1,26 +1,84 @@
-
-.transaction-table-container {
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+.transaction-list-container {
     margin-top: 20px;
+    color: white;
 }
 
-.table-header {
-    background-color: #3f51b5;
+.transaction-group {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.transaction-group-header {
+    background-color: rgba(0, 0, 0, 0.7);
+    padding: 10px;
+    border-radius: 4px 4px 0 0;
     color: white;
+}
+
+.transaction-group-content {
+    margin-top: 10px;
+}
+
+.transaction-list-item {
+    background-color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 10px;
+    transition: transform 0.2s, box-shadow 0.2s;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px;
+}
+
+.transaction-list-item:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.transaction-amount {
+    font-size: 1.2em;
+    font-weight: bold;
+    color: #4caf50;
+    display: flex;
+    align-items: center;
+}
+
+.transaction-date {
+    font-size: 1em;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.transaction-description {
+    font-size: 1em;
+    color: #666;
+    display: flex;
+    align-items: center;
+}
+
+.transaction-category {
+    display: flex;
+    align-items: center;
     font-weight: bold;
 }
 
-.table-row:nth-of-type(odd) {
-    background-color: #f2f2f2;
+.transaction-category.income {
+    color: #4caf50;
 }
 
-.table-row:nth-of-type(even) {
-    background-color: #ffffff;
+.transaction-category.expense {
+    color: #f44336;
 }
 
-.table-cell {
-    color: black;
-    font-size: 16px;
+.transaction-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.transaction-actions .MuiIconButton-root {
+    margin-left: 5px;
+}
+
+.transaction-icon {
+    margin-right: 5px;
 }
