@@ -13,12 +13,18 @@ import backgroundVideo from '../images/gif_background.mp4';
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [balance, setBalance] = useState(0);
+    const [totalExpense, setTotalExpense] = useState(0);
+    const [totalProfit, setTotalProfit] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchTransactions();
         fetchBalance();
     }, []);
+
+    useEffect(() => {
+        calculateTotals();
+    }, [transactions]);
 
     const fetchTransactions = async () => {
         const token = localStorage.getItem('token');
@@ -58,6 +64,20 @@ const Dashboard = () => {
             console.error('Error fetching balance:', error);
             setBalance(0);
         }
+    };
+
+    const calculateTotals = () => {
+        let expense = 0;
+        let profit = 0;
+        transactions.forEach(transaction => {
+            if (transaction.categoryId.name.toLowerCase() === 'income') {
+                profit += parseFloat(transaction.amount);
+            } else if (transaction.categoryId.name.toLowerCase() === 'expense') {
+                expense += parseFloat(transaction.amount);
+            }
+        });
+        setTotalExpense(expense);
+        setTotalProfit(profit);
     };
 
     const deleteTransaction = async (id) => {
@@ -131,7 +151,9 @@ const Dashboard = () => {
                     <Grid item xs={12}>
                         <Card className="dashboard-card">
                             <CardContent>
-                                <Typography variant="h5">Current Balance: ${balance}</Typography>
+                                <Typography variant="h5">Current Balance: ${balance.toFixed(2)}</Typography>
+                                <Typography variant="h6">Total Expense: ${totalExpense.toFixed(2)}</Typography>
+                                <Typography variant="h6">Total Profit: ${totalProfit.toFixed(2)}</Typography>
                             </CardContent>
                         </Card>
                     </Grid>
