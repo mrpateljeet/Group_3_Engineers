@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ForecastForm.css';
-import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
@@ -63,19 +63,15 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
 
     return (
         <div className="forecast-container">
-            <AppBar position="static" color="primary">
-                <Toolbar>
-                    <IconButton color="inherit" onClick={handleBackToDashboard}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Forecast Management
-                    </Typography>
-                    <IconButton color="inherit" onClick={handleLogout}>
-                        <ExitToAppIcon />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
+            <header className="forecast-header">
+                <button className="back-button" onClick={handleBackToDashboard}>
+                    &larr;
+                </button>
+                <h1>Forecast Management</h1>
+                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                    <ExitToAppIcon />
+                </IconButton>
+            </header>
             <form onSubmit={handleSubmit} className="forecast-form">
                 <div className="form-group2">
                     <label>Name:</label>

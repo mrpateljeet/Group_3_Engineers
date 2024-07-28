@@ -5,7 +5,7 @@ body {
     padding: 0;
 }
 
-.forecast-container {
+.profile-container {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -18,18 +18,18 @@ body {
 }
 
 /* Hide scrollbars for Webkit browsers (Chrome, Safari) */
-.forecast-container::-webkit-scrollbar {
+.profile-container::-webkit-scrollbar {
     width: 0;
     height: 0;
 }
 
 /* Hide scrollbars for Internet Explorer, Edge and Firefox */
-.forecast-container {
+.profile-container {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }
 
-.forecast-header {
+.profile-header {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -58,7 +58,7 @@ body {
     background-color: #CC0000;
 }
 
-.forecast-header h1 {
+.profile-header h1 {
     margin: 0;
     font-size: 24px;
     padding-left: 100px;
@@ -66,7 +66,7 @@ body {
     color: #333;
 }
 
-.forecast-form {
+.profile-form {
     background: #fff;
     padding: 20px;
     border-radius: 8px;
@@ -75,6 +75,7 @@ body {
     width: 100%;
     max-width: 500px;
     box-sizing: border-box;
+    color: #333;
 }
 
 .form-group2 {
@@ -96,7 +97,14 @@ body {
     box-sizing: border-box;
 }
 
-.forecast-button {
+.profile-details p {
+    margin: 10px 0;
+    font-size: 16px;
+    line-height: 1.6;
+    color: #333;
+}
+
+.save-profile-button, .edit-profile-button, .cancel-profile-button {
     background-color: #4facfe;
     color: white;
     padding: 10px 20px;
@@ -105,18 +113,23 @@ body {
     cursor: pointer;
     transition: background-color 0.3s ease;
     width: 100%;
+    box-sizing: border-box;
+    margin-top: 10px;
 }
 
-.forecast-button:hover {
+.save-profile-button:hover, .edit-profile-button:hover, .cancel-profile-button:hover {
     background-color: #00c2fe;
 }
 
-.forecast-result {
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    width: 100%;
-    max-width: 500px;
-    margin-top: 20px;
+.link-to-dashboard {
+    color: #4facfe;
+    text-decoration: none;
+    margin-top: 10px;
+    display: block;
     text-align: center;
+    transition: color 0.3s ease;
+}
+
+.link-to-dashboard:hover {
+    color: #00c2fe;
 }

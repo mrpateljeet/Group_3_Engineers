@@ -1,9 +1,16 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 import logo from '../images/budget_background.png';
-import backgroundVideo from '../images/gif_background.mp4'; 
+import backgroundVideo from '../images/gif_background.mp4';
 
 const Homepage = () => {
+  const navigate = useNavigate();
+
+  const handleJoinNow = () => {
+    navigate('/register');
+  };
+
   return (
     <div className="Homepage">
       <div className="background-video">
@@ -31,7 +38,7 @@ const Homepage = () => {
           <div className="hero-content">
             <h1>Smart Budgeting</h1>
             <p>Take control of your finances, smash your savings goals, and secure a brighter financial future with Budget Minder!</p>
-            <button className="join-now">Join Now</button>
+            <button className="join-now" onClick={handleJoinNow}>Join Now</button>
           </div>
         </section>
       </main>

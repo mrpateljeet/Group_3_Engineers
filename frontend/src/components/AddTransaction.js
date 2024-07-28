@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import './AddTransaction.css';
+import { IconButton } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import TransactionForm from './TransactionForm';
 
 const AddTransaction = () => {
     const [initialData, setInitialData] = useState({});
@@ -38,7 +37,8 @@ const AddTransaction = () => {
         }
     };
 
-    const handleSubmit = async (transaction) => {
+    const handleSubmit = async (event) => {
+        event.preventDefault();
         const token = localStorage.getItem('token');
         try {
             const method = initialData.id ? 'PUT' : 'POST';
@@ -51,7 +51,7 @@ const AddTransaction = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ ...transaction, userId: 1 }), // Adjust userId as necessary
+                body: JSON.stringify({ ...initialData, userId: 1 }), // Adjust userId as necessary
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -60,10 +60,6 @@ const AddTransaction = () => {
         } catch (error) {
             console.error('Error saving transaction:', error);
         }
-    };
-
-    const handleProfile = () => {
-        navigate('/profile');
     };
 
     const handleLogout = () => {
@@ -77,28 +73,61 @@ const AddTransaction = () => {
     };
 
     return (
-        <div>
-            <AppBar position="static" color="primary">
-                <Toolbar>
-                    <IconButton color="inherit" onClick={handleBackToDashboard}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Add Transaction
-                    </Typography>
-                    <IconButton color="inherit" onClick={handleProfile}>
-                        <AccountCircle />
-                    </IconButton>
-                    <IconButton color="inherit" onClick={handleLogout}>
-                        <ExitToAppIcon />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <TransactionForm
-                onSubmit={handleSubmit}
-                initialData={initialData}
-                categories={categories}
-            />
+        <div className="transaction-container">
+            <header className="transaction-header">
+                <button className="back-button" onClick={handleBackToDashboard}>
+                    &larr;
+                </button>
+                <h1>Add Transaction</h1>
+                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                    <ExitToAppIcon />
+                </IconButton>
+            </header>
+            <form onSubmit={handleSubmit} className="transaction-form">
+                <div className="form-group2">
+                    <label>Amount:</label>
+                    <input
+                        type="number"
+                        value={initialData.amount || ''}
+                        onChange={(e) => setInitialData({ ...initialData, amount: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="form-group2">
+                    <label>Date:</label>
+                    <input
+                        type="date"
+                        value={initialData.date || ''}
+                        onChange={(e) => setInitialData({ ...initialData, date: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="form-group2">
+                    <label>Description:</label>
+                    <input
+                        type="text"
+                        value={initialData.description || ''}
+                        onChange={(e) => setInitialData({ ...initialData, description: e.target.value })}
+                        required
+                    />
+                </div>
+                <div className="form-group2">
+                    <label>Category:</label>
+                    <select
+                        value={initialData.category || ''}
+                        onChange={(e) => setInitialData({ ...initialData, category: e.target.value })}
+                        required
+                    >
+                        <option value="">Select Category</option>
+                        {categories.map((category) => (
+                            <option key={category._id} value={category._id}>
+                                {category.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <button type="submit" className="add-transaction-button">Submit</button>
+            </form>
         </div>
     );
 };
