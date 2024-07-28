@@ -19,6 +19,7 @@ const RegisterForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -34,6 +35,8 @@ const RegisterForm = () => {
         const sanitizedUsername = sanitizeInput(username);
         const sanitizedEmail = sanitizeInput(email);
         const sanitizedPassword = sanitizeInput(password);
+
+        setLoading(true);
 
         // Send sanitized and validated data to backend
         const response = await fetch('http://localhost:3000/api/register', {
@@ -56,6 +59,7 @@ const RegisterForm = () => {
             setTimeout(() => navigate('/complete-profile'), 3000);
         } else {
             setMessage(data.error);
+            setLoading(false);
         }
     };
 
@@ -68,7 +72,7 @@ const RegisterForm = () => {
                     <Link to="/login">Login</Link>
                 </nav>
             </header>
-            <div className="form-container">
+            <div className={`form-container ${loading ? 'loading' : ''}`}>
                 <div className="form-content">
                     <h2>Register</h2>
                     <form onSubmit={handleSubmit}>
@@ -79,6 +83,7 @@ const RegisterForm = () => {
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="form-group">
@@ -88,6 +93,7 @@ const RegisterForm = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="form-group">
@@ -97,12 +103,14 @@ const RegisterForm = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
-                        <button type="submit" className="register-button">Register</button>
+                        <button type="submit" className="register-button" disabled={loading}>Register</button>
                     </form>
                     {message && <p className="message">{message}</p>}
                 </div>
+                {loading && <div className="spinner-overlay"><div className="spinner"></div></div>}
             </div>
             <footer className="footer">
                 <p>Budget Minder</p>
