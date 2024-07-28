@@ -18,6 +18,7 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
+    const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
@@ -32,6 +33,8 @@ const LoginForm = () => {
         // Sanitize inputs
         const sanitizedEmail = sanitizeInput(email);
         const sanitizedPassword = sanitizeInput(password);
+
+        setLoading(true);
 
         // Send sanitized and validated data to backend
         const response = await fetch('http://localhost:3000/api/login', {
@@ -54,6 +57,7 @@ const LoginForm = () => {
             setTimeout(() => navigate('/dashboard'), 3000);
         } else {
             setMessage(data.error);
+            setLoading(false);
         }
     };
 
@@ -66,7 +70,7 @@ const LoginForm = () => {
                     <Link to="/register">Sign Up</Link>
                 </nav>
             </header>
-            <div className="form-container">
+            <div className={`form-container ${loading ? 'loading' : ''}`}>
                 <div className="form-content">
                     <h2>Login</h2>
                     <form onSubmit={handleSubmit}>
@@ -77,6 +81,7 @@ const LoginForm = () => {
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
                         <div className="form-group">
@@ -86,12 +91,14 @@ const LoginForm = () => {
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
+                                disabled={loading}
                             />
                         </div>
-                        <button type="submit" className="login-button">Login</button>
+                        <button type="submit" className="login-button" disabled={loading}>Login</button>
                     </form>
                     {message && <p className="message">{message}</p>}
                 </div>
+                {loading && <div className="spinner-overlay"><div className="spinner"></div></div>}
             </div>
             <footer className="footer">
                 <p>Budget Minder</p>
