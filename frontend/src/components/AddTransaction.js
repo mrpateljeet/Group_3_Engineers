@@ -40,10 +40,11 @@ const AddTransaction = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
         try {
-            const method = initialData.id ? 'PUT' : 'POST';
-            const url = initialData.id
-                ? `http://localhost:3000/api/transactions/${initialData.id}`
+            const method = initialData._id ? 'PUT' : 'POST';
+            const url = initialData._id
+                ? `http://localhost:3000/api/transactions/${initialData._id}`
                 : 'http://localhost:3000/api/transactions';
             const response = await fetch(url, {
                 method,
@@ -51,7 +52,7 @@ const AddTransaction = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ ...initialData, userId: 1 }), // Adjust userId as necessary
+                body: JSON.stringify({ ...initialData, userId }),
             });
             if (!response.ok) {
                 throw new Error('Network response was not ok');
@@ -114,8 +115,8 @@ const AddTransaction = () => {
                 <div className="form-group2">
                     <label>Category:</label>
                     <select
-                        value={initialData.category || ''}
-                        onChange={(e) => setInitialData({ ...initialData, category: e.target.value })}
+                        value={initialData.categoryId || ''}
+                        onChange={(e) => setInitialData({ ...initialData, categoryId: e.target.value })}
                         required
                     >
                         <option value="">Select Category</option>

@@ -25,6 +25,8 @@ app.use('/api', transactionRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', goalRoutes);
 app.use('/api', forecastRoutes);
+app.use('/api/users', authRoutes);
+
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

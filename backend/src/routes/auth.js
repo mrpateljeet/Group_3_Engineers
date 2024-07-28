@@ -3,6 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const isValidObjectId = require('../utils/isValidObjectId');
 const secretKey = 'Marvel##';
 
 // Register a new user
@@ -36,7 +37,7 @@ router.post('/register', async (req, res) => {
     }
 });
 
-/// Login user
+// Login user
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -56,7 +57,7 @@ router.post('/login', async (req, res) => {
         res.status(200).json({
             message: 'User logged in successfully',
             token,
-            userId: user._id, // Include userId in the response
+            userId: user._id,
             name: user.username,
             accountBalance: user.accountBalance
         });
@@ -66,7 +67,7 @@ router.post('/login', async (req, res) => {
     }
 });
 
-
+// Fetch user details
 router.get('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -89,6 +90,7 @@ router.get('/user', async (req, res) => {
     }
 });
 
+// Update user details
 router.put('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
     const { name, job, bio, age, salary, accountBalance } = req.body;
@@ -118,6 +120,26 @@ router.put('/user', async (req, res) => {
     } catch (err) {
         console.error('Error updating user profile:', err);
         res.status(500).json({ error: 'Failed to update user profile.' });
+    }
+});
+
+// Fetch user balance
+router.get('/:userId/balance', async (req, res) => {
+    const { userId } = req.params;
+
+    if (!isValidObjectId(userId)) {
+        return res.status(400).json({ error: 'Invalid user ID' });
+    }
+
+    try {
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ error: 'User not found' });
+        }
+        res.json({ balance: user.accountBalance });
+    } catch (error) {
+        console.error('Error fetching balance:', error);
+        res.status(500).json({ error: 'Failed to fetch balance' });
     }
 });
 
