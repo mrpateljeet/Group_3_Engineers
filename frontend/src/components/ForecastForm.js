@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ForecastForm.css';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ForecastForm = ({ onForecast, saveForecast }) => {
     const [name, setName] = useState('');
@@ -8,6 +12,7 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
     const [monthlyIncome, setMonthlyIncome] = useState('');
     const [allocationPercentage, setAllocationPercentage] = useState('');
     const [forecastResult, setForecastResult] = useState(null);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -41,13 +46,36 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
         if (window.confirm("Do you want to record this forecast and get updates regarding it?")) {
             await saveForecast({ name, ...forecastData, months: result.months });
             setTimeout(() => {
-                window.location.href = '/add-goal';
+                navigate('/add-goal');
             }, 3000);
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/login', { replace: true });
+    };
+
+    const handleBackToDashboard = () => {
+        navigate('/dashboard');
+    };
+
     return (
         <div className="forecast-container">
+            <AppBar position="static" color="primary">
+                <Toolbar>
+                    <IconButton color="inherit" onClick={handleBackToDashboard}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                        Forecast Management
+                    </Typography>
+                    <IconButton color="inherit" onClick={handleLogout}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
             <form onSubmit={handleSubmit} className="forecast-form">
                 <div className="form-group2">
                     <label>Name:</label>

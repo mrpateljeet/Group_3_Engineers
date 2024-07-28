@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import TransactionForm from './TransactionForm';
 
 const AddTransaction = () => {
@@ -58,12 +62,44 @@ const AddTransaction = () => {
         }
     };
 
+    const handleProfile = () => {
+        navigate('/profile');
+    };
+
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/login', { replace: true });
+    };
+
+    const handleBackToDashboard = () => {
+        navigate('/dashboard');
+    };
+
     return (
-        <TransactionForm
-            onSubmit={handleSubmit}
-            initialData={initialData}
-            categories={categories}
-        />
+        <div>
+            <AppBar position="static" color="primary">
+                <Toolbar>
+                    <IconButton color="inherit" onClick={handleBackToDashboard}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                        Add Transaction
+                    </Typography>
+                    <IconButton color="inherit" onClick={handleProfile}>
+                        <AccountCircle />
+                    </IconButton>
+                    <IconButton color="inherit" onClick={handleLogout}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+            <TransactionForm
+                onSubmit={handleSubmit}
+                initialData={initialData}
+                categories={categories}
+            />
+        </div>
     );
 };
 

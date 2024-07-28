@@ -1,5 +1,9 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -7,6 +11,7 @@ const Profile = () => {
     const [error, setError] = useState(null);
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({});
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchUserProfile = async () => {
@@ -64,6 +69,16 @@ const Profile = () => {
         }
     };
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/login', { replace: true });
+    };
+
+    const handleBackToDashboard = () => {
+        navigate('/dashboard');
+    };
+
     if (loading) {
         return <p>Loading...</p>;
     }
@@ -74,90 +89,105 @@ const Profile = () => {
 
     return (
         <div>
-            <h1>Profile</h1>
-            {user && (
-                editMode ? (
-                    <form onSubmit={handleSubmit}>
-                        <div>
-                            <label>Name:</label>
-                            <input
-                                type="text"
-                                name="name"
-                                value={formData.name}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Email:</label>
-                            <input
-                                type="email"
-                                name="email"
-                                value={formData.email}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Job:</label>
-                            <input
-                                type="text"
-                                name="job"
-                                value={formData.job}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Bio:</label>
-                            <input
-                                type="text"
-                                name="bio"
-                                value={formData.bio}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Age:</label>
-                            <input
-                                type="number"
-                                name="age"
-                                value={formData.age}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Salary:</label>
-                            <input
-                                type="number"
-                                name="salary"
-                                value={formData.salary}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <div>
-                            <label>Account Balance:</label>
-                            <input
-                                type="number"
-                                name="accountBalance"
-                                value={formData.accountBalance}
-                                onChange={handleInputChange}
-                            />
-                        </div>
-                        <button type="submit">Save</button>
-                        <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
-                    </form>
-                ) : (
-                    <>
-                        <p>Name: {user.name}</p>
-                        <p>Email: {user.email}</p>
-                        <p>Job: {user.job}</p>
-                        <p>Bio: {user.bio}</p>
-                        <p>Age: {user.age}</p>
-                        <p>Salary: {user.salary}</p>
-                        <p>Account Balance: {user.accountBalance}</p>
-                        <button onClick={() => setEditMode(true)}>Edit</button>
-                        <Link to="/dashboard">Back to Dashboard</Link>
-                    </>
-                )
-            )}
+            <AppBar position="static" color="primary">
+                <Toolbar>
+                    <IconButton color="inherit" onClick={handleBackToDashboard}>
+                        <ArrowBackIcon />
+                    </IconButton>
+                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                        Profile
+                    </Typography>
+                    <IconButton color="inherit" onClick={handleLogout}>
+                        <ExitToAppIcon />
+                    </IconButton>
+                </Toolbar>
+            </AppBar>
+            <div>
+                <h1>Profile</h1>
+                {user && (
+                    editMode ? (
+                        <form onSubmit={handleSubmit}>
+                            <div>
+                                <label>Name:</label>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    value={formData.name}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Email:</label>
+                                <input
+                                    type="email"
+                                    name="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Job:</label>
+                                <input
+                                    type="text"
+                                    name="job"
+                                    value={formData.job}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Bio:</label>
+                                <input
+                                    type="text"
+                                    name="bio"
+                                    value={formData.bio}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Age:</label>
+                                <input
+                                    type="number"
+                                    name="age"
+                                    value={formData.age}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Salary:</label>
+                                <input
+                                    type="number"
+                                    name="salary"
+                                    value={formData.salary}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <div>
+                                <label>Account Balance:</label>
+                                <input
+                                    type="number"
+                                    name="accountBalance"
+                                    value={formData.accountBalance}
+                                    onChange={handleInputChange}
+                                />
+                            </div>
+                            <button type="submit">Save</button>
+                            <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
+                        </form>
+                    ) : (
+                        <>
+                            <p>Name: {user.name}</p>
+                            <p>Email: {user.email}</p>
+                            <p>Job: {user.job}</p>
+                            <p>Bio: {user.bio}</p>
+                            <p>Age: {user.age}</p>
+                            <p>Salary: {user.salary}</p>
+                            <p>Account Balance: {user.accountBalance}</p>
+                            <button onClick={() => setEditMode(true)}>Edit</button>
+                            <Link to="/dashboard">Back to Dashboard</Link>
+                        </>
+                    )
+                )}
+            </div>
         </div>
     );
 };
