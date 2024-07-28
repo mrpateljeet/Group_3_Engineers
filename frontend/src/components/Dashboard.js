@@ -12,10 +12,12 @@ import backgroundVideo from '../images/gif_background.mp4';
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
+    const [balance, setBalance] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
         fetchTransactions();
+        fetchBalance();
     }, []);
 
     const fetchTransactions = async () => {
@@ -38,6 +40,26 @@ const Dashboard = () => {
         }
     };
 
+    const fetchBalance = async () => {
+        const token = localStorage.getItem('token');
+        const userId = localStorage.getItem('userId');
+        try {
+            const response = await fetch(`http://localhost:3000/api/users/${userId}/balance`, {
+                headers: {
+                    'Authorization': `Bearer ${token}`
+                }
+            });
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setBalance(data.balance);
+        } catch (error) {
+            console.error('Error fetching balance:', error);
+            setBalance(0);
+        }
+    };
+
     const deleteTransaction = async (id) => {
         if (window.confirm("Are you sure you want to delete this transaction?")) {
             const token = localStorage.getItem('token');
@@ -52,6 +74,7 @@ const Dashboard = () => {
                     throw new Error('Network response was not ok');
                 }
                 setTransactions(transactions.filter((t) => t._id !== id));
+                fetchBalance(); // Update balance after deletion
             } catch (error) {
                 console.error('Error deleting transaction:', error);
             }
@@ -105,6 +128,13 @@ const Dashboard = () => {
                     </Toolbar>
                 </AppBar>
                 <Grid container spacing={3} style={{ padding: 20 }}>
+                    <Grid item xs={12}>
+                        <Card className="dashboard-card">
+                            <CardContent>
+                                <Typography variant="h5">Current Balance: ${balance}</Typography>
+                            </CardContent>
+                        </Card>
+                    </Grid>
                     <Grid item xs={12} sm={6} md={3}>
                         <Card className="dashboard-card">
                             <CardContent>
