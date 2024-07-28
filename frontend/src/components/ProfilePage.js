@@ -4,6 +4,7 @@ import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import './ProfilePage.css';
 
 const Profile = () => {
     const [user, setUser] = useState(null);
@@ -88,26 +89,22 @@ const Profile = () => {
     }
 
     return (
-        <div>
-            <AppBar position="static" color="primary">
-                <Toolbar>
-                    <IconButton color="inherit" onClick={handleBackToDashboard}>
-                        <ArrowBackIcon />
-                    </IconButton>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
-                        Profile
-                    </Typography>
-                    <IconButton color="inherit" onClick={handleLogout}>
-                        <ExitToAppIcon />
-                    </IconButton>
-                </Toolbar>
-            </AppBar>
-            <div>
+        <div className="profile-container">
+            <header className="profile-header">
+                <button className="back-button" onClick={handleBackToDashboard}>
+                    &larr;
+                </button>
+                <h1>Profile</h1>
+                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                    <ExitToAppIcon />
+                </IconButton>
+            </header>
+            <div className="profile-form">
                 <h1>Profile</h1>
                 {user && (
                     editMode ? (
                         <form onSubmit={handleSubmit}>
-                            <div>
+                            <div className="form-group2">
                                 <label>Name:</label>
                                 <input
                                     type="text"
@@ -116,7 +113,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Email:</label>
                                 <input
                                     type="email"
@@ -125,7 +122,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Job:</label>
                                 <input
                                     type="text"
@@ -134,7 +131,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Bio:</label>
                                 <input
                                     type="text"
@@ -143,7 +140,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Age:</label>
                                 <input
                                     type="number"
@@ -152,7 +149,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Salary:</label>
                                 <input
                                     type="number"
@@ -161,7 +158,7 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <div>
+                            <div className="form-group2">
                                 <label>Account Balance:</label>
                                 <input
                                     type="number"
@@ -170,8 +167,8 @@ const Profile = () => {
                                     onChange={handleInputChange}
                                 />
                             </div>
-                            <button type="submit">Save</button>
-                            <button type="button" onClick={() => setEditMode(false)}>Cancel</button>
+                            <button type="submit" className="save-profile-button">Save</button>
+                            <button type="button" onClick={() => setEditMode(false)} className="cancel-profile-button">Cancel</button>
                         </form>
                     ) : (
                         <>
@@ -182,8 +179,7 @@ const Profile = () => {
                             <p>Age: {user.age}</p>
                             <p>Salary: {user.salary}</p>
                             <p>Account Balance: {user.accountBalance}</p>
-                            <button onClick={() => setEditMode(true)}>Edit</button>
-                            <Link to="/dashboard">Back to Dashboard</Link>
+                            <button onClick={() => setEditMode(true)} className="edit-profile-button">Edit</button>
                         </>
                     )
                 )}
