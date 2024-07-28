@@ -1,6 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './GoalForm.css';
 import { VictoryChart, VictoryLine, VictoryAxis } from 'victory';
+import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
+import AccountCircle from '@mui/icons-material/AccountCircle';
+import ExitToAppIcon from '@mui/icons-material/ExitToApp';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [name, setName] = useState('');
@@ -8,6 +13,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [targetDate, setTargetDate] = useState('');
     const [goals, setGoals] = useState([]);
     const [forecasts, setForecasts] = useState([]);
+    const navigate = useNavigate();
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -30,6 +36,16 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         getGoalsAndForecasts();
     }, [fetchGoals, fetchForecasts]);
 
+    const handleLogout = () => {
+        localStorage.removeItem('token');
+        localStorage.removeItem('userId');
+        navigate('/login', { replace: true });
+    };
+
+    const handleBackToDashboard = () => {
+        navigate('/dashboard');
+    };
+
     const renderForecastChart = (forecast) => {
         const data = [
             { x: 'Target Amount', y: parseFloat(forecast.targetAmount) || 0 },
@@ -39,7 +55,6 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
         return (
             <div>
-                {/* <h3 className="chart-title">Forecast Chart</h3> */}
                 <VictoryChart
                     domainPadding={{ x: 50, y: 30 }}
                     padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
@@ -62,7 +77,6 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                         dependentAxis
                         style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
                     />
-                    
                 </VictoryChart>
             </div>
         );
@@ -73,7 +87,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             x: forecast.name,
             y: parseFloat(forecast.months) || 0
         }));
-    
+
         return (
             <div>
                 <VictoryChart
@@ -102,14 +116,17 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             </div>
         );
     };
-    
+
     return (
         <div className="goal-container">
             <header className="goal-header">
-                <button className="back-button" onClick={() => window.location.href = '/dashboard'}>
+                <button className="back-button" onClick={handleBackToDashboard}>
                     &larr;
                 </button>
                 <h1>Goal Management</h1>
+                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                    <ExitToAppIcon />
+                </IconButton>
             </header>
             <form onSubmit={handleSubmit} className="goal-form">
                 <div className="form-group2">
