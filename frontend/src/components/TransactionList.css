@@ -26,7 +26,6 @@
     transition: transform 0.2s, box-shadow 0.2s;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    padding: 10px;
 }
 
 .transaction-list-item:hover {
@@ -81,4 +80,10 @@
 
 .transaction-icon {
     margin-right: 5px;
+}
+
+.see-more-button-container {
+    text-align: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
 }

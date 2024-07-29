@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import { AppBar, Toolbar, Typography, IconButton, Button } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
+import { useNavigate } from 'react-router-dom';
+import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import './ProfilePage.css';
@@ -92,13 +91,16 @@ const Profile = () => {
         <div className="profile-container">
             <header className="profile-header">
                 <button className="back-button" onClick={handleBackToDashboard}>
-                    &larr;
+                    <ArrowBackIcon />
                 </button>
                 <h1>Profile</h1>
-                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                <IconButton color="secondary" onClick={handleLogout} className="icon-button">
                     <ExitToAppIcon />
                 </IconButton>
             </header>
+            <div className="profile-avatar">
+                <img src={`https://ui-avatars.com/api/?name=${user.name}&background=007bff&color=fff`} alt="Avatar" />
+            </div>
             <div className="profile-form">
                 <h1>Profile</h1>
                 {user && (

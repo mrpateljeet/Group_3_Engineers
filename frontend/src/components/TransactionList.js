@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, CardContent, Typography, IconButton, Grid } from '@mui/material';
+import React, { useState } from 'react';
+import { Card, CardContent, Typography, IconButton, Grid, Button } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Profit icon
@@ -22,7 +22,13 @@ const groupTransactionsByMonth = (transactions) => {
 };
 
 const TransactionList = ({ transactions, onEdit, onDelete }) => {
+    const [visibleTransactions, setVisibleTransactions] = useState(10);
+
     const groupedTransactions = groupTransactionsByMonth(transactions);
+
+    const handleSeeMore = () => {
+        setVisibleTransactions(visibleTransactions + 10);
+    };
 
     return (
         <div className="transaction-list-container">
@@ -32,53 +38,62 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
                         {monthYear}
                     </Typography>
                     <div className="transaction-group-content">
-                        {groupedTransactions[monthYear].map((transaction) => (
-                            <Card key={transaction._id} className="transaction-list-item">
-                                <CardContent>
-                                    <Grid container spacing={2}>
-                                        <Grid item xs={12} sm={6} md={3}>
-                                            <Typography className="transaction-amount">
-                                                <AttachMoneyIcon className="transaction-icon" />
-                                                ${transaction.amount}
-                                            </Typography>
+                        {groupedTransactions[monthYear]
+                            .slice(0, visibleTransactions)
+                            .map((transaction) => (
+                                <Card key={transaction._id} className="transaction-list-item">
+                                    <CardContent>
+                                        <Grid container spacing={2}>
+                                            <Grid item xs={12} sm={6} md={3}>
+                                                <Typography className="transaction-amount">
+                                                    <AttachMoneyIcon className="transaction-icon" />
+                                                    ${transaction.amount}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={3}>
+                                                <Typography className="transaction-date">
+                                                    <DateRangeIcon className="transaction-icon" />
+                                                    {new Date(transaction.date).toLocaleDateString()}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={3}>
+                                                <Typography className="transaction-description">
+                                                    <DescriptionIcon className="transaction-icon" />
+                                                    {transaction.description}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={2}>
+                                                <Typography className={`transaction-category ${transaction.categoryId.name.toLowerCase()}`}>
+                                                    {transaction.categoryId.name === 'Income' ? (
+                                                        <ArrowUpwardIcon className="transaction-icon" />
+                                                    ) : (
+                                                        <ArrowDownwardIcon className="transaction-icon" />
+                                                    )}
+                                                    {transaction.categoryId.name}
+                                                </Typography>
+                                            </Grid>
+                                            <Grid item xs={12} sm={6} md={1} className="transaction-actions">
+                                                <IconButton color="primary" onClick={() => onEdit(transaction)}>
+                                                    <EditIcon />
+                                                </IconButton>
+                                                <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Grid>
                                         </Grid>
-                                        <Grid item xs={12} sm={6} md={3}>
-                                            <Typography className="transaction-date">
-                                                <DateRangeIcon className="transaction-icon" />
-                                                {new Date(transaction.date).toLocaleDateString()}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} md={3}>
-                                            <Typography className="transaction-description">
-                                                <DescriptionIcon className="transaction-icon" />
-                                                {transaction.description}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} md={2}>
-                                            <Typography className={`transaction-category ${transaction.categoryId.name.toLowerCase()}`}>
-                                                {transaction.categoryId.name === 'Income' ? (
-                                                    <ArrowUpwardIcon className="transaction-icon" />
-                                                ) : (
-                                                    <ArrowDownwardIcon className="transaction-icon" />
-                                                )}
-                                                {transaction.categoryId.name}
-                                            </Typography>
-                                        </Grid>
-                                        <Grid item xs={12} sm={6} md={1} className="transaction-actions">
-                                            <IconButton color="primary" onClick={() => onEdit(transaction)}>
-                                                <EditIcon />
-                                            </IconButton>
-                                            <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
-                                                <DeleteIcon />
-                                            </IconButton>
-                                        </Grid>
-                                    </Grid>
-                                </CardContent>
-                            </Card>
-                        ))}
+                                    </CardContent>
+                                </Card>
+                            ))}
                     </div>
                 </div>
             ))}
+            {visibleTransactions < transactions.length && (
+                <div className="see-more-button-container">
+                    <Button variant="contained" color="primary" onClick={handleSeeMore}>
+                        See More
+                    </Button>
+                </div>
+            )}
         </div>
     );
 };
