@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionList from './TransactionList';
 import './Dashboard.css';
-import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton } from '@mui/material';
+import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import AccountCircle from '@mui/icons-material/AccountCircle';
 import ForecastIcon from '@mui/icons-material/WbSunny';
@@ -11,13 +11,37 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import BalanceIcon from '@mui/icons-material/AccountBalance';
 import ExpenseIcon from '@mui/icons-material/ArrowDownward';
 import ProfitIcon from '@mui/icons-material/ArrowUpward';
-import backgroundVideo from '../images/gif_background.mp4';
+import { Line } from 'react-chartjs-2';
+import {
+    Chart as ChartJS,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend,
+} from 'chart.js';
+import backgroundVideo from '../images/dashboard_background_gif.mp4';
+
+ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+    Title,
+    Tooltip,
+    Legend
+);
 
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [balance, setBalance] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
     const [totalProfit, setTotalProfit] = useState(0);
+    const [timeframe, setTimeframe] = useState('weekly');
+    const [chartData, setChartData] = useState({});
+    const [chartOptions, setChartOptions] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -27,7 +51,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         calculateTotals();
-    }, [transactions]);
+        generateChartData();
+    }, [transactions, timeframe]);
 
     const fetchTransactions = async () => {
         const token = localStorage.getItem('token');
@@ -73,14 +98,160 @@ const Dashboard = () => {
         let expense = 0;
         let profit = 0;
         transactions.forEach(transaction => {
-            if (transaction.categoryId.name.toLowerCase() === 'income') {
+            if (transaction.categoryId && transaction.categoryId.name && transaction.categoryId.name.toLowerCase() === 'income') {
                 profit += parseFloat(transaction.amount);
-            } else if (transaction.categoryId.name.toLowerCase() === 'expense') {
+            } else if (transaction.categoryId && transaction.categoryId.name && transaction.categoryId.name.toLowerCase() === 'expense') {
                 expense += parseFloat(transaction.amount);
             }
         });
         setTotalExpense(expense);
         setTotalProfit(profit);
+    };
+
+    const generateChartData = () => {
+        if (!transactions || transactions.length === 0) {
+            setChartData({});
+            return;
+        }
+
+        let labels = [];
+        let incomeData = [];
+        let expenseData = [];
+        let label = '';
+
+        switch (timeframe) {
+            case 'weekly':
+                label = 'Weekly Expenses & Income';
+                labels = ['Week 1', 'Week 2', 'Week 3', 'Week 4'];
+                incomeData = transactions.reduce((acc, transaction) => {
+                    const week = Math.ceil(new Date(transaction.date).getDate() / 7);
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'income') {
+                        if (!acc[week - 1]) {
+                            acc[week - 1] = 0;
+                        }
+                        acc[week - 1] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(4).fill(0));
+                expenseData = transactions.reduce((acc, transaction) => {
+                    const week = Math.ceil(new Date(transaction.date).getDate() / 7);
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'expense') {
+                        if (!acc[week - 1]) {
+                            acc[week - 1] = 0;
+                        }
+                        acc[week - 1] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(4).fill(0));
+                break;
+            case 'monthly':
+                label = 'Monthly Expenses & Income';
+                labels = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+                incomeData = transactions.reduce((acc, transaction) => {
+                    const month = new Date(transaction.date).getMonth();
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'income') {
+                        if (!acc[month]) {
+                            acc[month] = 0;
+                        }
+                        acc[month] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(12).fill(0));
+                expenseData = transactions.reduce((acc, transaction) => {
+                    const month = new Date(transaction.date).getMonth();
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'expense') {
+                        if (!acc[month]) {
+                            acc[month] = 0;
+                        }
+                        acc[month] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(12).fill(0));
+                break;
+            case 'yearly':
+                label = 'Yearly Expenses & Income';
+                const currentYear = new Date().getFullYear();
+                labels = [currentYear - 2, currentYear - 1, currentYear];
+                incomeData = transactions.reduce((acc, transaction) => {
+                    const year = new Date(transaction.date).getFullYear();
+                    const index = labels.indexOf(year);
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'income' && index >= 0) {
+                        if (!acc[index]) {
+                            acc[index] = 0;
+                        }
+                        acc[index] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(3).fill(0));
+                expenseData = transactions.reduce((acc, transaction) => {
+                    const year = new Date(transaction.date).getFullYear();
+                    const index = labels.indexOf(year);
+                    if (transaction.categoryId && transaction.categoryId.name.toLowerCase() === 'expense' && index >= 0) {
+                        if (!acc[index]) {
+                            acc[index] = 0;
+                        }
+                        acc[index] += parseFloat(transaction.amount);
+                    }
+                    return acc;
+                }, new Array(3).fill(0));
+                break;
+            default:
+                break;
+        }
+
+        setChartData({
+            labels,
+            datasets: [
+                {
+                    label: 'Income',
+                    data: incomeData,
+                    borderColor: '#4caf50',
+                    backgroundColor: 'rgba(76, 175, 80, 0.4)',
+                    fill: true,
+                    tension: 0.4,
+                },
+                {
+                    label: 'Expenses',
+                    data: expenseData,
+                    borderColor: '#f44336',
+                    backgroundColor: 'rgba(244, 67, 54, 0.4)',
+                    fill: true,
+                    tension: 0.4,
+                },
+            ],
+        });
+
+        setChartOptions({
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltip: {
+                    callbacks: {
+                        label: function (context) {
+                            return `${context.dataset.label}: $${context.raw.toFixed(2)}`;
+                        },
+                    },
+                },
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Time Period',
+                    },
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Amount ($)',
+                    },
+                    beginAtZero: true,
+                },
+            },
+        });
     };
 
     const deleteTransaction = async (id) => {
@@ -128,6 +299,10 @@ const Dashboard = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
+    };
+
+    const handleTimeframeChange = (event) => {
+        setTimeframe(event.target.value);
     };
 
     return (
@@ -221,6 +396,19 @@ const Dashboard = () => {
                         )}
                     </Grid>
                 </Grid>
+                <div className="visualization-section">
+                    <FormControl variant="outlined" className="timeframe-select">
+                        <InputLabel>Timeframe</InputLabel>
+                        <Select value={timeframe} onChange={handleTimeframeChange} label="Timeframe">
+                            <MenuItem value="weekly">Weekly</MenuItem>
+                            <MenuItem value="monthly">Monthly</MenuItem>
+                            <MenuItem value="yearly">Yearly</MenuItem>
+                        </Select>
+                    </FormControl>
+                    {chartData && chartData.labels && chartData.labels.length > 0 && (
+                        <Line data={chartData} options={chartOptions} />
+                    )}
+                </div>
             </div>
         </div>
     );
