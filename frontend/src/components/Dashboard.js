@@ -42,6 +42,7 @@ const Dashboard = () => {
     const [timeframe, setTimeframe] = useState('weekly');
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
+    const [visibleTransactions, setVisibleTransactions] = useState(12); // State to manage the number of visible transactions
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -58,7 +59,7 @@ const Dashboard = () => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
         try {
-            const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`, {
+            const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}&limit=${visibleTransactions}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -97,6 +98,7 @@ const Dashboard = () => {
     const calculateTotals = () => {
         let expense = 0;
         let profit = 0;
+
         transactions.forEach(transaction => {
             if (transaction.categoryId && transaction.categoryId.name && transaction.categoryId.name.toLowerCase() === 'income') {
                 profit += parseFloat(transaction.amount);
@@ -104,6 +106,7 @@ const Dashboard = () => {
                 expense += parseFloat(transaction.amount);
             }
         });
+
         setTotalExpense(expense);
         setTotalProfit(profit);
     };
@@ -305,6 +308,14 @@ const Dashboard = () => {
         setTimeframe(event.target.value);
     };
 
+    const loadMoreTransactions = () => {
+        setVisibleTransactions(prev => prev + 12); // Increase the visible transactions by 12
+    };
+
+    useEffect(() => {
+        fetchTransactions();
+    }, [visibleTransactions]);
+
     return (
         <div className="dashboard-container">
             <video autoPlay loop muted className="background-video">
@@ -388,13 +399,20 @@ const Dashboard = () => {
                     </Grid>
                     <Grid item xs={12}>
                         {transactions.length > 0 ? (
-                            <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={deleteTransaction} />
+                            <TransactionList transactions={transactions.slice(0, visibleTransactions)} onEdit={handleEdit} onDelete={deleteTransaction} />
                         ) : (
                             <Typography variant="h6" align="center" className="no-transactions">
                                 No transactions found.
                             </Typography>
                         )}
                     </Grid>
+                    {visibleTransactions < transactions.length && (
+                        <Grid item xs={12} className="load-more">
+                            <Button variant="contained" color="primary" onClick={loadMoreTransactions}>
+                                Load More
+                            </Button>
+                        </Grid>
+                    )}
                 </Grid>
                 <div className="visualization-section">
                     <FormControl variant="outlined" className="timeframe-select">

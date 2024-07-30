@@ -1,98 +1,110 @@
+/* ProfilePage.css */
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-image: url('https://www.example.com/premium-background.jpg'); /* Replace with your premium background image URL */
+    background-size: cover;
+    background-position: center;
+    height: 100%;
+    overflow-x: hidden;
+}
+
 .profile-container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    font-family: Arial, sans-serif;
-    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 30px;
+    max-width: 800px;
+    margin: 50px auto;
+    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    border-radius: 15px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    backdrop-filter: blur(10px); /* Blur effect */
+    animation: fadeIn 1s ease-in-out;
 }
 
 .profile-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 20px;
+    width: 100%;
+    margin-bottom: 30px;
+}
+
+.profile-header h1 {
+    font-size: 28px;
+    color: #333;
+    margin: 0;
+}
+
+.icon-button {
+    color: #007bff;
 }
 
 .back-button {
     background: none;
     border: none;
-    font-size: 1.5em;
     cursor: pointer;
-    color: #333;
-    transition: color 0.3s ease;
-}
-
-.back-button:hover {
     color: #007bff;
+    font-size: 24px;
 }
 
 .profile-avatar {
-    display: flex;
-    justify-content: center;
     margin-bottom: 20px;
 }
 
 .profile-avatar img {
+    width: 120px;
+    height: 120px;
     border-radius: 50%;
-    width: 100px;
-    height: 100px;
-    object-fit: cover;
-    border: 3px solid #007bff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+.profile-avatar img:hover {
+    transform: scale(1.1);
 }
 
 .profile-form {
-    text-align: center;
+    width: 100%;
 }
 
-.profile-form h1 {
-    margin-bottom: 20px;
-    font-size: 1.5em;
-    color: #333;
-}
-
-.profile-form p {
-    font-size: 1.1em;
+.profile-form p, 
+.profile-form label {
+    font-size: 18px;
     color: #555;
-    margin: 10px 0;
+    margin: 5px 0;
 }
 
 .form-group2 {
-    margin-bottom: 15px;
-    text-align: left;
-}
-
-.form-group2 label {
-    display: block;
-    margin-bottom: 5px;
-    font-weight: bold;
-    color: #333;
+    display: flex;
+    flex-direction: column;
 }
 
 .form-group2 input {
-    width: 100%;
     padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1em;
-    color: #333;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 16px;
+    margin-top: 5px;
 }
 
-.save-profile-button, .cancel-profile-button, .edit-profile-button {
+.save-profile-button,
+.cancel-profile-button,
+.edit-profile-button {
     padding: 10px 20px;
     border: none;
-    border-radius: 5px;
-    font-size: 1em;
+    border-radius: 4px;
     cursor: pointer;
-    margin: 5px;
-    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px;
+    margin-top: 20px;
+    transition: background-color 0.3s;
 }
 
 .save-profile-button {
     background-color: #28a745;
-    color: #fff;
+    color: white;
 }
 
 .save-profile-button:hover {
@@ -101,7 +113,8 @@
 
 .cancel-profile-button {
     background-color: #dc3545;
-    color: #fff;
+    color: white;
+    margin-left: 10px;
 }
 
 .cancel-profile-button:hover {
@@ -110,15 +123,42 @@
 
 .edit-profile-button {
     background-color: #007bff;
-    color: #fff;
+    color: white;
 }
 
 .edit-profile-button:hover {
     background-color: #0056b3;
 }
 
-.icon-button {
-    position: absolute;
-    right: 16px;
-    top: 16px;
+.profile-container {
+    max-height: 80vh;
+    overflow-y: auto;
+    padding-bottom: 30px;
+}
+
+.profile-container::-webkit-scrollbar {
+    width: 10px;
+}
+
+.profile-container::-webkit-scrollbar-thumb {
+    background: #007bff;
+    border-radius: 10px;
+}
+
+.profile-container::-webkit-scrollbar-track {
+    background: #f5f5f5;
+}
+
+/* Add some animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+.profile-container {
+    animation: fadeIn 1s ease-in-out;
 }
