@@ -39,7 +39,7 @@ The architecture of Budget Minder follows a typical Model-View-Controller (MVC) 
    - Middleware for authentication and authorization.
    - Controllers for managing business logic.
    
-3. **Database (MYSQL with Sequelize)**:
+3. **Database (MongoDB)**:
    - Stores user data, transactions, and categories.
    - Ensures data integrity and security.
 
