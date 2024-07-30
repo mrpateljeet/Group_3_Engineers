@@ -22,13 +22,10 @@ const groupTransactionsByMonth = (transactions) => {
 };
 
 const TransactionList = ({ transactions, onEdit, onDelete }) => {
-    const [visibleTransactions, setVisibleTransactions] = useState(10);
+    const [visibleTransactions] = useState(10);
 
     const groupedTransactions = groupTransactionsByMonth(transactions);
 
-    const handleSeeMore = () => {
-        setVisibleTransactions(visibleTransactions + 10);
-    };
 
     return (
         <div className="transaction-list-container">
@@ -87,13 +84,6 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
                     </div>
                 </div>
             ))}
-            {visibleTransactions < transactions.length && (
-                <div className="see-more-button-container">
-                    <Button variant="contained" color="primary" onClick={handleSeeMore}>
-                        See More
-                    </Button>
-                </div>
-            )}
         </div>
     );
 };
