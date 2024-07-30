@@ -21,11 +21,12 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api', authRoutes);
+app.use('/api/users', authRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', goalRoutes);
 app.use('/api', forecastRoutes);
-app.use('/api', feedbackRoutes); // Add this line
+app.use('/api', feedbackRoutes); 
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

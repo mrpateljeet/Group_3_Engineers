@@ -125,21 +125,15 @@ router.put('/user', async (req, res) => {
 
 // Fetch user balance
 router.get('/:userId/balance', async (req, res) => {
-    const { userId } = req.params;
-
-    if (!isValidObjectId(userId)) {
-        return res.status(400).json({ error: 'Invalid user ID' });
-    }
-
     try {
-        const user = await User.findById(userId);
+        const user = await User.findById(req.params.userId);
         if (!user) {
             return res.status(404).json({ error: 'User not found' });
         }
         res.json({ balance: user.accountBalance });
     } catch (error) {
-        console.error('Error fetching balance:', error);
-        res.status(500).json({ error: 'Failed to fetch balance' });
+        console.error('Error fetching user balance:', error);
+        res.status(500).json({ error: 'Internal server error' });
     }
 });
 

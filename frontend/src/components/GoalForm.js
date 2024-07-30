@@ -6,11 +6,7 @@ import { Doughnut } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import { Container, Form, Table, Card, Row, Col, ProgressBar, Modal, Button } from 'react-bootstrap';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import AccountCircle from '@mui/icons-material/AccountCircle';
-import ExitToAppIcon from '@mui/icons-material/ExitToApp';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import AddIcon from '@mui/icons-material/Add';
-import 'bootstrap/dist/css/bootstrap.min.css';
+import { Add as AddIcon, AccountCircle, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -228,15 +224,15 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
     return (
         <Container fluid className="goal-container p-4">
-            <AppBar position="static">
-                <Toolbar>
-                    <IconButton edge="start" color="inherit" onClick={handleBackToDashboard}>
+            <AppBar position="static" className="app-bar">
+                <Toolbar className="toolbar">
+                    <IconButton edge="start" color="inherit" onClick={handleBackToDashboard} className="icon-button">
                         <ArrowBackIcon />
                     </IconButton>
-                    <Typography variant="h6" style={{ flexGrow: 1 }}>
+                    <Typography variant="h6" className="typography">
                         Goal Management
                     </Typography>
-                    <IconButton color="inherit" onClick={handleLogout}>
+                    <IconButton color="inherit" onClick={handleLogout} className="icon-button">
                         <ExitToAppIcon />
                     </IconButton>
                 </Toolbar>

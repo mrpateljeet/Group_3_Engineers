@@ -3,7 +3,6 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-image: url('https://www.example.com/premium-background.jpg'); /* Replace with your premium background image URL */
     background-size: cover;
     background-position: center;
     height: 100%;
@@ -17,7 +16,7 @@ body, html {
     padding: 30px;
     max-width: 800px;
     margin: 50px auto;
-    background-color: rgba(255, 255, 255, 0.9); /* Semi-transparent white background */
+    background-color: rgba(255, 255, 255, 0.9); 
     border-radius: 15px;
     box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
     backdrop-filter: blur(10px); /* Blur effect */

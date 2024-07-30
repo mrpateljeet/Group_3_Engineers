@@ -1,172 +1,71 @@
-/* GoalForm.css */
-
-.goal-container {
-    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
-    min-height: 100vh;
-    padding: 0;
-    font-family: 'Roboto', sans-serif;
-}
-
-.goal-content {
-    margin-top: 2rem;
-}
-
-.shadow-lg {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.goal-form .form-control {
-    border: none;
-    border-bottom: 2px solid #007bff;
-    border-radius: 0;
-    box-shadow: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.goal-form .form-control:focus {
-    border-color: #0056b3;
-    box-shadow: none;
-}
-
-.goal-form .btn-primary {
-    background: #007bff;
-    border: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.goal-form .btn-primary:hover {
-    background: #0056b3;
-    transform: translateY(-3px);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 123, 255, 0.1);
-}
-
-.table-striped tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.2);
-    cursor: pointer;
-}
-
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.card-title svg {
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.card-title svg:hover {
-    transform: rotate(90deg);
-}
-
-.forecast-chart-container .progress-bar {
-    background: linear-gradient(90deg, #007bff, #00c6ff);
-    transition: width 0.5s ease-in-out;
-}
-
-.forecast-chart-container .btn-primary {
-    background: #007bff;
-    border: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.forecast-chart-container .btn-primary:hover {
-    background: #0056b3;
-    transform: translateY(-3px);
-}
-
-.forecast-chart-container {
-    transition: all 0.3s ease-in-out;
-}
-
-.forecast-chart-container:hover {
-    transform: scale(1.02);
-}
-
-.victory-container {
-    margin: auto;
-}
-
-.modal-content {
-    border-radius: 15px;
-}
-
-.modal-header {
-    border-bottom: none;
-    background: #007bff;
-    color: #fff;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.modal-body {
-    background: #f9f9f9;
-}
-
-.modal-footer {
-    border-top: none;
-}
-
-.modal-footer .btn-secondary {
-    background: #6c757d;
-    border: none;
-}
-
-.modal-footer .btn-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-3px);
-}
-
-.additional-info p {
-    font-size: 1rem;
+body {
     margin: 0;
-}
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .goal-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .goal-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background-color: #f9f9f9;
+    scrollbar-width: none;  /* Firefox */
+  }
+  
+  .goal-content::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari, Opera */
+  }
 
-.additional-info p strong {
-    color: #007bff;
-}
-
-.app-bar {
-    background: #007bff;
-}
-
-.app-bar .toolbar {
+  
+  
+  .goal-form {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .shadow-lg {
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15) !important;
+  }
+  
+  .app-bar {
+    background-color: #007bff;
+  }
+  
+  .toolbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
-}
-
-.app-bar .toolbar .icon-button {
+  }
+  
+  .icon-button {
     color: #fff;
-    transition: all 0.3s ease-in-out;
-}
-
-.app-bar .toolbar .icon-button:hover {
-    transform: translateY(-3px);
-}
-
-.app-bar .toolbar .typography {
-    color: #fff;
+  }
+  
+  .typography {
+    font-size: 1.25rem;
     font-weight: bold;
-}
-
-@media (max-width: 767.98px) {
-    .goal-form .form-control,
-    .modal-content,
-    .card-title,
-    .forecast-chart-container .btn-primary,
-    .app-bar .toolbar .typography {
-        font-size: 14px;
-    }
-
-    .modal-footer .btn-secondary,
-    .goal-form .btn-primary {
-        font-size: 12px;
-    }
-}
+  }
+  
+  .forecast-chart-container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+  }
+  
+  .table-striped tbody tr:nth-of-type(odd) {
+    background-color: rgba(0, 0, 0, 0.05);
+  }
+  
+  .additional-info {
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  

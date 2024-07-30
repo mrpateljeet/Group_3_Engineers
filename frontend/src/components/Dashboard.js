@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionList from './TransactionList';
-import FeedbackForm from './FeedbackForm';
 import './Dashboard.css';
 import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -90,6 +89,7 @@ const Dashboard = () => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+            console.log('Balance fetched from API:', data.balance); // Add logging
             setBalance(data.balance);
         } catch (error) {
             console.error('Error fetching balance:', error);
@@ -317,7 +317,7 @@ const Dashboard = () => {
     return (
         <div className="dashboard-container">
             <video autoPlay loop muted className="background-video">
-                <source src="/dashboard_background_gif.mp4" type="video/mp4" />
+                <source src="dashboard_background_gif.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
             <AppBar position="static" color="primary" className="app-bar">
@@ -406,7 +406,7 @@ const Dashboard = () => {
                     </Grid>
                 </Grid>
                 {visibleTransactions < transactions.length && (
-                    <Grid className="load-more">
+                    <Grid className="load-more" container justifyContent="center">
                         <Button variant="contained" color="primary" onClick={loadMoreTransactions}>
                             Load More
                         </Button>
@@ -425,15 +425,6 @@ const Dashboard = () => {
                         <Line data={chartData} options={chartOptions} />
                     )}
                 </div>
-                <Button variant="contained" color="primary"  onClick={handleFeedbackClick}>
-                                    Give Feedback
-                                </Button>
-                                {showFeedbackForm && (
-                <div>
-                    <FeedbackForm />
-                    <Button variant="contained" color="primary" onClick={handleCloseForm}>Close Feedback Form</Button>
-                </div>
-            )}
             </div>
         </div>
     );
