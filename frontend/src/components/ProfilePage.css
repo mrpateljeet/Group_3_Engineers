@@ -131,8 +131,9 @@ body, html {
 }
 
 .profile-container {
-    max-height: 80vh;
+    max-height: 90vh;
     overflow-y: auto;
+    width: 350px;
     padding-bottom: 30px;
 }
 

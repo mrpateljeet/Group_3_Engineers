@@ -1,5 +1,3 @@
-// models/Forecast.js
-
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
 
@@ -33,6 +31,22 @@ const forecastSchema = new Schema({
         ref: 'User',
         required: true,
     },
+    amountReceived: { 
+        type: Number, 
+        default: 0 
+    },
+    paymentHistory: [
+        {
+            amount: {
+                type: Number,
+                required: true
+            },
+            date: {
+                type: Date,
+                default: Date.now
+            }
+        }
+    ]
 }, {
     timestamps: true,
 });
