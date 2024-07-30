@@ -54,6 +54,11 @@
   transform: scale(1.05);
 }
 
+.feedback{
+  display: flex;
+  justify-content: center;
+  
+}
 .balance-card {
   display: flex;
   justify-content: space-between;

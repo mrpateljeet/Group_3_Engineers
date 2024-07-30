@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionList from './TransactionList';
+import FeedbackForm from './FeedbackForm';
 import './Dashboard.css';
 import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -37,6 +38,7 @@ ChartJS.register(
 const Dashboard = () => {
     const [transactions, setTransactions] = useState([]);
     const [balance, setBalance] = useState(0);
+    const [showFeedbackForm, setShowFeedbackForm] = useState(false);
     const [totalExpense, setTotalExpense] = useState(0);
     const [totalProfit, setTotalProfit] = useState(0);
     const [timeframe, setTimeframe] = useState('weekly');
@@ -72,6 +74,13 @@ const Dashboard = () => {
             console.error('Error fetching transactions:', error);
             setTransactions([]);
         }
+    };
+    const handleFeedbackClick = () => {
+        setShowFeedbackForm(true);
+    };
+
+    const handleCloseForm = () => {
+        setShowFeedbackForm(false);
     };
 
     const fetchBalance = async () => {
@@ -386,6 +395,7 @@ const Dashboard = () => {
                             </CardContent>
                         </Card>
                     </Grid>
+                    
                     <Grid item xs={12}>
                         {transactions.length > 0 ? (
                             <TransactionList transactions={transactions} onEdit={handleEdit} onDelete={deleteTransaction} />
@@ -409,6 +419,15 @@ const Dashboard = () => {
                         <Line data={chartData} options={chartOptions} />
                     )}
                 </div>
+                <Button variant="contained" color="primary"  onClick={handleFeedbackClick}>
+                                    Give Feedback
+                                </Button>
+                                {showFeedbackForm && (
+                <div>
+                    <FeedbackForm />
+                    <Button variant="contained" color="primary" onClick={handleCloseForm}>Close Feedback Form</Button>
+                </div>
+            )}
             </div>
         </div>
     );
