@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionList from './TransactionList';
+import FeedbackForm from './FeedbackForm';
 import './Dashboard.css';
 import { Button, Card, CardContent, Typography, Grid, AppBar, Toolbar, IconButton, MenuItem, Select, FormControl, InputLabel } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
@@ -21,8 +22,8 @@ import {
     Title,
     Tooltip,
     Legend,
+    Filler
 } from 'chart.js';
-import backgroundVideo from '../images/dashboard_background_gif.mp4';
 
 ChartJS.register(
     CategoryScale,
@@ -31,7 +32,8 @@ ChartJS.register(
     LineElement,
     Title,
     Tooltip,
-    Legend
+    Legend,
+    Filler
 );
 
 const Dashboard = () => {
@@ -42,7 +44,7 @@ const Dashboard = () => {
     const [timeframe, setTimeframe] = useState('weekly');
     const [chartData, setChartData] = useState({});
     const [chartOptions, setChartOptions] = useState({});
-    const [visibleTransactions, setVisibleTransactions] = useState(12); // State to manage the number of visible transactions
+    const [visibleTransactions, setVisibleTransactions] = useState(12); // Define the state for visible transactions
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,7 +61,7 @@ const Dashboard = () => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
         try {
-            const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}&limit=${visibleTransactions}`, {
+            const response = await fetch(`http://localhost:3000/api/transactions?userId=${userId}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`
                 }
@@ -312,14 +314,10 @@ const Dashboard = () => {
         setVisibleTransactions(prev => prev + 12); // Increase the visible transactions by 12
     };
 
-    useEffect(() => {
-        fetchTransactions();
-    }, [visibleTransactions]);
-
     return (
         <div className="dashboard-container">
             <video autoPlay loop muted className="background-video">
-                <source src={backgroundVideo} type="video/mp4" />
+                <source src="/dashboard_background_gif.mp4" type="video/mp4" />
                 Your browser does not support the video tag.
             </video>
             <AppBar position="static" color="primary" className="app-bar">
@@ -406,14 +404,14 @@ const Dashboard = () => {
                             </Typography>
                         )}
                     </Grid>
-                    {visibleTransactions < transactions.length && (
-                        <Grid item xs={12} className="load-more">
-                            <Button variant="contained" color="primary" onClick={loadMoreTransactions}>
-                                Load More
-                            </Button>
-                        </Grid>
-                    )}
                 </Grid>
+                {visibleTransactions < transactions.length && (
+                    <Grid className="load-more">
+                        <Button variant="contained" color="primary" onClick={loadMoreTransactions}>
+                            Load More
+                        </Button>
+                    </Grid>
+                )}
                 <div className="visualization-section">
                     <FormControl variant="outlined" className="timeframe-select">
                         <InputLabel>Timeframe</InputLabel>
@@ -427,6 +425,15 @@ const Dashboard = () => {
                         <Line data={chartData} options={chartOptions} />
                     )}
                 </div>
+                <Button variant="contained" color="primary"  onClick={handleFeedbackClick}>
+                                    Give Feedback
+                                </Button>
+                                {showFeedbackForm && (
+                <div>
+                    <FeedbackForm />
+                    <Button variant="contained" color="primary" onClick={handleCloseForm}>Close Feedback Form</Button>
+                </div>
+            )}
             </div>
         </div>
     );

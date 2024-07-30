@@ -1,3 +1,4 @@
+/* TransactionList.css */
 .transaction-list-container {
     margin-top: 20px;
     color: white;
@@ -82,7 +83,9 @@
     margin-right: 5px;
 }
 
-.see-more-button-container {
+.see-more-button-container1 {
+    display: flex;
+    justify-content: center;
     text-align: center;
     margin-top: 20px;
     margin-bottom: 20px;
