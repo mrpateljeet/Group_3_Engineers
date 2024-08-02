@@ -7,10 +7,17 @@ body {
   justify-content: center;
   align-items: center;
   height: 100vh;
-  /* background-image: url('path_to_background_image.jpg'); Add a path to your background image */
   background-size: cover;
   background-repeat: no-repeat;
 }
+
+/* Global CSS to make scrollbars invisible */
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  background: transparent;
+}
+
 
 .container {
   text-align: center;

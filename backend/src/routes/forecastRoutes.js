@@ -1,7 +1,7 @@
 // routes/forecastRoutes.js
 const express = require('express');
 const router = express.Router();
-const { saveForecast, getForecasts } = require('../controllers/forecastController');
+const { saveForecast, getForecasts,payForecast } = require('../controllers/forecastController');
 const jwt = require('jsonwebtoken');
 const secretKey = 'Marvel##';
 
@@ -24,5 +24,5 @@ const authenticateToken = (req, res, next) => {
 
 router.post('/forecasts', authenticateToken, saveForecast);
 router.get('/forecasts', authenticateToken, getForecasts);
-
+router.post('/forecasts/update', authenticateToken, payForecast);
 module.exports = router;

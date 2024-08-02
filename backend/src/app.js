@@ -1,4 +1,3 @@
-// app.js
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');
@@ -8,6 +7,7 @@ const transactionRoutes = require('./routes/transactionRoutes');
 const categoryRoutes = require('./routes/categoryRoutes');
 const goalRoutes = require('./routes/goalRoutes');
 const forecastRoutes = require('./routes/forecastRoutes');
+const feedbackRoutes = require('./routes/feedbackRoutes'); // Add this line
 
 const app = express();
 const port = 3000;
@@ -21,12 +21,12 @@ app.use(bodyParser.json());
 
 // Routes
 app.use('/api', authRoutes);
+app.use('/api/users', authRoutes);
 app.use('/api', transactionRoutes);
 app.use('/api', categoryRoutes);
 app.use('/api', goalRoutes);
 app.use('/api', forecastRoutes);
-app.use('/api/users', authRoutes);
-
+app.use('/api', feedbackRoutes); 
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);

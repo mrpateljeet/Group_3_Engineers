@@ -23,6 +23,7 @@ body {
 }
 
 .header h1 {
+  color: #fff;
   margin: 0;
   padding: 0 20px;
   font-size: 2rem;
@@ -52,7 +53,7 @@ body {
   border-radius: 10px;
   box-shadow: 0 10px 20px rgba(0, 0, 0, 0.5);
   max-width: 400px;
-  width: 100%;
+  width: 500px;
   margin-top: 10px;
   text-align: center;
   position: relative;
@@ -64,6 +65,7 @@ body {
 }
 
 .form-content h2 {
+  color: #fff;
   margin-bottom: 20px;
   font-size: 1.8rem;
 }
@@ -154,5 +156,6 @@ body {
 }
 
 .footer p {
+  color: white;
   margin: 5px 0;
 }
