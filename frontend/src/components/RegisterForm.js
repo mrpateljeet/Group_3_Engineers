@@ -56,7 +56,7 @@ const RegisterForm = () => {
         if (response.ok) {
             localStorage.setItem('token', data.token); // Save the token for session management
             setMessage(data.message);
-            setTimeout(() => navigate('/complete-profile'), 3000);
+           navigate('/complete-profile');
         } else {
             setMessage(data.error);
             setLoading(false);
@@ -77,8 +77,9 @@ const RegisterForm = () => {
                     <h2>Register</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Username:</label>
+                            <label htmlFor="username">Username:</label>
                             <input
+                                id="username"
                                 type="text"
                                 value={username}
                                 onChange={(e) => setUsername(e.target.value)}
@@ -87,8 +88,9 @@ const RegisterForm = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Email:</label>
+                            <label htmlFor="email">Email:</label>
                             <input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -97,8 +99,9 @@ const RegisterForm = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Password:</label>
+                            <label htmlFor="password">Password:</label>
                             <input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

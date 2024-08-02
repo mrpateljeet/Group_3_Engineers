@@ -3,7 +3,6 @@ body, html {
     margin: 0;
     padding: 0;
     font-family: 'Arial', sans-serif;
-    background-image: url('https://www.example.com/premium-background.jpg'); /* Replace with your premium background image URL */
     background-size: cover;
     background-position: center;
     height: 100%;

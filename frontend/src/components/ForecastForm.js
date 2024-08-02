@@ -68,51 +68,56 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
                     &larr;
                 </button>
                 <h1>Forecast Management</h1>
-                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }}>
+                <IconButton color="secondary" onClick={handleLogout} style={{ position: 'absolute', right: 16 }} aria-label="Logout">
                     <ExitToAppIcon />
                 </IconButton>
             </header>
             <form onSubmit={handleSubmit} className="forecast-form">
                 <div className="form-group2">
-                    <label>Name:</label>
+                    <label htmlFor="name">Name:</label>
                     <input
                         type="text"
+                        id="name"
                         value={name}
                         onChange={(e) => setName(e.target.value)}
                         required
                     />
                 </div>
                 <div className="form-group2">
-                    <label>Target Amount:</label>
+                    <label htmlFor="targetAmount">Target Amount:</label>
                     <input
                         type="number"
+                        id="targetAmount"
                         value={targetAmount}
                         onChange={(e) => setTargetAmount(e.target.value)}
                         required
                     />
                 </div>
                 <div className="form-group2">
-                    <label>Current Amount:</label>
+                    <label htmlFor="currentAmount">Current Amount:</label>
                     <input
                         type="number"
+                        id="currentAmount"
                         value={currentAmount}
                         onChange={(e) => setCurrentAmount(e.target.value)}
                         required
                     />
                 </div>
                 <div className="form-group2">
-                    <label>Monthly Income:</label>
+                    <label htmlFor="monthlyIncome">Monthly Income:</label>
                     <input
                         type="number"
+                        id="monthlyIncome"
                         value={monthlyIncome}
                         onChange={(e) => setMonthlyIncome(e.target.value)}
                         required
                     />
                 </div>
                 <div className="form-group2">
-                    <label>Allocation Percentage:</label>
+                    <label htmlFor="allocationPercentage">Allocation Percentage:</label>
                     <input
                         type="number"
+                        id="allocationPercentage"
                         value={allocationPercentage}
                         onChange={(e) => setAllocationPercentage(e.target.value)}
                         required

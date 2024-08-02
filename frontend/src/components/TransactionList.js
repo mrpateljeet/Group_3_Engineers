@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, Grid, Button } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Grid } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Profit icon
@@ -25,7 +25,6 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
     const [visibleTransactions] = useState(10);
 
     const groupedTransactions = groupTransactionsByMonth(transactions);
-
 
     return (
         <div className="transaction-list-container">
@@ -70,10 +69,18 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12} sm={6} md={1} className="transaction-actions">
-                                                <IconButton color="primary" onClick={() => onEdit(transaction)}>
+                                                <IconButton
+                                                    color="primary"
+                                                    onClick={() => onEdit(transaction)}
+                                                    data-testid={`edit-button-${transaction._id}`}
+                                                >
                                                     <EditIcon />
                                                 </IconButton>
-                                                <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
+                                                <IconButton
+                                                    color="secondary"
+                                                    onClick={() => onDelete(transaction._id)}
+                                                    data-testid={`delete-button-${transaction._id}`}
+                                                >
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Grid>

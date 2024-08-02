@@ -114,8 +114,9 @@ const Profile = () => {
                     editMode ? (
                         <form onSubmit={handleSubmit}>
                             <div className="form-group2">
-                                <label>Name:</label>
+                                <label htmlFor="name">Name:</label>
                                 <input
+                                    id="name"
                                     type="text"
                                     name="name"
                                     value={formData.name}
@@ -124,8 +125,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Email:</label>
+                                <label htmlFor="email">Email:</label>
                                 <input
+                                    id="email"
                                     type="email"
                                     name="email"
                                     value={formData.email}
@@ -134,8 +136,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Job:</label>
+                                <label htmlFor="job">Job:</label>
                                 <input
+                                    id="job"
                                     type="text"
                                     name="job"
                                     value={formData.job}
@@ -144,8 +147,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Bio:</label>
+                                <label htmlFor="bio">Bio:</label>
                                 <input
+                                    id="bio"
                                     type="text"
                                     name="bio"
                                     value={formData.bio}
@@ -154,8 +158,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Age:</label>
+                                <label htmlFor="age">Age:</label>
                                 <input
+                                    id="age"
                                     type="number"
                                     name="age"
                                     value={formData.age}
@@ -164,8 +169,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Salary:</label>
+                                <label htmlFor="salary">Salary:</label>
                                 <input
+                                    id="salary"
                                     type="number"
                                     name="salary"
                                     value={formData.salary}
@@ -174,8 +180,9 @@ const Profile = () => {
                                 />
                             </div>
                             <div className="form-group2">
-                                <label>Account Balance:</label>
+                                <label htmlFor="accountBalance">Account Balance:</label>
                                 <input
+                                    id="accountBalance"
                                     type="number"
                                     name="accountBalance"
                                     value={formData.accountBalance}
