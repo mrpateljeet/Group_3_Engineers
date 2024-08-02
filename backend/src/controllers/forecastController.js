@@ -1,10 +1,31 @@
 // controllers/forecastController.js
+/**
+ * File name: forecastController.js
+ * Description: Contains functions for handling forecast operations including saving,
+ * retrieving, and processing payments for forecasts.
+ * Author(s): [Your Name]
+ * Date created: [Current Date]
+ */
+
+// Import the Forecast and User models to interact with their respective collections
 const Forecast = require('../models/Forecast');
 const User = require('../models/User'); 
-
+/**
+ * Saves a new forecast to the database.
+ * 
+ * This asynchronous function extracts forecast details from the request body, 
+ * creates a new Forecast instance, and saves it to the database. Responds with
+ * the saved forecast data or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing forecast details in the body.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if saving the forecast fails.
+ */
 const saveForecast = async (req, res) => {
     const { name, targetAmount, currentAmount, monthlyIncome, allocationPercentage, months } = req.body;
-    const userId = req.user.id; // Assuming req.user contains the authenticated user's data
+    const userId = req.user.id; 
 
     try {
         const forecast = new Forecast({
@@ -23,6 +44,19 @@ const saveForecast = async (req, res) => {
     }
 };
 
+/**
+ * Retrieves all forecasts associated with the authenticated user.
+ * 
+ * This asynchronous function fetches forecasts from the database based on the
+ * user ID provided in the request. Responds with the list of forecasts or an
+ * error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if fetching forecasts fails.
+ */
 const getForecasts = async (req, res) => {
     try {
         const forecasts = await Forecast.find({ userId: req.user.id });

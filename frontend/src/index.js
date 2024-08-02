@@ -1,3 +1,15 @@
+//index.js
+/*
+ * File name: index.js
+ * Description: Entry point of the React application. This file initializes the React app, sets up routing, and applies global styles.
+ * 
+ * Overview:
+ * - Imports React, ReactDOM, and routing components.
+ * - Imports the main App component and global CSS file.
+ * - Renders the App component wrapped in a BrowserRouter for routing support.
+ * - Includes error handling for the root element not found scenario.
+ */
+
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter } from 'react-router-dom';

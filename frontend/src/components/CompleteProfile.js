@@ -1,7 +1,17 @@
+//components/CompleteProfile.js
+/**
+ * File name: CompleteProfile.js
+ * Description: This component allows users to complete their profile by entering details such as name, job, bio, age, salary, and account balance.
+ *              It handles form submission and updates the user profile by sending a PUT request to the server.
+ *              On successful submission, the user is redirected to the login page.
+ 
+ */
+
 import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 
 const CompleteProfile = () => {
+     // State variables for form inputs 
     const [name, setName] = useState('');
     const [job, setJob] = useState('');
     const [bio, setBio] = useState('');
@@ -10,7 +20,7 @@ const CompleteProfile = () => {
     const [accountBalance, setAccountBalance] = useState(''); // Added state for account balance
     const [message, setMessage] = useState('');
     const navigate = useNavigate();
-
+   // Handles form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
 

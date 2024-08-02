@@ -1,3 +1,10 @@
+//components/ForecastForm.js
+/*
+ * File name: ForecastForm.js
+ * Description: React component for managing financial forecasts. Includes form for 
+ *              inputting forecast data, fetching user data, and handling form submission.
+
+ */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ForecastForm.css';
@@ -6,6 +13,7 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const ForecastForm = ({ onForecast, saveForecast }) => {
+    // State variables for form inputs and forecast result
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [currentAmount, setCurrentAmount] = useState('');
@@ -13,7 +21,7 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
     const [allocationPercentage, setAllocationPercentage] = useState('');
     const [forecastResult, setForecastResult] = useState(null);
     const navigate = useNavigate();
-
+     // Fetch user data on component mount
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
@@ -29,7 +37,7 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
 
         fetchUserData();
     }, []);
-
+    // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -50,13 +58,13 @@ const ForecastForm = ({ onForecast, saveForecast }) => {
             }, 3000);
         }
     };
-
+    // Handle user logout
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-
+    // Navigate back to the dashboard
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };

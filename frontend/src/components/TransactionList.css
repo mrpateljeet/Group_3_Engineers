@@ -1,4 +1,11 @@
 /* TransactionList.css */
+/*
+ * File name: TransactionList.css
+ * Description: This CSS file contains styles for the TransactionList component.
+ * It provides the visual layout and design for transaction groups, items, and actions.
+ 
+ */
+
 .transaction-list-container {
     margin-top: 20px;
     color: white;

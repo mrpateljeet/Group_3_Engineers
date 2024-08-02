@@ -1,3 +1,10 @@
+//components/GoalForm.js
+/*
+ * File name: GoalForm.js
+ * Description: This component manages goals, including adding new goals, displaying forecasts, and handling payments.
+
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GoalForm.css';
@@ -9,8 +16,19 @@ import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
 import { Add as AddIcon, AccountCircle, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
-
+/**
+ * GoalForm Component
+ * 
+ * Handles the addition and management of user goals. Displays forms for adding new goals,
+ * lists existing goals, and shows forecast charts with allocation options.
+ * 
+ * Props:
+ * - onAdd: Function to add a new goal
+ * - fetchGoals: Function to fetch the list of goals
+ * - fetchForecasts: Function to fetch forecasts for goals
+ */
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
+    // State variables
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [targetDate, setTargetDate] = useState('');
@@ -21,7 +39,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({});
     const navigate = useNavigate();
-
+    // Handle form submission
     const handleSubmit = async (event) => {
         event.preventDefault();
         await onAdd({ name, targetAmount, targetDate });
@@ -31,7 +49,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         setTargetAmount('');
         setTargetDate('');
     };
-
+    // Fetch user data and current amount on component mount
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
@@ -46,7 +64,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
         fetchUserData();
     }, []);
-
+    // Fetch goals and forecasts, and initialize cumulative amounts
     useEffect(() => {
         const getGoalsAndForecasts = async () => {
             const goalsData = await fetchGoals();
@@ -62,17 +80,17 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
         getGoalsAndForecasts();
     }, [fetchGoals, fetchForecasts]);
-
+    // Handle user logout
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-
+    // Navigate back to the dashboard
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
-
+    // Handle payment allocation
     const handlePay = async (forecastId, allocatedMoney) => {
         if (currentAmount < allocatedMoney) {
             alert('Cannot process transaction: Low balance');
@@ -110,7 +128,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             console.error('Error:', error);
         }
     };
-
+    // Render the forecast chart for a specific forecast
     const renderForecastChart = (forecast) => {
         const allocatedMoney = forecast.monthlyIncome * (forecast.allocationPercentage / 100);
         const amountReceived = forecast.amountReceived || 0;
@@ -173,7 +191,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             </Card>
         );
     };
-
+    // Render the chart showing months to achieve each goal
     const renderMonthsToAchieveChart = () => {
         const data = forecasts.map(forecast => ({
             x: forecast.name,
@@ -211,12 +229,12 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             </Card>
         );
     };
-
+    // Show the modal with forecast details
     const handleShowModal = (forecast) => {
         setModalContent(forecast);
         setShowModal(true);
     };
-
+     // Close the modal
     const handleCloseModal = () => {
         setShowModal(false);
         setModalContent({});

@@ -1,13 +1,31 @@
+//components/RegisterForm.js
+/*
+ * File name: RegisterForm.jsx
+ * Description: A React component for user registration. 
+ * This form includes fields for username, email, and password with basic validation and sanitization. 
+ * It handles form submission, provides feedback messages, and navigates to a new route upon successful registration.
+
+ */
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './RegisterForm.css';
 
 // Utility functions for validation and sanitization
+/**
+ * Validates the email format using a regular expression.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} - True if the email format is valid, false otherwise.
+ */
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
 };
-
+/**
+ * Sanitizes user input to prevent XSS attacks.
+ * @param {string} input - The input to sanitize.
+ * @returns {string} - The sanitized input.
+ */
 const sanitizeInput = (input) => {
     const element = document.createElement('div');
     element.innerText = input;
@@ -21,7 +39,13 @@ const RegisterForm = () => {
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+     /**
+     * Handles form submission by validating, sanitizing input,
+     * and sending the data to the backend. Updates the message state
+     * based on the response and handles navigation upon success.
+     * @param {Event} event - The form submit event.
+     */
+     
     const handleSubmit = async (event) => {
         event.preventDefault();
 

@@ -1,4 +1,12 @@
 /* RegisterForm.css */
+/*
+ * File name: RegisterForm.css
+ * Description: Styles for the RegisterForm component. 
+ * This file contains CSS rules for layout, appearance, and responsive design 
+ * of the registration form, including header, form container, buttons, and 
+ * loading spinner.
+
+ */
 
 body {
   font-family: 'Arial', sans-serif;

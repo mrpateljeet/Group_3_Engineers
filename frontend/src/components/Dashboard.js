@@ -1,3 +1,11 @@
+//components/Dashboard.js
+/**
+ * File name: Dashboard.js
+ * Description: This component represents the Dashboard page of the application. It fetches and displays user transactions, balance information, and visualizes data with charts.
+ *              It also includes navigation buttons for profile, adding transactions, goals, and forecasts.
+ 
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import TransactionList from './TransactionList';
@@ -36,6 +44,7 @@ ChartJS.register(
 );
 
 const Dashboard = () => {
+    // State hooks for transactions, balance, totals, chart data, and visibility of transactions
     const [transactions, setTransactions] = useState([]);
     const [balance, setBalance] = useState(0);
     const [totalExpense, setTotalExpense] = useState(0);
@@ -45,17 +54,17 @@ const Dashboard = () => {
     const [chartOptions, setChartOptions] = useState({});
     const [visibleTransactions, setVisibleTransactions] = useState(12); // Define the state for visible transactions
     const navigate = useNavigate();
-
+    // Fetch transactions and balance on component mount
     useEffect(() => {
         fetchTransactions();
         fetchBalance();
     }, []);
-
+    // Calculate totals and generate chart data whenever transactions or timeframe change
     useEffect(() => {
         calculateTotals();
         generateChartData();
     }, [transactions, timeframe]);
-
+    // Function to fetch transactions from the API
     const fetchTransactions = async () => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
@@ -75,7 +84,7 @@ const Dashboard = () => {
             setTransactions([]);
         }
     };
-
+    // Function to fetch balance from the API
     const fetchBalance = async () => {
         const token = localStorage.getItem('token');
         const userId = localStorage.getItem('userId');
@@ -96,7 +105,7 @@ const Dashboard = () => {
             setBalance(0);
         }
     };
-
+    // Function to calculate total expense and profit from transactions
     const calculateTotals = () => {
         let expense = 0;
         let profit = 0;
@@ -112,7 +121,7 @@ const Dashboard = () => {
         setTotalExpense(expense);
         setTotalProfit(profit);
     };
-
+    // Function to generate chart data based on the timeframe
     const generateChartData = () => {
         if (!transactions || transactions.length === 0) {
             setChartData({});
@@ -123,7 +132,7 @@ const Dashboard = () => {
         let incomeData = [];
         let expenseData = [];
         let label = '';
-
+        // Generate data based on timeframe selection
         switch (timeframe) {
             case 'weekly':
                 label = 'Weekly Expenses & Income';
@@ -203,7 +212,7 @@ const Dashboard = () => {
             default:
                 break;
         }
-
+         // Set chart data and options
         setChartData({
             labels,
             datasets: [
@@ -258,7 +267,7 @@ const Dashboard = () => {
             },
         });
     };
-
+    //function to delete transaction
     const deleteTransaction = async (id) => {
         if (window.confirm("Are you sure you want to delete this transaction?")) {
             const token = localStorage.getItem('token');
@@ -279,37 +288,37 @@ const Dashboard = () => {
             }
         }
     };
-
+    // Function to handle Edit
     const handleEdit = (transaction) => {
         navigate('/add-transaction', { state: { transaction } });
     };
-
+    // Function to handle Profile
     const handleProfile = () => {
         navigate('/profile');
     };
-
+    // Function to handle Add
     const handleAdd = () => {
         navigate('/add-transaction');
     };
-
+    // Function to handle Forecast
     const handleForecast = () => {
         navigate('/forecast');
     };
-
+    // Function to handle add goal
     const handleAddGoal = () => {
         navigate('/add-goal');
     };
-
+    // Function to handle Logout
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-
+    // Function to handle timeframe selection change
     const handleTimeframeChange = (event) => {
         setTimeframe(event.target.value);
     };
-
+    // Function to handle "View More Transactions" button click
     const loadMoreTransactions = () => {
         setVisibleTransactions(prev => prev + 12); // Increase the visible transactions by 12
     };

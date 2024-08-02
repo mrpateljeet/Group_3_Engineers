@@ -1,3 +1,12 @@
+//components/ForecastForm.test.js
+
+/*
+ * File name: ForecastForm.test.js
+ * Description: Test suite that contain Unit tests for the ForecastForm component. Tests include rendering the form, 
+ *              submitting the form, showing forecast results, and handling logout and navigation.
+
+ */
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';

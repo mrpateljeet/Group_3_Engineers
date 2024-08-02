@@ -1,10 +1,30 @@
+// controllers/authController.js
+/**
+ * File name: authController.js
+ * Description: Contains functions for user authentication operations including registration,
+ * login, and fetching user details. Handles password hashing, token generation, and validation.
+ 
+ */
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 
-const secretKey = 'Marvel##'; // Replace with your secret key
+const secretKey = 'Marvel##'; 
 
-// Registration
+/**
+ * Registers a new user.
+ * 
+ * This asynchronous function hashes the user's password, creates a new User instance, 
+ * saves it to the database, and responds with a success message and user data or an error 
+ * message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing user registration details in the body.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if hashing the password or saving the user fails.
+ */
 const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
 
@@ -19,7 +39,19 @@ const registerUser = async (req, res) => {
     }
 };
 
-// Login
+/**
+ * Logs in a user.
+ * 
+ * This asynchronous function checks if the user's email exists, compares the provided password 
+ * with the stored hashed password, generates a JWT token if the credentials are valid, and 
+ * responds with a success message, token, and user name or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing user login details in the body.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if finding the user, comparing passwords, or generating the token fails.
+ */
 const loginUser = async (req, res) => {
     const { email, password } = req.body;
 
@@ -43,7 +75,19 @@ const loginUser = async (req, res) => {
     }
 };
 
-// Fetch user details
+
+/**
+ * Fetches user details based on the provided JWT token.
+ * 
+ * This asynchronous function verifies the JWT token, retrieves the user's data from the database, 
+ * and responds with the user details or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing the authorization header.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if verifying the token or finding the user fails.
+ */
 const getUserDetails = async (req, res) => {
     const token = req.headers['authorization'].split(' ')[1];
 

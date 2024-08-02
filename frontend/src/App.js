@@ -1,3 +1,10 @@
+//App.js
+/*
+ * File name: App.js
+ * Description: Main application component defining routes and handling API interactions for goals and forecasts.
+ * 
+ */
+
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import LoginForm from './components/LoginForm';
 import RegisterForm from './components/RegisterForm';
@@ -11,7 +18,7 @@ import ForecastForm from './components/ForecastForm';
 import ParentComponent from './components/ParentComponent';
 
 function App() {
-
+// Function to add a new goal
   const addGoal = async (goal) => {
     const token = localStorage.getItem('token');
     try {
@@ -30,7 +37,7 @@ function App() {
         console.error('Error adding goal:', error);
     }
   };
-  
+  // Function to fetch goals from the server
   const fetchGoals = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -49,7 +56,7 @@ function App() {
         return [];
     }
   };
-  
+  // Function to handle forecasting goals
   const handleForecastGoal = async (data) => {
     const token = localStorage.getItem('token');
     const response = await fetch('http://localhost:3000/api/goals/forecast', {
@@ -65,7 +72,7 @@ function App() {
     }
     return response.json();
   };
-
+// Function to fetch forecasts from the server
   const fetchForecasts = async () => {
     const token = localStorage.getItem('token');
     try {
@@ -84,7 +91,7 @@ function App() {
         return [];
     }
   };
-
+// Function to save a forecast
   const saveForecast = async (forecastData) => {
     const token = localStorage.getItem('token');
     try {

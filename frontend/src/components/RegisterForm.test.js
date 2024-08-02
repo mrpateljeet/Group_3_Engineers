@@ -1,3 +1,11 @@
+//components/Register.test.js
+/*
+ * File name: RegisterForm.test.js
+ * Description: Test suite that contain Unit tests for the RegisterForm component.
+ * Tests include rendering the form, validating email input, and submitting the form with valid data.
+ 
+ */
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor  } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
@@ -14,6 +22,10 @@ beforeAll(() => {
     Storage.prototype.getItem = jest.fn();
     Storage.prototype.removeItem = jest.fn();
 });
+/**
+ * Test case to ensure the RegisterForm component renders correctly.
+ * It checks for the presence of the heading, input fields, and the submit button.
+ */
 test('renders register form', () => {
     render(
         <BrowserRouter>
@@ -28,6 +40,11 @@ test('renders register form', () => {
     expect(screen.getByLabelText('Password:')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Register' })).toBeInTheDocument();
 });
+
+/**
+ * Test case to validate the email format. 
+ * It verifies that an invalid email format results in an appropriate error message.
+ */
 test('validates email format', async () => {
     render(
         <BrowserRouter>
@@ -49,6 +66,11 @@ test('validates email format', async () => {
         expect(screen.getByText('Invalid email format.')).toBeInTheDocument();
     });
 });
+/**
+ * Test case to simulate form submission with valid data.
+ * It checks if the form submission succeeds, the correct success message is displayed,
+ * the token is stored in localStorage, and the user is navigated to the '/complete-profile' route.
+ */
 test('submits form with valid data', async () => {
     jest.setTimeout(10000); 
     global.fetch = jest.fn(() =>

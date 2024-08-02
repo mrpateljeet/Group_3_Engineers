@@ -1,3 +1,11 @@
+//components/ProfilePage.js
+/*
+ * File name: ProfilePage.js
+ * Description: The Profile component allows users to view and edit their profile information. 
+ * Includes fetching user data, handling form submissions, and navigation.
+
+ */
+
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
@@ -12,7 +20,7 @@ const Profile = () => {
     const [editMode, setEditMode] = useState(false);
     const [formData, setFormData] = useState({});
     const navigate = useNavigate();
-
+    // Effect hook to fetch user profile data on component mount
     useEffect(() => {
         const fetchUserProfile = async () => {
             const token = localStorage.getItem('token');
@@ -37,7 +45,7 @@ const Profile = () => {
 
         fetchUserProfile();
     }, []);
-
+     // Handler for input changes in the profile form
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setFormData({
@@ -45,7 +53,7 @@ const Profile = () => {
             [name]: value,
         });
     };
-
+    // Handler for form submission to update user profile
     const handleSubmit = async (e) => {
         e.preventDefault();
         const token = localStorage.getItem('token');
@@ -68,17 +76,17 @@ const Profile = () => {
             setError(error.message);
         }
     };
-
+    // Handler for logging out and navigating to login page
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-
+    // Handler for navigating back to the dashboard
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
-
+    // Conditional rendering based on loading, error, and user data
     if (loading) {
         return <p>Loading...</p>;
     }

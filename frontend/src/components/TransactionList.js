@@ -1,3 +1,11 @@
+//components/TransactionList.js
+/*
+ * File name: TransactionList.js
+ * Description: This component displays a list of transactions grouped by month.
+ * It provides functionality to view, edit, and delete transactions.
+ * 
+ */
+
 import React, { useState } from 'react';
 import { Card, CardContent, Typography, IconButton, Grid , Button} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';

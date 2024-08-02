@@ -1,3 +1,9 @@
+//routes/auth.js
+/**
+ * File name: userRoutes.js
+ * Description: Defines routes for user registration, login, profile management, and balance retrieval.
+
+ */
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
@@ -6,7 +12,19 @@ const User = require('../models/User');
 const isValidObjectId = require('../utils/isValidObjectId');
 const secretKey = 'Marvel##';
 
-// Register a new user
+/**
+ * Route: POST /register
+ * Description: Registers a new user and returns a JWT token.
+ * Request Body:
+ *   - username: String
+ *   - email: String
+ *   - password: String
+ *   - accountBalance: Number (optional)
+ * Response:
+ *   - 201: User registered successfully with a JWT token
+ *   - 400: User already exists
+ *   - 500: Internal server error
+ */
 router.post('/register', async (req, res) => {
     const { username, email, password, accountBalance } = req.body;
 
@@ -37,7 +55,17 @@ router.post('/register', async (req, res) => {
     }
 });
 
-// Login user
+/**
+ * Route: POST /login
+ * Description: Authenticates a user and returns a JWT token.
+ * Request Body:
+ *   - email: String
+ *   - password: String
+ * Response:
+ *   - 200: User logged in successfully with a JWT token and user details
+ *   - 401: Invalid email or password
+ *   - 500: Internal server error
+ */
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
@@ -67,7 +95,17 @@ router.post('/login', async (req, res) => {
     }
 });
 
-// Fetch user details
+/**
+ * Route: GET /user
+ * Description: Fetches the details of the logged-in user.
+ * Headers:
+ *   - Authorization: Bearer [JWT Token]
+ * Response:
+ *   - 200: User details
+ *   - 401: No token provided or token invalid
+ *   - 404: User not found
+ *   - 500: Internal server error
+ */
 router.get('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -89,8 +127,24 @@ router.get('/user', async (req, res) => {
         res.status(500).json({ error: 'Failed to authenticate token.' });
     }
 });
-
-// Update user details
+/**
+ * Route: PUT /user
+ * Description: Updates the details of the logged-in user.
+ * Headers:
+ *   - Authorization: Bearer [JWT Token]
+ * Request Body:
+ *   - name: String (optional)
+ *   - job: String (optional)
+ *   - bio: String (optional)
+ *   - age: Number (optional)
+ *   - salary: Number (optional)
+ *   - accountBalance: Number (optional)
+ * Response:
+ *   - 200: Updated user details
+ *   - 401: No token provided or token invalid
+ *   - 404: User not found
+ *   - 500: Internal server error
+ */
 router.put('/user', async (req, res) => {
     const token = req.headers['authorization']?.split(' ')[1];
     const { name, job, bio, age, salary, accountBalance } = req.body;
@@ -123,7 +177,16 @@ router.put('/user', async (req, res) => {
     }
 });
 
-// Fetch user balance
+/**
+ * Route: GET /:userId/balance
+ * Description: Fetches the account balance of a specific user by userId.
+ * Request Params:
+ *   - userId: String
+ * Response:
+ *   - 200: User balance
+ *   - 404: User not found
+ *   - 500: Internal server error
+ */
 router.get('/:userId/balance', async (req, res) => {
     try {
         const user = await User.findById(req.params.userId);

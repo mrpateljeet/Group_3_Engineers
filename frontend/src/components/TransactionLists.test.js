@@ -1,3 +1,13 @@
+//components/TransactionLists.test.js
+/*
+ * File name: TransactionList.test.jsx
+ * Description: Unit tests for the TransactionList component.
+ * 
+ * Tests include:
+ * - Rendering of transactions grouped by month and year.
+ * - Functionality of the edit and delete buttons, ensuring handlers are called correctly.
+ */
+
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
 import TransactionList from './TransactionList';

@@ -1,3 +1,10 @@
+//components/LoginForm.test.js
+/*
+ * File name: LoginForm.test.js
+ * Description: Test Suite that contain unit tests for the LoginForm component using React Testing Library and Jest. It tests rendering, form validation, form submission, and error handling.
+
+ */
+
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
