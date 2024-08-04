@@ -1,3 +1,11 @@
+//components/AddTransaction.js
+/**
+ * File name: AddTransaction.js
+ * Description: Component for adding or editing a transaction.
+ * Author(s): [Your Name]
+ * Date created: [Current Date]
+ */
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import './AddTransaction.css';
@@ -6,10 +14,13 @@ import ExitToAppIcon from '@mui/icons-material/ExitToApp';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 const AddTransaction = () => {
+     // State variables
     const [initialData, setInitialData] = useState({});
     const [categories, setCategories] = useState([]);
+     // Hooks for location and navigation
     const location = useLocation();
     const navigate = useNavigate();
+    // Fetch transaction data and categories when component mounts or location state changes
 
     useEffect(() => {
         if (location.state && location.state.transaction) {
@@ -17,7 +28,7 @@ const AddTransaction = () => {
         }
         fetchCategories();
     }, [location.state]);
-
+   // Fetch categories from the server
     const fetchCategories = async () => {
         const token = localStorage.getItem('token');
         try {
@@ -36,7 +47,7 @@ const AddTransaction = () => {
             setCategories([]);
         }
     };
-
+    // Handle form submission for adding or updating a transaction
     const handleSubmit = async (event) => {
         event.preventDefault();
         const token = localStorage.getItem('token');
@@ -62,13 +73,13 @@ const AddTransaction = () => {
             console.error('Error saving transaction:', error);
         }
     };
-
+    // Handle user logout
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-
+    // Navigate back to the dashboard
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };

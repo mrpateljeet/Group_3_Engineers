@@ -1,6 +1,13 @@
+//models/Forecast.js
+/**
+ * File name: Forecast.js
+ * Description: Defines the schema and model for forecasting financial goals.
+ 
+ */
+// Import mongoose and Schema from mongoose
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+// Define the schema for the Forecast model
 const forecastSchema = new Schema({
     name: {
         type: String,

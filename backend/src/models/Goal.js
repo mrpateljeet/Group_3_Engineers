@@ -1,8 +1,14 @@
 // models/Goal.js
+/**
+ * File name: Goal.js
+ * Description: Defines the schema and model for financial goals set by users.
+ 
+ */
 
+// Import mongoose and Schema from mongoose
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+// Define the schema for the Goal model
 const goalSchema = new Schema({
     name: {
         type: String,

@@ -1,8 +1,12 @@
 /* src/index.css */
+/*
+ * File name: index.css
+ * Description: Global styles for the application, including layout, typography, and scrollbar customization.
+ */
 body {
   margin: 0;
   font-family: Arial, Helvetica, sans-serif;
-  background-color: #f4f4f4;
+  /* background-color: #f4f4f4; */
   display: flex;
   justify-content: center;
   align-items: center;

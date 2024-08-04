@@ -1,3 +1,9 @@
+//app.js
+/**
+ * File name: server.js
+ * Description: Main server file that sets up and runs the Express application, connects to MongoDB, and configures middleware and routes.
+ 
+ */
 const express = require('express');
 const cors = require('cors');
 const bodyParser = require('body-parser');

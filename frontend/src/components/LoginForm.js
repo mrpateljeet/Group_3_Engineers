@@ -1,13 +1,33 @@
+//components/LoginForm.js
+
+/*
+ * File name: LoginForm.js
+ * Description: This React component represents a login form where users can enter their email and password to log into the application. It includes input validation, sanitization, and loading state handling.
+
+ */
+
+
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import './LoginForm.css';
 
 // Utility functions for validation and sanitization
+
+/**
+ * Validates the email format.
+ * @param {string} email - The email address to validate.
+ * @returns {boolean} - Returns true if the email format is valid, otherwise false.
+ */
 const validateEmail = (email) => {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
 };
 
+/**
+ * Sanitizes input to prevent XSS attacks by escaping HTML characters.
+ * @param {string} input - The input string to sanitize.
+ * @returns {string} - The sanitized input string.
+ */
 const sanitizeInput = (input) => {
     const element = document.createElement('div');
     element.innerText = input;
@@ -15,12 +35,16 @@ const sanitizeInput = (input) => {
 };
 
 const LoginForm = () => {
+    // State hooks for form inputs and loading state
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const navigate = useNavigate();
-
+    /**
+     * Handles form submission, including validation and API request.
+     * @param {Event} event - The form submission event.
+     */
     const handleSubmit = async (event) => {
         event.preventDefault();
 
@@ -75,8 +99,9 @@ const LoginForm = () => {
                     <h2>Login</h2>
                     <form onSubmit={handleSubmit}>
                         <div className="form-group">
-                            <label>Email:</label>
+                            <label htmlFor="email">Email:</label>
                             <input
+                                id="email"
                                 type="email"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -85,8 +110,9 @@ const LoginForm = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Password:</label>
+                            <label htmlFor="password">Password:</label>
                             <input
+                                id="password"
                                 type="password"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}

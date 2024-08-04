@@ -1,3 +1,10 @@
+//server.js
+/**
+ * File name: server.js
+ * Description: Basic Express server setup with user registration, login, and data access functionalities.
+
+ */
+
 const express = require('express');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
@@ -16,6 +23,12 @@ const ENCRYPTION_KEY = crypto.randomBytes(32); // For demonstration, use a secur
 const IV_LENGTH = 16; // For AES, this is always 16
 
 // Helper functions for encryption and decryption
+
+/**
+ * Encrypt text using AES-256-CBC.
+ * @param {string} text - The text to encrypt.
+ * @returns {string} The encrypted text with IV.
+ */
 function encrypt(text) {
   let iv = crypto.randomBytes(IV_LENGTH);
   let cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
@@ -23,7 +36,11 @@ function encrypt(text) {
   encrypted = Buffer.concat([encrypted, cipher.final()]);
   return iv.toString('hex') + ':' + encrypted.toString('hex');
 }
-
+/**
+ * Decrypt text using AES-256-CBC.
+ * @param {string} text - The encrypted text with IV.
+ * @returns {string} The decrypted text.
+ */
 function decrypt(text) {
   let textParts = text.split(':');
   let iv = Buffer.from(textParts.shift(), 'hex');
@@ -42,10 +59,7 @@ app.post('/api/register', async (req, res) => {
   res.status(201).json({ message: 'User registered successfully' });
 });
 
-// app.get('/api', async (req, res) => {
-//   res.json({ message: 'Welcome to the API' });
-// }
-// )
+
 
 
 

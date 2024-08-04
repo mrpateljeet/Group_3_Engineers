@@ -1,5 +1,13 @@
-const mongoose = require('mongoose');
+// models/Transaction.js
+/**
+ * File name: Transaction.js
+ * Description: Defines the schema and model for financial transactions.
+ 
+ */
 
+// Import mongoose
+const mongoose = require('mongoose');
+// Define the schema for the Transaction model
 const transactionSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,

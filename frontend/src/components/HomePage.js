@@ -1,9 +1,27 @@
+//components/HomePage.js
+/*
+ * File name: Homepage.js
+ * Description: This React component renders the homepage of the Budget Minder application, featuring a background video, a header with navigation, and a hero section with a call-to-action.
+
+ */
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './HomePage.css';
 import logo from '../images/budget_background.png';
 import backgroundVideo from '../images/gif_background.mp4';
-
+/**
+ * Homepage component
+ * 
+ * This component renders the main page for the Budget Minder application, including:
+ * - A background video that plays automatically
+ * - A sticky header with a logo, navigation links, and a "Get Started" button
+ * - A hero section with a title, description, and a "Join Now" button
+ * 
+ * Uses React Router's `useNavigate` for navigation purposes.
+ * 
+ * @returns {JSX.Element} The Homepage component
+ */
 const Homepage = () => {
   const navigate = useNavigate();
 

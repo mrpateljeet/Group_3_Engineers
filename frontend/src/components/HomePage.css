@@ -1,8 +1,14 @@
+/* HoemPage.css*/
+/*
+ * File name: HomePage.css
+ * Description: This stylesheet defines the styling for the homepage, including layout, background video, header, navigation bar, and hero section.
+
+ */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: #4b2e39;
+    /* background-color: #4b2e39; */
     color: white;
     height: 100%;
     overflow: hidden;

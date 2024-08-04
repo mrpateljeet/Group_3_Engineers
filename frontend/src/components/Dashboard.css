@@ -1,3 +1,11 @@
+/* Dashboard.css */
+/**
+ * File name: Dashboard.css
+ * Description: This stylesheet provides the styles for the Dashboard component, including layout, appearance of cards, and integration of background video.
+ *              It ensures a visually appealing and functional user interface for the dashboard, including responsiveness and interactive elements.
+ 
+ */
+
 .dashboard-container {
   position: static;
   width: 100%;

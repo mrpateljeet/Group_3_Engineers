@@ -1,5 +1,10 @@
 /* FeedbackForm.css */
+/*
+ * File name: FeedbackForm.css
+ * Description: Styles for the feedback form and feedback popup components. 
+ *              Includes layout, spacing, and color settings for various elements.
 
+ */
 .feedback-form-container {
     display: flex;
     flex-direction: column;

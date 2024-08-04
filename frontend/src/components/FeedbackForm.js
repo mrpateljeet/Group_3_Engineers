@@ -1,13 +1,23 @@
+//components/FeedbackForm.js
+/*
+ * File name: FeedbackForm.js
+ * Description: React component for submitting feedback. Includes rating selection 
+ *              and a comments field. Handles form submission and error handling.
+
+ */
 import React, { useState } from 'react';
 import axios from 'axios';
 import './FeedbackForm.css';
 
 const FeedbackForm = () => {
+    // State to hold the selected rating (1 to 5)
     const [rating, setRating] = useState(1);
+    // State to hold the comments input
     const [comments, setComments] = useState('');
-
+    // Handle form submission
     const handleSubmit = async (e) => {
         e.preventDefault();
+        // Retrieve token from local storage
         const token = localStorage.getItem('token');
 
         if (!token) {

@@ -1,6 +1,14 @@
+/*ForecastForm.css*/
+/*
+ * File name: ForcastForm.css
+ * Description: CSS file for styling the forecast page. Includes styles for layout, 
+ *              forms, buttons, and scrollbars. Provides a clean and responsive design.
+
+ */
+
 body {
     font-family: 'Arial', sans-serif;
-    background: linear-gradient(to right, #4facfe, #00f2fe);
+    /* background: linear-gradient(to right, #4facfe, #00f2fe); */
     margin: 0;
     padding: 0;
 }

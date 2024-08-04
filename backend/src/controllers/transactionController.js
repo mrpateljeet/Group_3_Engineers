@@ -1,3 +1,12 @@
+// controllers/transactionController.js
+/**
+ * File name: transactionController.js
+ * Description: Contains functions for handling transaction operations including adding,
+ * deleting, editing transactions, and fetching transactions for a user.
+ 
+ */
+
+// Import required models and utility functions
 const mongoose = require('mongoose');
 const Transaction = require('../models/Transaction');
 const User = require('../models/User');
@@ -5,7 +14,20 @@ const Category = require('../models/Category');
 const isValidObjectId = require('../utils/isValidObjectId');
 const roundToTwoDecimals = require('../utils/roundToTwoDecimals');
 
-// Add a new transaction
+/**
+ * Adds a new transaction to the database.
+ * 
+ * This asynchronous function extracts transaction details from the request body, 
+ * creates a new Transaction instance, and saves it to the database. It updates the 
+ * user's balance based on the transaction category. Responds with the saved transaction 
+ * or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing transaction details in the body.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if saving the transaction or updating the user fails.
+ */
 const addTransaction = async (req, res) => {
     const { userId, categoryId, amount, date, description } = req.body;
 
@@ -48,7 +70,20 @@ const addTransaction = async (req, res) => {
     }
 };
 
-// Delete a transaction
+
+/**
+ * Deletes a transaction from the database.
+ * 
+ * This asynchronous function finds and deletes a transaction based on its ID,
+ * updates the user's balance based on the transaction's category, and responds 
+ * with a success message or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing the transaction ID in the parameters.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if deleting the transaction or updating the user fails.
+ */
 const deleteTransaction = async (req, res) => {
     const { id } = req.params;
 
@@ -87,7 +122,20 @@ const deleteTransaction = async (req, res) => {
     }
 };
 
-// Fetch transactions for a user
+
+/**
+ * Fetches transactions for a specific user.
+ * 
+ * This asynchronous function retrieves all transactions for a user based on their
+ * ID, populates the category information, and responds with the list of transactions 
+ * or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing the user ID in the query parameters.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if fetching transactions fails.
+ */
 const getTransactions = async (req, res) => {
     const { userId } = req.query;
 
@@ -103,8 +151,20 @@ const getTransactions = async (req, res) => {
         res.status(500).json({ error: 'Error fetching transactions' });
     }
 };
-
-// Edit an existing transaction
+/**
+ * Edits an existing transaction in the database.
+ * 
+ * This asynchronous function updates a transaction's details, reverts the old balance
+ * effect, and applies the new balance effect based on the updated category. Responds 
+ * with the updated transaction or an error message if the operation fails.
+ * 
+ * @async
+ * @function
+ * @param {Object} req - The request object containing transaction details in the body
+ * and transaction ID in the parameters.
+ * @param {Object} res - The response object used to send a response back to the client.
+ * @throws {Error} Throws an error if editing the transaction or updating the user fails.
+ */
 const editTransaction = async (req, res) => {
     const { id } = req.params;
     const { userId, categoryId, amount, date, description } = req.body;

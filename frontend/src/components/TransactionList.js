@@ -1,5 +1,13 @@
+//components/TransactionList.js
+/*
+ * File name: TransactionList.js
+ * Description: This component displays a list of transactions grouped by month.
+ * It provides functionality to view, edit, and delete transactions.
+ * 
+ */
+
 import React, { useState } from 'react';
-import { Card, CardContent, Typography, IconButton, Grid, Button } from '@mui/material';
+import { Card, CardContent, Typography, IconButton, Grid , Button} from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'; // Profit icon
@@ -25,6 +33,7 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
     const [visibleTransactions, setVisibleTransactions] = useState(12); // State to manage the number of visible transactions
 
     const groupedTransactions = groupTransactionsByMonth(transactions);
+
 
     const loadMoreTransactions = () => {
         setVisibleTransactions(prev => prev + 12); // Increase the visible transactions by 12
@@ -73,10 +82,18 @@ const TransactionList = ({ transactions, onEdit, onDelete }) => {
                                                 </Typography>
                                             </Grid>
                                             <Grid item xs={12} sm={6} md={1} className="transaction-actions">
-                                                <IconButton color="primary" onClick={() => onEdit(transaction)}>
+                                                <IconButton
+                                                    color="primary"
+                                                    onClick={() => onEdit(transaction)}
+                                                    data-testid={`edit-button-${transaction._id}`}
+                                                >
                                                     <EditIcon />
                                                 </IconButton>
-                                                <IconButton color="secondary" onClick={() => onDelete(transaction._id)}>
+                                                <IconButton
+                                                    color="secondary"
+                                                    onClick={() => onDelete(transaction._id)}
+                                                    data-testid={`delete-button-${transaction._id}`}
+                                                >
                                                     <DeleteIcon />
                                                 </IconButton>
                                             </Grid>

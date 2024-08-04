@@ -1,5 +1,9 @@
 /* LoginForm.css */
-
+/*
+ * File name: LoginForm.css
+ * Description: This CSS file provides styling for the login form page of the application. It includes styles for the background, header, form container, and other elements such as buttons and spinners.
+ 
+ */
 body {
   font-family: 'Arial', sans-serif;
   background: linear-gradient(135deg, #6b73ff 0%, #000dff 100%);

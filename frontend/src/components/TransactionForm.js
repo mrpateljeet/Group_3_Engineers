@@ -1,3 +1,15 @@
+//components/TransactionForm.js
+/*
+ * File name: TransactionForm.js
+ * Description: This component provides a form for adding or updating transactions.
+ * It includes input fields for amount, date, description, and category selection.
+ * The component fetches available categories from the backend, handles form submissions,
+ * and provides feedback messages to the user.
+ 
+ */
+
+
+
 import React, { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 

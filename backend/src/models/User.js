@@ -1,8 +1,14 @@
 // models/User.js
+/**
+ * File name: User.js
+ * Description: Defines the schema and model for user accounts.
 
+ */
+
+// Import mongoose and Schema from mongoose
 const mongoose = require('mongoose');
 const { Schema } = mongoose;
-
+// Define the schema for the User model
 const userSchema = new Schema({
     username: {
         type: String,

@@ -1,11 +1,20 @@
+// routes/feedbakRoutes.js
+/**
+ * File name: feedbackRoutes.js
+ * Description: Defines routes for submitting and retrieving feedback, and handling token refresh.
+ 
+ */
 const express = require('express');
 const router = express.Router();
 const { submitFeedback, getAllFeedback } = require('../controllers/feedbackController');
 const jwt = require('jsonwebtoken');
 const secretKey = 'Marvel##';
 const refreshTokens = []; // Store refresh tokens in memory (use a database in production)
-
 // Middleware to authenticate access token
+/**
+ * Middleware to authenticate JWT access token.
+ * Attaches decoded user data to the request object if the token is valid.
+ */
 const authenticateToken = (req, res, next) => {
     const token = req.headers['authorization']?.split(' ')[1];
 
@@ -27,6 +36,11 @@ const authenticateToken = (req, res, next) => {
 };
 
 // Generate access and refresh tokens
+/**
+ * Function to generate access and refresh tokens for a user.
+ * @param {Object} user - User object containing user ID.
+ * @returns {Object} - Contains accessToken and refreshToken.
+ */
 const generateTokens = (user) => {
     const accessToken = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '1h' });
     const refreshToken = jwt.sign({ userId: user.id }, secretKey, { expiresIn: '7d' });
@@ -35,6 +49,12 @@ const generateTokens = (user) => {
 };
 
 // Refresh token endpoint
+/**
+ * Endpoint to refresh access tokens using a refresh token.
+ * @param {Object} req - Request object containing refreshToken in the body.
+ * @param {Object} res - Response object.
+ * @returns {Object} - New accessToken and refreshToken.
+ */
 router.post('/refresh-token', (req, res) => {
     const { refreshToken } = req.body;
     if (!refreshToken || !refreshTokens.includes(refreshToken)) {
