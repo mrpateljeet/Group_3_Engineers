@@ -9,7 +9,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import '@testing-library/jest-dom';
-import LoginForm from './LoginForm';
+import LoginForm from '../LoginForm';
 
 // Mock the useNavigate hook
 const mockedUsedNavigate = jest.fn();

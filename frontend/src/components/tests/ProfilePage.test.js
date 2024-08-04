@@ -10,7 +10,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import Profile from './ProfilePage';
+import Profile from '../ProfilePage';
 
 const mockNavigate = jest.fn();
 const mockFetch = jest.fn();

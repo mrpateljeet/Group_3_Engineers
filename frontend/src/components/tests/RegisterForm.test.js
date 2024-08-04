@@ -9,7 +9,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor  } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import RegisterForm from './RegisterForm';
+import RegisterForm from '../RegisterForm';
 
 const mockNavigate = jest.fn();
 jest.mock('react-router-dom', () => ({

@@ -10,7 +10,7 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import ForecastForm from './ForecastForm';
+import ForecastForm from '../ForecastForm';
 
 // Mock functions for onForecast and saveForecast
 const mockOnForecast = jest.fn();
