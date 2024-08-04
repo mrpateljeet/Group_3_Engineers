@@ -10,7 +10,7 @@
 
 import '@testing-library/jest-dom';
 import { render, screen, fireEvent } from '@testing-library/react';
-import TransactionList from './TransactionList';
+import TransactionList from '../TransactionList';
 
 // Mock data for transactions
 const transactions = [
