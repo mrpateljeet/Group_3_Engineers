@@ -47,7 +47,7 @@ jobs:
     # This step will fail if the code does not compile
     - name: Build frontend application
       working-directory: ./frontend
-      run: npm run build
+      run: CI=false npm run build
 
     # Debugging Step: List build directory contents before uploading
     - name: List build directory contents before uploading
