@@ -47,14 +47,10 @@ jobs:
     # This step will fail if the code does not compile
     - name: Build frontend application
       working-directory: ./frontend
-      run: CI=false npm run build
+      run: npm run build
 
-    # Debugging Step: List working directory contents
-    - name: List working directory contents
-      run: ls -la ./frontend/
-
-    # Debugging Step: List build directory contents
-    - name: List build directory contents
+    # Debugging Step: List build directory contents before uploading
+    - name: List build directory contents before uploading
       run: ls -la ./frontend/build/
 
     # Step 7: Install backend dependencies
@@ -79,7 +75,10 @@ jobs:
       uses: actions/upload-artifact@v2
       with:
         name: production-artifacts
-        path: |
-          frontend/build/**  # Frontend build files
-          backend/.env       # Backend environment variables (if any)
-          backend/src/**     # Backend source files (if needed)
+        path: frontend/build/**
+
+    # Step 10: Deploy to production (if needed)
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/main' && success()
+      run: |
+        # Add your deployment script here
