@@ -1,37 +1,17 @@
-//components/GoalForm.js
-/*
- * File name: GoalForm.js
- * Description: This component manages goals, including adding new goals, displaying forecasts, and handling payments.
-
- */
-
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GoalForm.css';
-import { VictoryChart, VictoryLine, VictoryAxis } from 'victory';
-import { Doughnut } from 'react-chartjs-2';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
-import { Container, Form, Table, Card, Row, Col, ProgressBar, Modal, Button } from 'react-bootstrap';
-import { AppBar, Toolbar, Typography, IconButton } from '@mui/material';
-import { Add as AddIcon, AccountCircle, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+import { VictoryChart, VictoryLine, VictoryAxis, VictoryPie } from 'victory';
+import { Container, Row, Col, Form, Table, Card, Modal, Button, ProgressBar } from 'react-bootstrap';
+import { AppBar, Toolbar, Typography, IconButton, TextField, Card as MUICard, CardContent, CardActions } from '@mui/material';
+import { Add as AddIcon, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
 
-ChartJS.register(ArcElement, Tooltip, Legend);
-/**
- * GoalForm Component
- * 
- * Handles the addition and management of user goals. Displays forms for adding new goals,
- * lists existing goals, and shows forecast charts with allocation options.
- * 
- * Props:
- * - onAdd: Function to add a new goal
- * - fetchGoals: Function to fetch the list of goals
- * - fetchForecasts: Function to fetch forecasts for goals
- */
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
-    // State variables
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [targetDate, setTargetDate] = useState('');
+    const [category, setCategory] = useState(''); // New field
+    const [description, setDescription] = useState(''); // New field
     const [goals, setGoals] = useState([]);
     const [forecasts, setForecasts] = useState([]);
     const [cumulativeAmounts, setCumulativeAmounts] = useState({});
@@ -39,17 +19,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [showModal, setShowModal] = useState(false);
     const [modalContent, setModalContent] = useState({});
     const navigate = useNavigate();
-    // Handle form submission
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        await onAdd({ name, targetAmount, targetDate });
-        const updatedGoals = await fetchGoals();
-        setGoals(updatedGoals);
-        setName('');
-        setTargetAmount('');
-        setTargetDate('');
-    };
-    // Fetch user data and current amount on component mount
+
     useEffect(() => {
         const fetchUserData = async () => {
             const token = localStorage.getItem('token');
@@ -61,10 +31,9 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             const data = await response.json();
             setCurrentAmount(data.accountBalance);
         };
-
         fetchUserData();
     }, []);
-    // Fetch goals and forecasts, and initialize cumulative amounts
+
     useEffect(() => {
         const getGoalsAndForecasts = async () => {
             const goalsData = await fetchGoals();
@@ -77,26 +46,36 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             });
             setCumulativeAmounts(initialCumulativeAmounts);
         };
-
         getGoalsAndForecasts();
     }, [fetchGoals, fetchForecasts]);
-    // Handle user logout
+
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        await onAdd({ name, targetAmount, targetDate, category, description });
+        const updatedGoals = await fetchGoals();
+        setGoals(updatedGoals);
+        setName('');
+        setTargetAmount('');
+        setTargetDate('');
+        setCategory('');
+        setDescription('');
+    };
+
     const handleLogout = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userId');
         navigate('/login', { replace: true });
     };
-    // Navigate back to the dashboard
+
     const handleBackToDashboard = () => {
         navigate('/dashboard');
     };
-    // Handle payment allocation
+
     const handlePay = async (forecastId, allocatedMoney) => {
         if (currentAmount < allocatedMoney) {
             alert('Cannot process transaction: Low balance');
             return;
         }
-
         setCumulativeAmounts(prevCumulativeAmounts => {
             const newCumulativeAmounts = { ...prevCumulativeAmounts };
             newCumulativeAmounts[forecastId] = (newCumulativeAmounts[forecastId] || 0) + allocatedMoney;
@@ -128,70 +107,43 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             console.error('Error:', error);
         }
     };
-    // Render the forecast chart for a specific forecast
+
     const renderForecastChart = (forecast) => {
         const allocatedMoney = forecast.monthlyIncome * (forecast.allocationPercentage / 100);
         const amountReceived = forecast.amountReceived || 0;
         const remainingAmount = forecast.targetAmount - amountReceived;
         const progress = (amountReceived / forecast.targetAmount) * 100;
 
-        const data = {
-            labels: ['Amount Received', 'Remaining Amount'],
-            datasets: [
-                {
-                    data: [amountReceived, remainingAmount > 0 ? remainingAmount : 0],
-                    backgroundColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 75, 75, 1)'],
-                    borderColor: ['rgba(75, 192, 192, 1)', 'rgba(192, 75, 75, 1)'],
-                    borderWidth: 1,
-                },
-            ],
-        };
-
-        const options = {
-            cutout: '70%',
-            plugins: {
-                tooltip: {
-                    callbacks: {
-                        label: (tooltipItem) => `${tooltipItem.label}: ${tooltipItem.raw}`
-                    }
-                },
-                legend: {
-                    display: false
-                },
-                datalabels: {
-                    display: true,
-                    formatter: (value, context) => {
-                        if (context.dataIndex === 0) {
-                            return `${progress.toFixed(2)}%`;
-                        } else {
-                            return '';
-                        }
-                    },
-                    color: 'white',
-                    font: {
-                        size: 18,
-                    }
-                }
-            }
-        };
-
         return (
-            <Card className="forecast-chart-container mb-4 shadow-lg">
-                <Card.Body>
-                    <Card.Title>
+            <MUICard className="forecast-chart-container mb-4 shadow-lg">
+                <CardContent>
+                    <Typography variant="h6" className="d-flex justify-content-between align-items-center">
                         {forecast.name}
-                        <AddIcon onClick={() => handleShowModal(forecast)} />
-                    </Card.Title>
-                    <Doughnut data={data} options={options} />
+                        <IconButton size="small" onClick={() => handleShowModal(forecast)} className="modal-icon">
+                            <AddIcon />
+                        </IconButton>
+                    </Typography>
+                    <VictoryPie
+                        data={[
+                            { x: "Received", y: amountReceived },
+                            { x: "Remaining", y: remainingAmount > 0 ? remainingAmount : 0 },
+                        ]}
+                        colorScale={["#4CAF50", "#FF5252"]}
+                        innerRadius={50}
+                        labelRadius={80}
+                        style={{ labels: { fontSize: 12, fill: "white" } }}
+                    />
                     <ProgressBar now={progress} label={`${progress.toFixed(2)}%`} className="mt-3" animated striped />
-                    <Button variant="primary" className="mt-3" onClick={() => handlePay(forecast._id, allocatedMoney)}>
+                </CardContent>
+                <CardActions>
+                    <Button variant="contained" color="primary" fullWidth onClick={() => handlePay(forecast._id, allocatedMoney)}>
                         Add Monthly Allocation
                     </Button>
-                </Card.Body>
-            </Card>
+                </CardActions>
+            </MUICard>
         );
     };
-    // Render the chart showing months to achieve each goal
+
     const renderMonthsToAchieveChart = () => {
         const data = forecasts.map(forecast => ({
             x: forecast.name,
@@ -199,9 +151,9 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         }));
 
         return (
-            <Card className="shadow-lg mb-4">
-                <Card.Body>
-                    <Card.Title>Months to Achieve Goal</Card.Title>
+            <MUICard className="shadow-lg mb-4">
+                <CardContent>
+                    <Typography variant="h6">Months to Achieve Goal</Typography>
                     <VictoryChart
                         domainPadding={{ x: 50, y: 30 }}
                         padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
@@ -225,16 +177,16 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                             }}
                         />
                     </VictoryChart>
-                </Card.Body>
-            </Card>
+                </CardContent>
+            </MUICard>
         );
     };
-    // Show the modal with forecast details
+
     const handleShowModal = (forecast) => {
         setModalContent(forecast);
         setShowModal(true);
     };
-     // Close the modal
+
     const handleCloseModal = () => {
         setShowModal(false);
         setModalContent({});
@@ -242,6 +194,10 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
     return (
         <Container fluid className="goal-container p-4">
+            <video autoPlay loop muted className="background-video">
+                <source src="/path/to/your/video.mp4" type="video/mp4" />
+            </video>
+
             <AppBar position="static" className="app-bar">
                 <Toolbar className="toolbar">
                     <IconButton edge="start" color="inherit" onClick={handleBackToDashboard} className="icon-button">
@@ -259,52 +215,78 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
             <Container className="goal-content mt-4">
                 <Row>
                     <Col md={6}>
-                        <Card className="shadow-lg mb-4">
-                            <Card.Body>
-                                <Card.Title>
-                                    Add New Goal <AddIcon />
-                                </Card.Title>
+                        <MUICard className="shadow-lg mb-4 goal-card">
+                            <CardContent>
+                                <Typography variant="h6" className="d-flex justify-content-between align-items-center">
+                                    Add New Goal
+                                    <AddIcon />
+                                </Typography>
                                 <Form onSubmit={handleSubmit} className="goal-form">
-                                    <Form.Group className="mb-3" controlId="formGoalName">
-                                        <Form.Label>Goal Name</Form.Label>
-                                        <Form.Control
-                                            type="text"
-                                            value={name}
-                                            onChange={(e) => setName(e.target.value)}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formTargetAmount">
-                                        <Form.Label>Target Amount</Form.Label>
-                                        <Form.Control
-                                            type="number"
-                                            value={targetAmount}
-                                            onChange={(e) => setTargetAmount(e.target.value)}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Form.Group className="mb-3" controlId="formTargetDate">
-                                        <Form.Label>Target Date</Form.Label>
-                                        <Form.Control
-                                            type="date"
-                                            value={targetDate}
-                                            onChange={(e) => setTargetDate(e.target.value)}
-                                            required
-                                        />
-                                    </Form.Group>
-                                    <Button type="submit" variant="primary">Add Goal</Button>
+                                    <TextField
+                                        label="Goal Name"
+                                        variant="outlined"
+                                        fullWidth
+                                        className="mb-3"
+                                        value={name}
+                                        onChange={(e) => setName(e.target.value)}
+                                        required
+                                    />
+                                    <TextField
+                                        label="Category"
+                                        variant="outlined"
+                                        fullWidth
+                                        className="mb-3"
+                                        value={category}
+                                        onChange={(e) => setCategory(e.target.value)}
+                                        required
+                                    />
+                                    <TextField
+                                        label="Target Amount"
+                                        variant="outlined"
+                                        type="number"
+                                        fullWidth
+                                        className="mb-3"
+                                        value={targetAmount}
+                                        onChange={(e) => setTargetAmount(e.target.value)}
+                                        required
+                                    />
+                                    <TextField
+                                        label="Target Date"
+                                        variant="outlined"
+                                        type="date"
+                                        fullWidth
+                                        className="mb-3"
+                                        value={targetDate}
+                                        onChange={(e) => setTargetDate(e.target.value)}
+                                        required
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    <TextField
+                                        label="Description"
+                                        variant="outlined"
+                                        fullWidth
+                                        className="mb-3"
+                                        multiline
+                                        rows={3}
+                                        value={description}
+                                        onChange={(e) => setDescription(e.target.value)}
+                                    />
+                                    <Button type="submit" variant="contained" color="primary" fullWidth>Add Goal</Button>
                                 </Form>
-                            </Card.Body>
-                        </Card>
+                            </CardContent>
+                        </MUICard>
                     </Col>
                     <Col md={6}>
-                        <Card className="shadow-lg mb-4">
-                            <Card.Body>
-                                <Card.Title>Your Goals</Card.Title>
+                        <MUICard className="shadow-lg mb-4 goal-card">
+                            <CardContent>
+                                <Typography variant="h6">Your Goals</Typography>
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
                                             <th>Goal Name</th>
+                                            <th>Category</th>
                                             <th>Target Amount</th>
                                             <th>Target Date</th>
                                         </tr>
@@ -313,27 +295,22 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                                         {goals.map(goal => (
                                             <tr key={goal._id}>
                                                 <td>{goal.name}</td>
+                                                <td>{goal.category}</td>
                                                 <td>${goal.targetAmount}</td>
                                                 <td>{new Date(goal.targetDate).toLocaleDateString()}</td>
                                             </tr>
                                         ))}
                                     </tbody>
                                 </Table>
-                            </Card.Body>
-                        </Card>
+                            </CardContent>
+                        </MUICard>
                     </Col>
                 </Row>
 
                 <Row>
                     {forecasts.map(forecast => (
                         <Col md={6} key={forecast._id}>
-                            <Card className="shadow-lg mb-4" onClick={() => handleShowModal(forecast)}>
-                                <Card.Body>
-                                    <Card.Title>{forecast.name}</Card.Title>
-                                    <ProgressBar now={(forecast.amountReceived / forecast.targetAmount) * 100} label={`${((forecast.amountReceived / forecast.targetAmount) * 100).toFixed(2)}%`} animated striped />
-                                    <Button variant="info" className="mt-3">View Details</Button>
-                                </Card.Body>
-                            </Card>
+                            {renderForecastChart(forecast)}
                         </Col>
                     ))}
                 </Row>
@@ -374,7 +351,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
+                    <Button variant="contained" color="secondary" onClick={handleCloseModal}>
                         Close
                     </Button>
                 </Modal.Footer>

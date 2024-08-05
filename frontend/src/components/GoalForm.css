@@ -1,169 +1,105 @@
-body {
-    margin: 0;
-    padding: 0;
+.goal-container {
+    position: relative;
+    z-index: 1;
     font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.background-video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+    filter: brightness(0.5);
 }
 
 .goal-content {
-    margin-top: 2rem;
-}
-
-.shadow-lg {
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-.goal-form .form-control {
-    border: none;
-    border-bottom: 2px solid #007bff;
-    border-radius: 0;
-    box-shadow: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.goal-form .form-control:focus {
-    border-color: #0056b3;
-    box-shadow: none;
-}
-
-.goal-form .btn-primary {
-    background: #007bff;
-    border: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.goal-form .btn-primary:hover {
-    background: #0056b3;
-    transform: translateY(-3px);
-}
-
-.table-striped tbody tr:nth-of-type(odd) {
-    background-color: rgba(0, 123, 255, 0.1);
-}
-
-.table-striped tbody tr:hover {
-    background-color: rgba(0, 123, 255, 0.2);
-    cursor: pointer;
-}
-
-.card-title {
-    font-size: 1.5rem;
-    font-weight: bold;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.card-title svg {
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-}
-
-.card-title svg:hover {
-    transform: rotate(90deg);
-}
-
-.forecast-chart-container .progress-bar {
-    background: linear-gradient(90deg, #007bff, #00c6ff);
-    transition: width 0.5s ease-in-out;
-}
-
-.forecast-chart-container .btn-primary {
-    background: #007bff;
-    border: none;
-    transition: all 0.3s ease-in-out;
-}
-
-.forecast-chart-container .btn-primary:hover {
-    background: #0056b3;
-    transform: translateY(-3px);
-}
-
-.forecast-chart-container {
-    transition: all 0.3s ease-in-out;
-}
-
-.forecast-chart-container:hover {
-    transform: scale(1.02);
-}
-
-.victory-container {
-    margin: auto;
-}
-
-.modal-content {
-    border-radius: 15px;
-}
-
-.modal-header {
-    border-bottom: none;
-    background: #007bff;
-    color: #fff;
-    border-top-left-radius: 15px;
-    border-top-right-radius: 15px;
-}
-
-.modal-body {
-    background: #f9f9f9;
-}
-
-.modal-footer {
-    border-top: none;
-}
-
-.modal-footer .btn-secondary {
-    background: #6c757d;
-    border: none;
-}
-
-.modal-footer .btn-secondary:hover {
-    background: #5a6268;
-    transform: translateY(-3px);
-}
-
-.additional-info p {
-    font-size: 1rem;
-    margin: 0;
-}
-
-.additional-info p strong {
-    color: #007bff;
+    position: relative;
+    z-index: 2;
+    overflow-y: auto;
+    height: 90vh;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
 }
 
 .app-bar {
-    background: #007bff;
+    background-color: #3f51b5;
+    color: white;
 }
 
-.app-bar .toolbar {
+.toolbar {
     display: flex;
     justify-content: space-between;
-    align-items: center;
 }
 
-.app-bar .toolbar .icon-button {
-    color: #fff;
-    transition: all 0.3s ease-in-out;
+.icon-button {
+    color: white;
 }
 
-.app-bar .toolbar .icon-button:hover {
-    transform: translateY(-3px);
+.typography {
+    flex-grow: 1;
+    text-align: center;
 }
 
-.app-bar .toolbar .typography {
-    color: #fff;
+.goal-card {
+    background-color: white;
+    border-radius: 12px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.goal-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.goal-form {
+    padding: 10px;
+}
+
+.modal-icon {
+    color: #3f51b5;
+    cursor: pointer;
+}
+
+.forecast-chart-container {
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 20px;
+    transition: transform 0.2s ease-in-out;
+}
+
+.forecast-chart-container:hover {
+    transform: translateY(-5px);
+}
+
+.forecast-chart-container .card-title {
+    font-size: 18px;
     font-weight: bold;
+    color: #333;
 }
 
-@media (max-width: 767.98px) {
-    .goal-form .form-control,
-    .modal-content,
-    .card-title,
-    .forecast-chart-container .btn-primary,
-    .app-bar .toolbar .typography {
-        font-size: 14px;
-    }
+.forecast-chart-container .btn {
+    background-color: #3f51b5;
+    border: none;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
 
-    .modal-footer .btn-secondary,
-    .goal-form .btn-primary {
-        font-size: 12px;
-    }
+.forecast-chart-container .btn:hover {
+    background-color: #303f9f;
+}
+
+.table-striped tbody tr:nth-of-type(odd) {
+    background-color: #f9f9f9;
+}
+
+.table-hover tbody tr:hover {
+    background-color: #e0e0e0;
 }
