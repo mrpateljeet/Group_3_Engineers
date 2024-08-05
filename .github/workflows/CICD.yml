@@ -39,7 +39,7 @@ jobs:
 
     - name: Build frontend application
       working-directory: ./frontend
-      run: CI=false npm run build
+      run: npm run build  # Running the build in CI environment with proper checks
 
     - name: Install backend dependencies
       working-directory: ./backend
@@ -59,9 +59,9 @@ jobs:
       with:
         name: production-artifacts
         path: |
-          ./frontend/build/  # Frontend build files
-          ./backend/.env      # Backend environment variables (if any)
-          ./backend/src/      # Backend source files (if needed)
+          frontend/build/  # Frontend build files
+          backend/.env      # Backend environment variables (if any)
+          backend/src/      # Backend source files (if needed)
 
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()

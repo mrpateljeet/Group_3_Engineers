@@ -138,7 +138,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                     </CardContent>
                     <CardActions>
                         <Button variant="contained" color="primary" fullWidth onClick={() => handlePay(forecast._id, allocatedMoney)}>
-                            Add Monthly Allocation
+                            Pay Now
                         </Button>
                     </CardActions>
                 </MUICard>
@@ -225,9 +225,8 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     return (
         <Container fluid className="goal-container p-4">
             <video autoPlay loop muted className="background-video">
-                <source src="/path/to/your/video.mp4" type="video/mp4" />
+                <source src="/dashboard_background_gif.mp4" type="video/mp4" />
             </video>
-
             <AppBar position="static" className="app-bar">
                 <Toolbar className="toolbar">
                     <IconButton edge="start" color="inherit" onClick={handleBackToDashboard} className="icon-button">
