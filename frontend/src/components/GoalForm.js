@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GoalForm.css';
-import { VictoryChart, VictoryLine, VictoryAxis, VictoryPie } from 'victory';
-import { Container, Row, Col, Form, Table, Card, Modal, Button, ProgressBar } from 'react-bootstrap';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { Container, Row, Col, Form, Table, Card, Modal, Button } from 'react-bootstrap';
 import { AppBar, Toolbar, Typography, IconButton, TextField, Card as MUICard, CardContent, CardActions } from '@mui/material';
 import { Add as AddIcon, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+} from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
 
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [targetDate, setTargetDate] = useState('');
-    const [category, setCategory] = useState(''); // New field
-    const [description, setDescription] = useState(''); // New field
+    const [category, setCategory] = useState('');
+    const [description, setDescription] = useState('');
     const [goals, setGoals] = useState([]);
     const [forecasts, setForecasts] = useState([]);
     const [cumulativeAmounts, setCumulativeAmounts] = useState({});
@@ -114,69 +127,120 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         const remainingAmount = forecast.targetAmount - amountReceived;
         const progress = (amountReceived / forecast.targetAmount) * 100;
 
+        const data = {
+            labels: ['Amount Received', 'Remaining Amount'],
+            datasets: [
+                {
+                    data: [amountReceived, remainingAmount],
+                    backgroundColor: ['#4CAF50', '#FF5252'],
+                    hoverBackgroundColor: ['#388E3C', '#D32F2F'],
+                    borderWidth: 1,
+                },
+            ],
+        };
+
+        const options = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: (tooltipItem) => `${tooltipItem.label}: $${tooltipItem.raw}`
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            cutout: '70%',
+            maintainAspectRatio: false,
+        };
+
         return (
-            <MUICard className="forecast-chart-container mb-4 shadow-lg">
-                <CardContent>
-                    <Typography variant="h6" className="d-flex justify-content-between align-items-center">
-                        {forecast.name}
-                        <IconButton size="small" onClick={() => handleShowModal(forecast)} className="modal-icon">
-                            <AddIcon />
-                        </IconButton>
-                    </Typography>
-                    <VictoryPie
-                        data={[
-                            { x: "Received", y: amountReceived },
-                            { x: "Remaining", y: remainingAmount > 0 ? remainingAmount : 0 },
-                        ]}
-                        colorScale={["#4CAF50", "#FF5252"]}
-                        innerRadius={50}
-                        labelRadius={80}
-                        style={{ labels: { fontSize: 12, fill: "white" } }}
-                    />
-                    <ProgressBar now={progress} label={`${progress.toFixed(2)}%`} className="mt-3" animated striped />
-                </CardContent>
-                <CardActions>
-                    <Button variant="contained" color="primary" fullWidth onClick={() => handlePay(forecast._id, allocatedMoney)}>
-                        Add Monthly Allocation
-                    </Button>
-                </CardActions>
-            </MUICard>
+            <div className="forecast-item">
+                <MUICard className="forecast-chart-container mb-4 shadow-lg">
+                    <CardContent>
+                        <Typography variant="h6" className="d-flex justify-content-between align-items-center">
+                            {forecast.name}
+                            <IconButton size="small" onClick={() => handleShowModal(forecast)} className="modal-icon">
+                                <AddIcon />
+                            </IconButton>
+                        </Typography>
+                        <div style={{ position: 'relative', width: '150px', height: '150px' }}>
+                            <Doughnut data={data} options={options} />
+                        </div>
+                        <Button variant="contained" color="primary" className="mt-3" onClick={() => handlePay(forecast._id, allocatedMoney)}>
+                            Add Monthly Allocation
+                        </Button>
+                    </CardContent>
+                </MUICard>
+                {modalContent._id === forecast._id && (
+                    <MUICard className="forecast-detail-container shadow-lg">
+                        <CardContent>
+                            <Typography variant="h6">Forecast Details</Typography>
+                            <Table striped bordered hover className="mt-3">
+                                <thead>
+                                    <tr>
+                                        <th>Amount</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {forecast.paymentHistory?.map((payment, index) => (
+                                        <tr key={index}>
+                                            <td>${payment.amount}</td>
+                                            <td>{new Date(payment.date).toLocaleDateString()}</td>
+                                        </tr>
+                                    ))}
+                                </tbody>
+                            </Table>
+                            <div className="additional-info mt-3">
+                                <p><strong>Number of Months:</strong> {forecast.months}</p>
+                                <p><strong>Amount Received:</strong> ${forecast.amountReceived || 0}</p>
+                                <p><strong>Amount Remaining:</strong> ${forecast.targetAmount - (forecast.amountReceived || 0)}</p>
+                            </div>
+                        </CardContent>
+                    </MUICard>
+                )}
+            </div>
         );
     };
 
     const renderMonthsToAchieveChart = () => {
-        const data = forecasts.map(forecast => ({
-            x: forecast.name,
-            y: parseFloat(forecast.months) || 0
-        }));
+        const data = {
+            labels: forecasts.map(forecast => forecast.name),
+            datasets: [{
+                label: 'Months to Achieve Goal',
+                data: forecasts.map(forecast => parseFloat(forecast.months) || 0),
+                fill: false,
+                backgroundColor: '#2196f3',
+                borderColor: '#2196f3',
+            }]
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Goals'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Months'
+                    }
+                }
+            },
+            maintainAspectRatio: false,
+        };
 
         return (
             <MUICard className="shadow-lg mb-4">
                 <CardContent>
                     <Typography variant="h6">Months to Achieve Goal</Typography>
-                    <VictoryChart
-                        domainPadding={{ x: 50, y: 30 }}
-                        padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
-                        width={600}
-                        height={300}
-                    >
-                        <VictoryAxis
-                            style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
-                        />
-                        <VictoryAxis
-                            dependentAxis
-                            style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
-                        />
-                        <VictoryLine
-                            data={data}
-                            x="x"
-                            y="y"
-                            style={{
-                                data: { stroke: "#FF5722" },
-                                labels: { fontSize: 12, fontWeight: 'bold' }
-                            }}
-                        />
-                    </VictoryChart>
+                    <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                        <Line data={data} options={options} />
+                    </div>
                 </CardContent>
             </MUICard>
         );
@@ -214,13 +278,12 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
             <Container className="goal-content mt-4">
                 <Row>
+                    <Col md={12}>
+                        <Typography variant="h5" className="section-title">Add New Goal</Typography>
+                    </Col>
                     <Col md={6}>
                         <MUICard className="shadow-lg mb-4 goal-card">
                             <CardContent>
-                                <Typography variant="h6" className="d-flex justify-content-between align-items-center">
-                                    Add New Goal
-                                    <AddIcon />
-                                </Typography>
                                 <Form onSubmit={handleSubmit} className="goal-form">
                                     <TextField
                                         label="Goal Name"
@@ -307,9 +370,14 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                     </Col>
                 </Row>
 
+                <hr className="section-divider" />
+
                 <Row>
+                    <Col md={12}>
+                        <Typography variant="h5" className="section-title">Your Forecasts</Typography>
+                    </Col>
                     {forecasts.map(forecast => (
-                        <Col md={6} key={forecast._id}>
+                        <Col md={12} key={forecast._id}>
                             {renderForecastChart(forecast)}
                         </Col>
                     ))}
@@ -321,41 +389,6 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                     </Col>
                 </Row>
             </Container>
-
-            <Modal show={showModal} onHide={handleCloseModal} size="lg">
-                <Modal.Header closeButton>
-                    <Modal.Title>{modalContent.name}</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                    {modalContent.name && renderForecastChart(modalContent)}
-                    <Table striped bordered hover className="mt-3">
-                        <thead>
-                            <tr>
-                                <th>Amount</th>
-                                <th>Date</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {modalContent.paymentHistory?.map((payment, index) => (
-                                <tr key={index}>
-                                    <td>${payment.amount}</td>
-                                    <td>{new Date(payment.date).toLocaleDateString()}</td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </Table>
-                    <div className="additional-info mt-3">
-                        <p><strong>Number of Months:</strong> {modalContent.months}</p>
-                        <p><strong>Amount Received:</strong> ${modalContent.amountReceived || 0}</p>
-                        <p><strong>Amount Remaining:</strong> ${modalContent.targetAmount - (modalContent.amountReceived || 0)}</p>
-                    </div>
-                </Modal.Body>
-                <Modal.Footer>
-                    <Button variant="contained" color="secondary" onClick={handleCloseModal}>
-                        Close
-                    </Button>
-                </Modal.Footer>
-            </Modal>
         </Container>
     );
 };

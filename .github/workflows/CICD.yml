@@ -16,32 +16,46 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    # Step 1: Checkout the repository
     - name: Checkout repository
       uses: actions/checkout@v2
 
+    # Step 2: Set up Node.js environment
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '21.x'  # Match this with your local Node.js version
+        cache: 'npm'
 
+    # Step 3: Install the correct npm version
+    - run: npm install -g npm@10.2.4  # Install the same npm version as your local environment
+
+    # Step 4: Install frontend dependencies
     - name: Install frontend dependencies
       working-directory: ./frontend
       run: npm install
 
+    # Step 5: Run frontend unit tests
+    # This step ensures the pipeline fails if the unit tests fail
     - name: Run frontend unit tests
       working-directory: ./frontend
       run: npm test
-      continue-on-error: false  # Pipeline will fail if tests fail
+      env:
+        CI: true  # Ensure watch mode is disabled in CI
 
+    # Step 6: Build the frontend application
+    # This step will fail if the code does not compile
     - name: Build frontend application
       working-directory: ./frontend
-      run: npm run build
-      continue-on-error: false  # Pipeline will fail if the build fails
+      run: CI=false npm run build  # Running the build in CI environment with proper checks
 
+    # Step 7: Install backend dependencies
     - name: Install backend dependencies
       working-directory: ./backend
       run: npm install
 
+    # Step 8: Verify frontend build artifacts
+    # This step checks if the build artifacts exist; the pipeline will fail if they are not present
     - name: Verify frontend build artifacts
       if: success()
       run: |
@@ -50,17 +64,20 @@ jobs:
           exit 1
         fi
 
+    # Step 9: Archive production artifacts
+    # This step archives the necessary files to run the project
     - name: Archive production artifacts
       if: success()
       uses: actions/upload-artifact@v2
       with:
         name: production-artifacts
         path: |
-          ./frontend/build/  # Frontend build files
-          ./backend/.env      # Backend environment variables (if any)
-          ./backend/src/      # Backend source files (if needed)
+          frontend/build/  # Frontend build files
+          backend/.env      # Backend environment variables (if any)
+          backend/src/      # Backend source files (if needed)
 
-    # Add deployment steps here if required
+    # Step 10: Deploy to production (if needed)
+    # This step runs the deployment script only if on the main branch and all previous steps succeeded
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()
       run: |
