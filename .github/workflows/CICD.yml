@@ -42,12 +42,6 @@ jobs:
       working-directory: ./backend
       run: npm install
 
-    # Add backend tests if you have them
-    # - name: Run backend tests
-    #   working-directory: ./backend
-    #   run: npm test
-    #   continue-on-error: false  # Pipeline will fail if tests fail
-
     - name: Verify frontend build artifacts
       if: success()
       run: |
