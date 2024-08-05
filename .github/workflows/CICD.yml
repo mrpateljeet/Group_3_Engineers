@@ -22,7 +22,11 @@ jobs:
     - name: Set up Node.js
       uses: actions/setup-node@v2
       with:
-        node-version: '14'
+        node-version: '21.x'  # Match this with your local Node.js version
+        cache: 'npm'
+
+    - name: Install npm 10.x
+      run: npm install -g npm@10.2.4  # Install the same npm version as your local environment
 
     - name: Install frontend dependencies
       working-directory: ./frontend
@@ -60,7 +64,6 @@ jobs:
           ./backend/.env      # Backend environment variables (if any)
           ./backend/src/      # Backend source files (if needed)
 
-    # Add deployment steps here if required
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()
       run: |
