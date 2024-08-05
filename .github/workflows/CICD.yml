@@ -1,17 +1,24 @@
-name: CI Pipeline
+name: CI/CD Pipeline
 
+# 1. Pipeline Execution Triggers
 on:
   push:
-    branches: [ main, develop ]
+    branches:
+      - main
+      - develop
   pull_request:
-    branches: [ main ]
+    branches:
+      - main
+      - develop
 
 jobs:
   build:
+
+    # 2. Using GitHub-Hosted Runners
     runs-on: ubuntu-latest
-    
+
     steps:
-    - name: Checkout code
+    - name: Checkout repository
       uses: actions/checkout@v2
 
     - name: Set up Node.js
@@ -22,22 +29,38 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Run tests
+    # 3. Run Unit Tests
+    - name: Run unit tests
       run: npm test
-      env:
-        CI: true 
+      continue-on-error: false  # Pipeline will fail if tests fail
 
-    - name: Build project
+    # 4. Build the Application
+    - name: Build application
       run: npm run build
+      continue-on-error: false  # Pipeline will fail if the build fails
 
-    - name: Archive build artifacts
+    # 5. Verify Build Artifacts
+    - name: Verify build artifacts
       if: success()
-      uses: actions/upload-artifact@v3
-      with:
-        name: build
-        path: ./build
+      run: |
+        if [ ! -d "build" ]; then
+          echo "Build artifacts not found!"
+          exit 1
+        fi
 
-    - name: Check for build artifacts
-      if: failure()
-      run: echo "Build failed or artifacts not found."
-      continue-on-error: false
+    # 6. Archive Production Artifacts
+    - name: Archive production artifacts
+      if: success()  # Only runs if build and artifact verification succeed
+      uses: actions/upload-artifact@v2
+      with:
+        name: production-artifacts
+        path: |
+          build/           # Frontend build files
+          .env             # Environment variables
+          other-folder/    # Any other necessary files
+
+    # 7. Deploy to Production (Optional)
+    - name: Deploy to production
+      if: github.ref == 'refs/heads/main' && success()
+      run: |
+        # Add your deployment script here
