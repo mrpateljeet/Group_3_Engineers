@@ -258,9 +258,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
 
     return (
         <Container fluid className="goal-container p-4">
-            <video autoPlay loop muted className="background-video">
-                <source src="/path/to/your/video.mp4" type="video/mp4" />
-            </video>
+            <img src="/savings_goal.jpg" alt="Background Image" className="background-image" />
 
             <AppBar position="static" className="app-bar">
                 <Toolbar className="toolbar">
