@@ -91,7 +91,7 @@ describe('LoginForm', () => {
         const submitButton = screen.getByRole('button', { name: 'Login' });
 
         fireEvent.change(emailInput, { target: { value: 'test@example.com' } });
-        fireEvent.change(passwordInput, { target: { value: 'password123' } });
+        fireEvent.change(passwordInput, { target: { value: 'password12345' } });
         fireEvent.click(submitButton);
 
         await waitFor(() => {
