@@ -80,6 +80,6 @@ jobs:
       with:
         name: production-artifacts
         path: |
-          frontend/build/  # Frontend build files
-          backend/.env      # Backend environment variables (if any)
-          backend/src/      # Backend source files (if needed)
+          frontend/build/**  # Frontend build files
+          backend/.env       # Backend environment variables (if any)
+          backend/src/**     # Backend source files (if needed)
