@@ -1,6 +1,5 @@
 name: CI/CD Pipeline
 
-# 1. Pipeline Execution Triggers
 on:
   push:
     branches:
@@ -14,7 +13,6 @@ on:
 jobs:
   build:
 
-    # 2. Using GitHub-Hosted Runners
     runs-on: ubuntu-latest
 
     steps:
@@ -26,40 +24,43 @@ jobs:
       with:
         node-version: '14'
 
-    - name: Install dependencies
+    - name: Install frontend dependencies
+      working-directory: ./frontend
       run: npm install
 
-    # 3. Run Unit Tests
-    - name: Run unit tests
+    - name: Run frontend unit tests
+      working-directory: ./frontend
       run: npm test
       continue-on-error: false  # Pipeline will fail if tests fail
 
-    # 4. Build the Application
-    - name: Build application
+    - name: Build frontend application
+      working-directory: ./frontend
       run: npm run build
       continue-on-error: false  # Pipeline will fail if the build fails
 
-    # 5. Verify Build Artifacts
-    - name: Verify build artifacts
+    - name: Install backend dependencies
+      working-directory: ./backend
+      run: npm install
+
+    - name: Verify frontend build artifacts
       if: success()
       run: |
-        if [ ! -d "build" ]; then
+        if [ ! -d "./frontend/build" ]; then
           echo "Build artifacts not found!"
           exit 1
         fi
 
-    # 6. Archive Production Artifacts
     - name: Archive production artifacts
-      if: success()  # Only runs if build and artifact verification succeed
+      if: success()
       uses: actions/upload-artifact@v2
       with:
         name: production-artifacts
         path: |
-          build/           # Frontend build files
-          .env             # Environment variables
-          other-folder/    # Any other necessary files
+          ./frontend/build/  # Frontend build files
+          ./backend/.env      # Backend environment variables (if any)
+          ./backend/src/      # Backend source files (if needed)
 
-    # 7. Deploy to Production (Optional)
+    # Add deployment steps here if required
     - name: Deploy to production
       if: github.ref == 'refs/heads/main' && success()
       run: |
