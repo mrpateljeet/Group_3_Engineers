@@ -12,6 +12,7 @@ Budget Minder is a web-based application designed to help users manage and forec
 6. [Architecture Diagram](#architecture-diagram)
 7. [Activity Diagram](#activity-diagram)
 8. [Sequence Diagram](#sequence-diagram)
+9. [Usecase Diagram](#usecase-diagram)
 
 ## Introduction
 Budget Minder is designed to provide users with tools to track their income, expenses, and savings goals. The system offers functionalities such as user registration, login, transaction management, and budget forecasting. The project leverages various open-source libraries and frameworks to deliver a seamless and secure user experience.
@@ -52,10 +53,15 @@ The architecture of Budget Minder follows a typical Model-View-Controller (MVC) 
   - **Dashboard**: Displays user transactions and budget overview.
   - **TransactionList**: Shows a list of transactions.
   - **AddTransactionForm**: Form to add new transactions.
-  - **EditTransactionForm**: Form to edit existing transactions.
-  - **SavingsGoalForm**: Allows users to set savings goals.
-  - **Forecast**: Displays budget forecast based on user data.
-
+  - **GoalForm**: Allows users to set savings goals.
+  - **ForecastForm**: Displays budget forecast based on user data.
+  - **Chart**: Renders a line chart using Chart.js and react-chartjs-2.
+  - **CompleteProfile**: Allows users to complete their profile by entering details.
+  - **FeedbackForm**: Allows user to submit feedback.
+  - **HomePage**: The main page for the Budget Minder application
+  - **ParentComponent**: Sends the forecast data to the backend API and returns the response.
+  - **ProfilePage**-: allows users to view and edit their profile information.
+  - **TransactionForm**-:This component provides a form for adding or updating transactions.
 - **State Management**: Uses React's Context API or Redux for managing global state.
 - **Routing**: Utilizes React Router for navigation between different components.
 
@@ -67,24 +73,35 @@ The architecture of Budget Minder follows a typical Model-View-Controller (MVC) 
   - **/api/user**: Endpoint for fetching and updating user details.
   - **/api/transactions**: Endpoints for CRUD operations on transactions.
   - **/api/categories**: Endpoint for fetching transaction categories.
+  - **/api/forecast**: Endpoint for saving, retrieving, and updating forecasts.
+  - **api/feedback**: Endpoint for submitting and retrieving feedback.
+  - **api/goal**: Endpoint for adding goals, forecasting goals, and retrieving goals.
 
 - **Controllers**:
   - **authController**: Manages user authentication (registration, login).
   - **userController**: Handles user data operations (fetch, update profile).
   - **transactionController**: Manages transaction-related operations (add, edit, delete, fetch).
   - **categoryController**: Handles category data operations (fetch categories).
+  - **feedbackController**: handling feedback submissions and retrieval.
+  - **forecastController**: handling forecast operations.
+  - **goalController**: handling goal operations
 
 - **Models**:
   - **User**: Defines user data schema (username, email, password, etc.).
   - **Transaction**: Defines transaction data schema (userId, categoryId, amount, date, description).
   - **Category**: Defines category data schema (name, type).
+  - **Goal**: Defines the schema and model for financial goals set by users.
+  - **Forecast**: Defines the schema and model for forecasting financial goals.
+  - **Feedback**: Defines the schema and model for feedback submitted by users.
 
 ### Database 
 - **Schema Definitions**:
   - **User**: Stores user information and credentials.
   - **Transaction**: Records financial transactions.
   - **Category**: Defines income and expense categories.
-
+  - **Goal**: stores financial goals set by users.
+  - **Forecast**: stores forecasting financial goals.
+  - **Feedback**: stores feedback submitted by users.
 - **Relationships**:
   - **User has many Transactions**: Each user can have multiple transactions.
   - **Transaction belongs to User**: Each transaction is linked to a specific user.
@@ -210,9 +227,108 @@ sequenceDiagram
     Server -->> UI: Return Forecast Data
     UI -->> User: Display Forecast Result
 ```
+### Usecase Diagram
+## usecase diagram for Login
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f7fa', 'secondaryColor': '#4f7cac', 'tertiaryColor': '#f4d35e', 'fontFamily': 'Arial'}}}%%
+graph TB
+    %% Define Nodes (Use Cases and Actions)
+    A["Enter Email and Password"]
+    B["Submit Login Form"]
+    C{"Validate Email Format"}
+    D["Sanitize Inputs"]
+    E["Send Login Data to Backend"]
+    F{"Process Login Response"}
+    G["Navigate to Dashboard"]
+    H["Display Error Message"]
+
+    %% Define Flow
+    A --> B
+    B --> C
+    C -->|Yes| D
+    C -->|No| H
+    D --> E
+    E --> F
+    F -->|Success| G
+    F -->|Failure| H
+```
+## usecase diagram for Registration
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f7fa', 'secondaryColor': '#4f7cac', 'tertiaryColor': '#f4d35e', 'fontFamily': 'Arial'}}}%%
+graph TB
+    %% Define Nodes (Use Cases and Actions)
+    A["Enter Username, Email, and Password"]
+    B["Submit Registration Form"]
+    C{"Validate Email Format"}
+    D["Sanitize Inputs"]
+    E["Send Registration Data to Backend"]
+    F{"Process Registration Response"}
+    G["Navigate to Complete Profile"]
+    H["Display Error Message"]
+
+    %% Define Flow
+    A --> B
+    B --> C
+    C -->|Yes| D
+    C -->|No| H
+    D --> E
+    E --> F
+    F -->|Success| G
+    F -->|Failure| H
+```
+## usecase diagram for Budget Forecast
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f7fa', 'secondaryColor': '#4f7cac', 'tertiaryColor': '#f4d35e', 'fontFamily': 'Arial'}}}%%
+graph TB
+    %% Define Nodes (Use Cases and Actions)
+    A["Fetch User Data"]
+    B["Submit Forecast Form"]
+    C{"User Confirms to Save Forecast?"}
+    D["Save Forecast Data"]
+    E{"Was the Request Successful?"}
+    F["Navigate to Add Goal Page"]
+    G["Display Forecast Result"]
+    
     
 
+    %% Define Flow
+    A --> B
+    B --> C
+    C -->|Yes| D
+    C -->|No| G
+    D --> E
+    E -->|Success| F
+    E -->|Failure| G
+    
+   
+    G -->|Display Forecast Result| B
+```
+## usecase diagram for adding income and Expense
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#f5f7fa', 'secondaryColor': '#4f7cac', 'tertiaryColor': '#f4d35e', 'fontFamily': 'Arial'}}}%%
+graph TB
+    %% Define Nodes (Use Cases and Actions)
+    A["Load Transaction Page"]
+    B["Enter Amount, Date, Description, and choose a category"]
+    C["Submit Transaction Form"]
+    
+    E["Send Transaction Data to Backend"]
+    F{"Was the Request Successful?"}
+    H["Navigate to Dashboard"]
+    I["Display Error Message"]
+   
 
-
+    %% Define Flow
+    A --> B
+    B --> C
+    C --> E
+  
+    
+    E -->|Yes| F
+    E -->|No| I
+   
+    F-->|Success| H
+    F -->|Failure| I
+```
 
  
