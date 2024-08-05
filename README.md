@@ -108,6 +108,20 @@ Budget Minder is a web-based application designed to help users manage and forec
 
 - **GET /api/categories**: Get all categories.
 
+### Forecasts
+
+- **GET /api/forecast** : Endpoint for retrieving forecasts.
+- **PUT /api/forecast** : Endpoint for saving forecasts.
+
+### Feedback
+
+- **GET api/feedback** : Endpoint for retrieving feedback.
+- **PUT api/feedback** : Endpoint for submitting feedback.
+
+### Goal
+- **GET api/feedback**: Endpoint for retrieving feedback.
+- **PUT api/feedback**: Endpoint for submitting feedback.
+  
 ## System Requirements
 
 - **Node.js**: v14.x or higher
