@@ -14,18 +14,6 @@
     box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
-.goal-content {
-    position: relative;
-    z-index: 2;
-    overflow-y: auto; /* Enables vertical scrolling */
-    height: calc(100vh - 60px); /* Adjust height to ensure it fits within the viewport */
-    padding: 20px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 12px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
-}
-
-
 /* Background video styling */
 .background-video {
     position: absolute;

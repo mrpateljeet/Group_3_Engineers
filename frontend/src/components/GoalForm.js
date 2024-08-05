@@ -1,17 +1,30 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './GoalForm.css';
-import { VictoryChart, VictoryLine, VictoryAxis, VictoryPie } from 'victory';
-import { Container, Row, Col, Form, Table, Card, Modal, Button, ProgressBar } from 'react-bootstrap';
+import { Doughnut, Line } from 'react-chartjs-2';
+import { Container, Row, Col, Form, Table, Card, Modal, Button } from 'react-bootstrap';
 import { AppBar, Toolbar, Typography, IconButton, TextField, Card as MUICard, CardContent, CardActions } from '@mui/material';
 import { Add as AddIcon, ExitToApp as ExitToAppIcon, ArrowBack as ArrowBackIcon } from '@mui/icons-material';
+
+import {
+    Chart as ChartJS,
+    ArcElement,
+    Tooltip,
+    Legend,
+    CategoryScale,
+    LinearScale,
+    PointElement,
+    LineElement,
+} from 'chart.js';
+
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, PointElement, LineElement);
 
 const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     const [name, setName] = useState('');
     const [targetAmount, setTargetAmount] = useState('');
     const [targetDate, setTargetDate] = useState('');
-    const [category, setCategory] = useState(''); // New field
-    const [description, setDescription] = useState(''); // New field
+    const [category, setCategory] = useState('');
+    const [description, setDescription] = useState('');
     const [goals, setGoals] = useState([]);
     const [forecasts, setForecasts] = useState([]);
     const [cumulativeAmounts, setCumulativeAmounts] = useState({});
@@ -114,6 +127,33 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
         const remainingAmount = forecast.targetAmount - amountReceived;
         const progress = (amountReceived / forecast.targetAmount) * 100;
 
+        const data = {
+            labels: ['Amount Received', 'Remaining Amount'],
+            datasets: [
+                {
+                    data: [amountReceived, remainingAmount],
+                    backgroundColor: ['#4CAF50', '#FF5252'],
+                    hoverBackgroundColor: ['#388E3C', '#D32F2F'],
+                    borderWidth: 1,
+                },
+            ],
+        };
+
+        const options = {
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        label: (tooltipItem) => `${tooltipItem.label}: $${tooltipItem.raw}`
+                    }
+                },
+                legend: {
+                    display: false
+                }
+            },
+            cutout: '70%',
+            maintainAspectRatio: false,
+        };
+
         return (
             <div className="forecast-item">
                 <MUICard className="forecast-chart-container mb-4 shadow-lg">
@@ -124,23 +164,13 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                                 <AddIcon />
                             </IconButton>
                         </Typography>
-                        <VictoryPie
-                            data={[
-                                { x: "Received", y: amountReceived },
-                                { x: "Remaining", y: remainingAmount > 0 ? remainingAmount : 0 },
-                            ]}
-                            colorScale={["#4CAF50", "#FF5252"]}
-                            innerRadius={50}
-                            labelRadius={80}
-                            style={{ labels: { fontSize: 12, fill: "white" } }}
-                        />
-                        <ProgressBar now={progress} label={`${progress.toFixed(2)}%`} className="mt-3" animated striped />
-                    </CardContent>
-                    <CardActions>
-                        <Button variant="contained" color="primary" fullWidth onClick={() => handlePay(forecast._id, allocatedMoney)}>
-                            Pay Now
+                        <div style={{ position: 'relative', width: '150px', height: '150px' }}>
+                            <Doughnut data={data} options={options} />
+                        </div>
+                        <Button variant="contained" color="primary" className="mt-3" onClick={() => handlePay(forecast._id, allocatedMoney)}>
+                            Add Monthly Allocation
                         </Button>
-                    </CardActions>
+                    </CardContent>
                 </MUICard>
                 {modalContent._id === forecast._id && (
                     <MUICard className="forecast-detail-container shadow-lg">
@@ -175,38 +205,42 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     };
 
     const renderMonthsToAchieveChart = () => {
-        const data = forecasts.map(forecast => ({
-            x: forecast.name,
-            y: parseFloat(forecast.months) || 0
-        }));
+        const data = {
+            labels: forecasts.map(forecast => forecast.name),
+            datasets: [{
+                label: 'Months to Achieve Goal',
+                data: forecasts.map(forecast => parseFloat(forecast.months) || 0),
+                fill: false,
+                backgroundColor: '#2196f3',
+                borderColor: '#2196f3',
+            }]
+        };
+
+        const options = {
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Goals'
+                    }
+                },
+                y: {
+                    title: {
+                        display: true,
+                        text: 'Months'
+                    }
+                }
+            },
+            maintainAspectRatio: false,
+        };
 
         return (
             <MUICard className="shadow-lg mb-4">
                 <CardContent>
                     <Typography variant="h6">Months to Achieve Goal</Typography>
-                    <VictoryChart
-                        domainPadding={{ x: 50, y: 30 }}
-                        padding={{ left: 80, right: 80, top: 30, bottom: 50 }}
-                        width={600}
-                        height={300}
-                    >
-                        <VictoryAxis
-                            style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
-                        />
-                        <VictoryAxis
-                            dependentAxis
-                            style={{ tickLabels: { fontSize: 12, padding: 5, fontWeight: 'bold' } }}
-                        />
-                        <VictoryLine
-                            data={data}
-                            x="x"
-                            y="y"
-                            style={{
-                                data: { stroke: "#FF5722" },
-                                labels: { fontSize: 12, fontWeight: 'bold' }
-                            }}
-                        />
-                    </VictoryChart>
+                    <div style={{ position: 'relative', width: '100%', height: '300px' }}>
+                        <Line data={data} options={options} />
+                    </div>
                 </CardContent>
             </MUICard>
         );
@@ -225,8 +259,9 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
     return (
         <Container fluid className="goal-container p-4">
             <video autoPlay loop muted className="background-video">
-                <source src="/dashboard_background_gif.mp4" type="video/mp4" />
+                <source src="/path/to/your/video.mp4" type="video/mp4" />
             </video>
+
             <AppBar position="static" className="app-bar">
                 <Toolbar className="toolbar">
                     <IconButton edge="start" color="inherit" onClick={handleBackToDashboard} className="icon-button">
