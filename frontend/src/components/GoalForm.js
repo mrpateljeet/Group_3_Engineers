@@ -168,7 +168,7 @@ const GoalForm = ({ onAdd, fetchGoals, fetchForecasts }) => {
                             <Doughnut data={data} options={options} />
                         </div>
                         <Button variant="contained" color="primary" className="mt-3" onClick={() => handlePay(forecast._id, allocatedMoney)}>
-                            Add Monthly Allocation
+                            Pay Now
                         </Button>
                     </CardContent>
                 </MUICard>

@@ -1,22 +1,15 @@
-/* General container and background video styling */
-.goal-container {
-    position: relative;
-    z-index: 1;
-    font-family: 'Roboto', sans-serif;
-    height: 100vh;
+/* General page styling */
+body, html {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
-    padding: 20px;
-    box-sizing: border-box;
-    background: rgba(255, 255, 255, 0.8);
-    border-radius: 20px;
-    max-width: 1200px;
-    margin: 0 auto;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* Background video styling */
 .background-video {
-    position: absolute;
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -24,6 +17,22 @@
     object-fit: cover;
     z-index: -1;
     filter: brightness(0.3);
+}
+
+/* Container to make content scrollable */
+.goal-container {
+    position: relative;
+    z-index: 1;
+    font-family: 'Roboto', sans-serif;
+    height: calc(100vh - 40px); /* Reduced height to ensure padding and scrollbar fit */
+    overflow-y: auto; /* Enables vertical scrolling */
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.8);
+    border-radius: 20px;
+    max-width: 1200px;
+    margin: 20px auto; /* Adds some space around the container */
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
 }
 
 /* AppBar styling */
