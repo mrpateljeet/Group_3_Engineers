@@ -25,8 +25,7 @@ jobs:
         node-version: '21.x'  # Match this with your local Node.js version
         cache: 'npm'
 
-    - name: Install npm 10.x
-      run: npm install -g npm@10.2.4  # Install the same npm version as your local environment
+    - run: npm install -g npm@10.2.4  # Install the same npm version as your local environment
 
     - name: Install frontend dependencies
       working-directory: ./frontend
@@ -35,12 +34,12 @@ jobs:
     - name: Run frontend unit tests
       working-directory: ./frontend
       run: npm test
-      continue-on-error: false  # Pipeline will fail if tests fail
+      env:
+        CI: true  # Ensure watch mode is disabled in CI
 
     - name: Build frontend application
       working-directory: ./frontend
       run: npm run build
-      continue-on-error: false  # Pipeline will fail if the build fails
 
     - name: Install backend dependencies
       working-directory: ./backend
